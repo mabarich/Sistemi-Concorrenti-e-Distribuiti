@@ -113,4 +113,5 @@ CONVENZIONI
 		mioMetodoConSideEffects()
 		MiaCostante
 	La graffa aperta sulla stessa riga del nome (possono esserci problemi col parser)
-	|metodo = {
+	|	metodo = {
+	Modificatori metodi: annotazioni (una per riga), override, protected, final, def
