@@ -1,0 +1,116 @@
+SCALA
+	Object Oriented: Ogni valore è un oggetto
+	Funzionale: Ogni funzione è un valore
+TIPI ASTRATTI
+	Nelle classi e nei trait posso avere sia valori sia tipi da utilizzare all'interno
+	Posso non assegnare nessun valore al tipo e definirlo nelle sottoclassi
+	|	type U
+	| 	type T <: Seq[U]
+	Posso passarli alle classi come parametri
+	|	new SeqBuffer[Int, List[Int]]
+ANNOTAZIONI [Da finire]
+	Associazione informazione-contenuto
+	|	@throws(classOf[IOException])
+CLASSI
+	Template statici istanziabili
+	Se faccio overriding di metodi, devo dirlo
+	|	override def
+	Costruttore nel nome
+	|	class Point(xc: Int, yc: Int)
+	Il main è in un oggetto singleton
+	|	object Classes { def main(args: Array[String]) {
+	Val non consente modifiche, var consente modifiche
+CLASSI CASE
+	|	x = Var("x")
+	Usate per decomporre ricorsivamente usando i pattern
+	|	 term match { case Var(n) =>
+	Pattern Matching
+	|	term match { caso => istruzioni }
+TIPI COMPOSITI
+	Prende i metodi da entrambi i tipi
+	| 	obj: A with B
+CICLO FOR
+	Non vuole indici, ma lista da scorrere (come foreach)
+	|	for (i <- List.range(from, to) if i % 2 == 0) yield i
+	Posso aggiungerci dei filtri come l'if
+SCOMPOSIZIONE
+	Composizione chiama Apply
+	|	Twice(21) //Twice.Apply(21)
+	Scomposizione chiama Unapply
+	|	x match { case Twice(n) => n } //Twice.Unapply(n)
+CLASSI GENERICHE
+	|	class Stack[T] { }
+	Stack[T]<:Stack[S] se e solo se S=T
+CLASSI INTERNE
+	Stesse classi interne in più oggetti sono considerate diverse al contrario di Java
+MIXIN
+	Combina classi con trait (metodi di entrambi). Mi servono i traits
+	|	trait RichIterator extends AbsIterator { }
+FUNZIONI INNESTATE
+	Come ML
+	| 	def filter(xs: List[Int], threshold: Int) = { def process(ys: List[Int]): List[Int] = { } }
+FUNZIONI ANONIME
+	|	val increment = (x: Int) => x + 1
+	|	((x:Int) => x+1)(2)
+CURRYING
+	Più o meno come ML
+OPERATORI
+	Operatori con un parametro possono essere infissi
+	|	(x or y) //x.or(y)
+FUNZIONI HIGH ORDER
+	Funzioni vanno bene sia come parametri, sia come return
+	|	def apply(f: Int => String, v: Int) = f(v)
+SWITCH
+	Posso farli misti
+	|	x match { case 1 => "one" 
+	|			  case "two" => 2 }
+	Con le liste, ho l'elemento generico
+	|	case Seq('a', resto @_*) =>
+	|	case Seq(_*) =>
+FUNZIONI POLIMORFE
+	Non è obbligatorio passare il tipo perché viene fatta eventualmente un'inferenza
+	|	def dup[T](x: T, n: Int): List[T] =
+	| 	dup[Int](3, 4)
+TRAITS
+	Interfacce di Java. Rappresentano tipi e possono avere metodi implementati
+	In genere mischiati a classi con il mixin
+THIS
+	Posso darci altri tipi??
+	| 	{ self: Node => def ... }
+INFERENZA
+	Se non ho ricorsione, posso omettere i tipi in quanto il compilatore se li trova anche da solo
+	Se una classe (o un metodo) ha nome[Tipi1, Tipo2], se la può ricavare da sola
+	Se assegno null a qualcosa, poi non posso più cambiare (null è l'unico valore per il tipo Null)
+TIPI
+	Any sopra a tutto
+	Nothing sotto di tutto
+	Sotto Any ci sono AnyRef (oggetti) e AnyVal (primitivi)
+	Appena più sotto di AnyRef c'è ScalaObject
+	Appena più sopra di Nothing c'è Null
+VARIANZA (Rileggo l'ultimo pezzo)
+	+T= covarianza
+	-T= controvarianza
+VISTE
+	Per conversioni implicite se non vengono trovati i tipi o i metodi giusti
+	|	implicit def list2ordered[A](x: List[A])
+PARAMETRI DI DEFAULT
+	|	def printName(first:String = "John", last:String = "Smith")
+NOMI DEI PARAMETRI ATTUALI
+	|	printName("John","Smith")
+	|	printName(first = "John",last = "Smith")
+	|	printName(last = "Smith",first = "John")
+CONVENZIONI
+	Creati in automatico i getter ed i setter!
+	|	private var _name: String = _
+	|	def name = _name
+	|	def name_=(name: String) { }
+	Uso le parentesi per i metodi senza parametri se un metodo ha side-effects
+	Nomi:
+		MiaClasse
+		mioOggetto
+		miopackage
+		mioMetodoSenzaSideEffects
+		mioMetodoConSideEffects()
+		MiaCostante
+	La graffa aperta sulla stessa riga del nome (possono esserci problemi col parser)
+	|metodo = {
