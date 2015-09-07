@@ -1,0 +1,3 @@
+Divido in 4
+Ogni macchina prende prima il lock del pezzo di incrocio
+E poi prende il lock sulla strada

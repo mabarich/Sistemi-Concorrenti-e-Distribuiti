@@ -1,0 +1,7 @@
+Dopo un'analisi delle azioni, ho notato un problema che non avevo notato in precedenza. Considerando una strada con una fermata "unica", il bus doveva attendere il proprio turno lungo tutta la strada. Se divido quindi la strada in due parti (in presenza di una fermata per il bus), questo può fermarsi (anche se davanti a ha una coda di mezzi).
+	Strade.png
+Per l'aggiornamento della visualizzazione, l'idea più sensata consiste nell'avere uno o più thread in ogni zona in attesa sulle varie code (strade). Non appena un mezzo verrà trasferito da una zona ad un'altra, questo verrà messo nella nuova coda e di conseguenza si potrà aggiornare la posizione del mezzo sullo schermo. Lo stesso discorso vale anche per gli incroci con gli accodamenti al semaforo. Ovviamente ora bisognerà tenere conto anche della divisione spiegata prima, quindi verranno mostrati i mezzi anche quando arriveranno presso una fermata per i bus.
+Per quanto riguarda la coerenza temporale invece, dato che la corretta esecuzione non deve dipendere dall'ordine dei processi, ho provato ad analizzare le possibili conseguenza in base all'interruzione dei vari processi. 
+	CorrettezaTemporale.xlsx
+Ho in seguito studiato se l'esecuzione di alcune azioni potessero causare l'accodamento forzato di altre.
+	Indipendenza.xlsx

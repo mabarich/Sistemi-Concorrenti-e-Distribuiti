@@ -1,0 +1,42 @@
+Attore
+	Stato+Comportamento+mailbox+figli+strategia per supervisionare
+	Ovviamente tutto privato e non accessibile dall'esterno
+	Ho più attori in un thread -> più efficiente!
+	I messaggi non arrivano nello stesso ordine in cui vengono spediti
+		Se però ho più messaggi dallo stesso autore, questi vengono accodati correttamente
+	Con Akka devo gestire io la dequeue del messaggio successivo. Se fallisco senza fare la dequeue, non va avanti
+	Quando termina, libera le risorse, cestina i messaggi rimanenti (DeadLetters. La mailbox ha il riferimento cambiato che fa il redirect)
+	
+Gerarchia di attori
+	Divido finché non ho attori che fanno cose elementari
+	Se attore fallisce, chiede al padre cosa fare
+	Sistema gestisce servizi di scheduling services, configuration e logging
+	context.actorOf(...) e context.stop(child) modificano la gerarchia
+	Strategia di gestione fallimenti non può essere cambiata
+	Non uso i Futures se devo aspettare. Che faccio se poi non arriva?
+	Supervisione e monitoraggio
+		Supervisore delega i compiti e risponde in caso di fallimento
+		All'eccezione, vengono sospesi i figli e l'eccezione viene mandata al padre, che decide che fare	
+			Riprendere, resettare o bloccare il figlio. Tale scelta si ripercuote anche sui nipoti
+			Bloccarsi a sua volta
+		Comunicazioni avvengono tramite mailbox separata -> Problema dell'ordine non necessariamente uguale
+		root>user
+			>system
+		Se root ha problemi, manda messaggio a qualcun altro che termina tutto
+		Se ricevo eccezione da un figlio, posso bloccare solo lui oppure anche i suoi fratelli. I fratelli devo bloccarli io, non si bloccano da soli
+
+Indirizzamento e trasparenza
+		
+Modello di memoria Java
+	Con memoria condivisa tra threads, possono esserci situazioni strane
+	Messaggi devono essere immutabili, altrimenti il ricevente può vederli male
+	Regole per gestire bene le cose:
+		L'invio del messaggio avviene prima della ricezione dello stesso messaggio
+		Processare un messaggio avviene prima di processare il messaggio successivo dello stesso attore
+		Un futures viene completato prima di una sua chiamata
+	
+Affidabilità consegna dei messaggi
+	Mandare messaggi via rete porta ad i soliti problemi
+	at-most-once delivery (non c'è garanzia)
+	
+		
