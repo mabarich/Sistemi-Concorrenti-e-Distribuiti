@@ -29,6 +29,9 @@ trait Mezzo
 
 	def percorso = _percorso 
 	def percorso_= (value:ArrayBuffer [String]):Unit =  { _percorso = value; }
+
+	def next = _next 
+	def next_= (value:Int):Unit =  { _next = value; }
 }
 
 class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo 
@@ -46,13 +49,41 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo
 
 class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo 
 {
-	protected var _passeggeri = ArrayBuffer [Persona]();
+	protected var _passeggeri = ArrayBuffer [Persona](new Pedone("P1", ArrayBuffer("1O1", "1O1", "X")));
 	protected val _limite:Int = 20;
 
 	id = i;
 	percorso = p;
 
 	def limite = _limite 
+
+	def togli: ArrayBuffer [Persona] =
+	{
+		var discesa= ArrayBuffer [Persona]();
+		if (_passeggeri.size!=0)
+		{
+			var restanti= ArrayBuffer [Persona]();
+			for (p <- 0 to _passeggeri.size-1)
+			{	
+				var dove=_passeggeri(p).to; //DA CONTROLLARE
+				if (true) //DA CAMBIARE CONDIZIONE
+				{
+					discesa+=_passeggeri(p);
+					println("Il passeggero "+_passeggeri(p).id+" è sceso dalla corriera");
+				}
+					
+				else
+					restanti+=_passeggeri(p);
+			}
+			_passeggeri=restanti;
+		}
+		discesa;
+	}
+
+	def aggiungi (p: Persona): Unit =
+	{
+		_passeggeri+=p;
+	}
 
 	def passeggeri = _passeggeri 
 	def passeggeri_= (value:ArrayBuffer [Persona]):Unit =  { _passeggeri = value; }

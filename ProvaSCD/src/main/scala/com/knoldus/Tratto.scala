@@ -37,12 +37,16 @@ class Tratto extends Actor
 	def gestisci (m:Mezzo): Unit =
 	{
 		println("Mezzo "+m.id+" arrivato al tratto "+id);
-		val dove=m.to;
+		var dove=m.to;
+		val pos=dove.indexOf("_"); 
+		if (pos>=0)
+			dove=dove.substring(2, pos);
+		else
+			dove=dove.substring(2);
 		val io=id.substring(2);
-		val to=dove.substring(2);
-		if(io==to)
+		if(io==dove)
 			nextActor!m;
 		else
-			tratti(to.toInt-1)!m;
+			tratti(dove.toInt-1)!m;
 	}	
 }
