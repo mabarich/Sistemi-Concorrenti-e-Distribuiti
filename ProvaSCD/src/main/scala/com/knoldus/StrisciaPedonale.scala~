@@ -57,7 +57,7 @@ class StrisciaPedonale extends Actor
 
 	def gestisci (p:Persona): Unit =
 	{
-		println("Persona "+p.id+" arrivata alla striscia "+id);
+		println("Persona "+p.id+" arrivata alla striscia "+id+" e deve continuare");
 		val dove=p.to;
 		val io=id.substring(2); //1S3
 		val to=dove.substring(3); //1MO3

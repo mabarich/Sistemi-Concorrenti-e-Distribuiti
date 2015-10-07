@@ -42,28 +42,59 @@ class Zona extends Actor
 	def start: Unit  =
 	{
 		println("Eccomi");
+		inizializzazioneProva;	
+
+
+		var x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+
+		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "1MO1", "X"));
+		self!prsn;
+
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;}
+
+		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X") , new Pedone ("P1", ArrayBuffer("")));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
+		//var mzz= new Auto ("M0", ArrayBuffer("1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
+		//self!mzz;		
+	}
+
+	def inizializzazioneProva: Unit =
+	{
 		//Creo l'incrocio
 		var tratti = ArrayBuffer[ActorRef]();
 		var strisce = ArrayBuffer[ActorRef]();
-		incrocio=context.actorOf(Props[Incrocio], "1Incrocio");
+		incrocio=context.actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "1Incrocio");
 		incrocio!"Start";
 		//Creo tratti e strisce
-		tratti+=context.actorOf(Props[Tratto], "1T1");
+		tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), "1T1");
 		tratti(0)!"1T1";
-		tratti+=context.actorOf(Props[Tratto], "1T2");
+		tratti(0)!Verde;
+		tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), "1T2");
 		tratti(1)!"1T2";
-		tratti+=context.actorOf(Props[Tratto], "1T3");
+		tratti(1)!Rosso;
+		tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), "1T3");
 		tratti(2)!"1T3";
-		tratti+=context.actorOf(Props[Tratto], "1T5");
+		tratti(2)!Verde;
+		tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), "1T4");
 		tratti(3)!"1T4";
-		strisce+=context.actorOf(Props[StrisciaPedonale], "1S1");
+		tratti(3)!Rosso;
+		strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), "1S1");
 		strisce(0)!"1S1";
-		strisce+=context.actorOf(Props[StrisciaPedonale], "1S2");
+		strisce(0)!Rosso;
+		strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), "1S2");
 		strisce(1)!"1S2";
-		strisce+=context.actorOf(Props[StrisciaPedonale], "1S3");
+		strisce(1)!Rosso;
+		strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), "1S3");
 		strisce(2)!"1S3";
-		strisce+=context.actorOf(Props[StrisciaPedonale], "1S4");
+		strisce(2)!Rosso;
+		strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), "1S4");
 		strisce(3)!"1S4";
+		strisce(3)!Rosso;
 		for(x <- 0 to (tratti.size-1))
 		{
 			incrocio!ArrayBuffer(tratti(x), strisce(x));
@@ -141,15 +172,6 @@ class Zona extends Actor
 			marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut((4-ind)%4));
 		}
 		incrocio!new containerActrf(corsiaOut, marciapiedeOut);
-		incrocio!"Manda";	
-		
-		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "F"));
-		self!prsn;
-
-		var x=0; for (a<-0 to 999999) {x+=1;}
-
-		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X") , new Pedone ("P1", ArrayBuffer("")));
-		var mzz= new Autobus ("M0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
-		self!mzz;		
+		incrocio!"Manda";
 	}
 }

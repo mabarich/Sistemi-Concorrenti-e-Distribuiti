@@ -4,6 +4,11 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.Props
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.duration._
+import akka.dispatch.UnboundedStablePriorityMailbox
+import com.typesafe.config.Config
+import akka.dispatch.PriorityGenerator
+import akka.actor.ActorSystem
 
 class Incrocio extends Actor 
 {
@@ -11,6 +16,14 @@ class Incrocio extends Actor
 	var marciapiedeOut = ArrayBuffer[ActorRef]();
 	var tratti = ArrayBuffer[ActorRef]();	
 	var strisce = ArrayBuffer[ActorRef]();
+	var stato:Int=0;
+	
+
+	override def preStart: Unit = 
+	{
+		import context.dispatcher
+		this.context.system.scheduler.schedule(0 seconds, 12 seconds, self, CambiaSemafori)
+	}
 
   	override def receive: Actor.Receive = 
 	{
@@ -19,6 +32,48 @@ class Incrocio extends Actor
 		case m:Mezzo =>	gestisciMezzo (m);
 		case p:Persona => gestisciPedone (p);
 		case "Manda" =>	aggiornaTrattiEStrisce;
+		case CambiaSemafori =>	cambiaSemafori;
+	}
+
+	//Cambia i semafori
+	def cambiaSemafori: Unit  =
+	{	
+		stato match 
+		{
+			case 0 => for (p<-0 to strisce.size-1) //Pedoni rossi, semafori pari verdi, dispari rossi
+				  	strisce(p)!Rosso;
+				  for (m<-0 to tratti.size-1)
+				  {
+				  	if(m%2==0)
+				 		tratti(m)!Verde;
+				 	else
+				 		tratti(m)!Rosso;
+				  }
+				 println("Strisce: rosso; Tratti pari: verde; Tratti dispari: rosso");
+			case 1 => for (m<-0 to tratti.size-1) //Semafori rossi, pedoni verdi
+				 	tratti(m)!Rosso;
+				  for (p<-0 to strisce.size-1)
+					strisce(p)!Verde;
+				  println("Strisce: verde; Tratti rosso");
+			case 2 => for (p<-0 to strisce.size-1) //Pedoni rossi, semafori dispari verdi, pari rossi
+				 	strisce(p)!Rosso;
+				  for (m<-0 to tratti.size-1)
+				  {
+				 	if(m%2!=0)
+						tratti(m)!Verde;
+					else
+						tratti(m)!Rosso;
+				  }
+				  println("Strisce: rosso; Tratti dispari: verde; Tratti pari: rosso");
+			case 3 => for (m<-0 to tratti.size-1) //Semafori rossi, pedoni verdi
+				 	tratti(m)!Rosso;
+				  for (p<-0 to strisce.size-1)
+					strisce(p)!Verde;
+				  println("Strisce: verde; Tratti rosso");
+		}
+		stato+=1;
+		if(stato==4)
+			stato=0;	
 	}
 
 	//Aggiunge un tratto ed una striscia
@@ -66,12 +121,20 @@ class Incrocio extends Actor
 			dove=dove.substring(2, pos);
 		else
 			dove=dove.substring(2);
+		println("Dove= "+dove+ "Calcolo: "+(tratti.size-(dove.toInt%tratti.size)));
 		//Caso particolare del calcolo	
-		val tratto=tratti.size-(dove.toInt%tratti.size);		
+		/*val tratto=dove.toInt%tratti.size;		
 		if(tratto==tratti.size)
-			tratti(0)!m;
-		else
 			tratti(tratto)!m;
+		else
+			tratti(tratto-1)!m;*/
+			
+		
+		val tratto=dove.toInt;		
+		if(tratto==1)
+			tratti(tratti.size-1)!m;
+		else
+			tratti(tratto-2)!m;
 	}
 
 	//Invia i pedoni alle strisce giuste
@@ -81,11 +144,28 @@ class Incrocio extends Actor
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
 		dove=dove.substring(3);
-		val striscia=((dove.toInt+2)%strisce.size);	
+		/*val striscia=((dove.toInt+2)%strisce.size);	
 		//Caso particolare del calcolo	
 		if(striscia==2)
 			strisce(strisce.size)!p;
 		else
-			strisce(striscia-1)!p;
+			strisce(striscia-1)!p;*/
+			
+			
+		val striscia=dove.toInt;	
+		//Casi particolari del calcolo	
+		if(striscia==1)
+			strisce(strisce.size-2)!p;
+		else if(striscia==2)
+			strisce(strisce.size-1)!p;
+		else
+			strisce(striscia-3)!p;
 	}
 }
+
+class IncrocioPriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(
+PriorityGenerator 
+{
+	case CambiaSemafori => 0
+	case _ => 1
+})

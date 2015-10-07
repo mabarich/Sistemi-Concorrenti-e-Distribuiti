@@ -23,22 +23,6 @@ class containerFermata (f: ActorRef)
 	def fermata_= (value:ActorRef):Unit =  { _fermata = value; }
 }
 
-class containerMezzo (m: Mezzo)
-{
-	var _mezzo = m;
-
-	def mezzo = _mezzo 
-	def mezzo_= (value:Mezzo):Unit =  { _mezzo = value; }
-}
-
-class containerPersona (p: Persona)
-{
-	var _persona = p;
-
-	def persona = _persona 
-	def persona_= (value:Persona):Unit =  { _persona = value; }
-}
-
 case object Rosso
 case object Verde
 case object CambiaSemafori
