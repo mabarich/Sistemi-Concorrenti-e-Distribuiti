@@ -39,6 +39,14 @@ class containerPersona (p: Persona)
 	def persona_= (value:Persona):Unit =  { _persona = value; }
 }
 
+class containerDestinazione (d: ActorRef)
+{
+	var _destinazione = d;
+
+	def destinazione = _destinazione 
+	def destinazione_= (value:ActorRef):Unit =  { _destinazione = value; }
+}
+
 case object Rosso
 case object Verde
 case object CambiaSemafori

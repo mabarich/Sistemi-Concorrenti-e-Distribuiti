@@ -11,12 +11,14 @@ class Marciapiede extends Actor
 	var fermata:ActorRef=null;
 	var id="";
 	var numMarciapiedi=0;
+	var destinazione:ActorRef = null;
 
   	override def receive: Actor.Receive = 
 	{
 		case p:Int => numMarciapiedi=p;
 		case "AA" => println("Contattato da incrocio");
 		case f:containerFermata => creaFermata(f);	
+		case z:containerDestinazione => destinazione=z.destinazione;
 		case p:String => start(p);
 		case p:ArrayBuffer[ActorRef] => nextReceived(p);	
 		case p:Persona => gestisci (p);		   
@@ -50,22 +52,28 @@ class Marciapiede extends Actor
 		//Se è X allora è arrivato a destinazione, altrimenti lo mando al prossimo attore
 		if(dove!="X")
 		{
-			if(dove=="F")
+			if (dove!="R")
 			{
-				fermata!p;
-			}
-			else
-			{			
-				//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
-				var dv=dove.substring(3).toInt;
-				var io=id.substring(3).toInt;
-				if((numMarciapiedi-(io-1))!=dv)
-					nextActor!p;
+				if(dove.indexOf("F") != -1)
+				{
+					fermata!p;
+				}
 				else
-					nextMarciapiede!p;
+				{			
+					//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
+					var dv=dove.substring(3).toInt;
+					var io=id.substring(3).toInt;
+					if((numMarciapiedi-(io-1))!=dv)
+						nextActor!p;
+					else
+						nextMarciapiede!p;
+				}
 			}
 		}
 		else
+		{
+			destinazione!p;
 			println("Persona "+p.id+" arrivato a destinazione sul marciapiede "+id);
+		}
 	}	
 }

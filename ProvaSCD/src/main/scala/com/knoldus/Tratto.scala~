@@ -22,7 +22,7 @@ class Tratto extends Actor
 		case m:ActorRef => nextReceived(m); //Salva la corsia uscente	
 		case m:ArrayBuffer[ActorRef] => trattiRicevuti(m); //Salva tutti i tratti dell'incrocio
 		case m:Mezzo =>	gestisci (m); //Invia i mezzi perché il semaforo è verde
-		case m:mezzoPiuPriorita => gestisci (m);
+		case m:mezzoPiuPriorita => gestisci (m.mezzo);
 		case m:containerMezzo => gestisci (m); //Invia i mezzi
 		case Rosso =>	context.become(redReceiver, false);    
 	}

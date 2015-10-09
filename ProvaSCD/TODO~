@@ -1,0 +1,4 @@
+- Akka clustering
+- Creazione da file
+- Discesa da corriera (OK)
+- Ripartire (if dove=="R" then p.next=-1, destinazione!p)

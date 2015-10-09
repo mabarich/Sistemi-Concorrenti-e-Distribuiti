@@ -13,6 +13,7 @@ class Zona extends Actor
 	var corsiaOutCont = ArrayBuffer[ActorRef]();
 	var marciapiedeIn = ArrayBuffer[ActorRef]();
 	var marciapiedeOut = ArrayBuffer[ActorRef]();
+	var destinazione: ActorRef =null;
 	var incrocio: ActorRef=null;
   	override def receive: Actor.Receive = 
 	{
@@ -42,6 +43,8 @@ class Zona extends Actor
 	def start: Unit  =
 	{
 		println("Eccomi");
+		destinazione=context.actorOf(Props[Destinazione], "Destinazione");
+		destinazione!self;
 		inizializzazioneProva;	
 
 
@@ -49,7 +52,8 @@ class Zona extends Actor
 		x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;} 
 
-		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "1MO3", "X"));
+		//var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "FA0", "1FO3", "1MO3", "X", "1MI3", "1MO1", "X"));
+		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "1MO3", "X", "1MI3", "1MO1", "X"));
 		self!prsn;
 
 		x=0; for (a<-0 to 999999) {x+=1;} 
@@ -57,14 +61,17 @@ class Zona extends Actor
 		x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;}
 
-		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X") , new Pedone ("P1", ArrayBuffer("")));
+		var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X", "1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
 		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","X"));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I2", "1I1_2", "1I1_1", "X"));
 		//var mzz= new Auto ("M0", ArrayBuffer("1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
-		//self!mzz;		
+		self!mzz;		
 	}
 
 	def inizializzazioneProva: Unit =
 	{
+		var dest=new containerDestinazione(destinazione);
 		//Creo l'incrocio
 		var tratti = ArrayBuffer[ActorRef]();
 		var strisce = ArrayBuffer[ActorRef]();
@@ -104,6 +111,7 @@ class Zona extends Actor
 		corsiaIn(0)!"1I1_1";
 		var fermata=context.actorOf(Props[Fermata], "1FI1");
 		fermata!self;
+		fermata!"1FI1";
 		var contei=new containerFermata(fermata);
 		corsiaIn(0)!contei;
 		corsiaIn+=context.actorOf(Props[Corsia], "1I2");
@@ -118,27 +126,65 @@ class Zona extends Actor
 		corsiaInCont+=null;
 		corsiaInCont+=null;
 		corsiaInCont+=null;
-		for(x <- 0 to (corsiaIn.size-1))
+		if(corsiaIn.size!=0)
 		{
-			if(corsiaInCont(x)!=null)
-				corsiaIn(x)!corsiaInCont(x);
-			else
-				corsiaIn(x)!incrocio;
+			for(x <- 0 to (corsiaIn.size-1))
+			{
+				corsiaIn(x)!dest;
+				if(corsiaInCont(x)!=null)
+					corsiaIn(x)!corsiaInCont(x);
+				else
+					corsiaIn(x)!incrocio;
+			}
 		}
-		for(x <- 0 to (corsiaInCont.size-1))
+		if(corsiaInCont.size!=0)
 		{
-			if(corsiaInCont(x)!=null)
-				corsiaInCont(x)!incrocio;
+			for(x <- 0 to (corsiaInCont.size-1))
+			{
+				
+				if(corsiaInCont(x)!=null)
+				{
+					corsiaInCont(x)!dest;
+					corsiaInCont(x)!incrocio;
+				}
+			}
 		}
 		//STRADE OUT
 		corsiaOut+=context.actorOf(Props[Corsia], "1O1");
 		corsiaOut(0)!"1O1";
 		corsiaOut+=context.actorOf(Props[Corsia], "1O2");
 		corsiaOut(1)!"1O2";
-		corsiaOut+=context.actorOf(Props[Corsia], "1O3");
-		corsiaOut(2)!"1O3";
+		corsiaOut+=context.actorOf(Props[Corsia], "1O3_1");
+		corsiaOut(2)!"1O3_1";
+		var fermata2=context.actorOf(Props[Fermata], "1FO3");
+		fermata2!self;
+		fermata2!"1FO3";
+		var contei2=new containerFermata(fermata2);
+		corsiaOut(2)!contei2;
 		corsiaOut+=context.actorOf(Props[Corsia], "1O4");
 		corsiaOut(3)!"1O4";
+		
+		corsiaOutCont+=null;
+		corsiaOutCont+=null;
+		corsiaOutCont+=context.actorOf(Props[Corsia], "1O3_2");
+		corsiaOutCont(2)!"1O3_2";
+		corsiaOutCont+=null;
+		for(x <- 0 to (corsiaOut.size-1))
+		{
+			corsiaOut(x)!dest;
+			if(corsiaOutCont(x)!=null)
+				corsiaOut(x)!corsiaOutCont(x);
+			else
+				corsiaOut(x)!incrocio;
+		}		
+		for(x <- 0 to (corsiaOutCont.size-1))
+		{
+			if(corsiaOutCont(x)!=null)
+				corsiaOutCont(x)!dest;
+				//corsiaOutCont(x)!incrocio;
+			//DEVO METTERCI UNA ZONA
+		}
+
 		//MARCIAPIEDI IN
 		marciapiedeIn+=context.actorOf(Props[Marciapiede], "1MI1");
 		marciapiedeIn(0)!"1MI1";
@@ -156,14 +202,17 @@ class Zona extends Actor
 		marciapiedeOut(1)!"1MO2";
 		marciapiedeOut+=context.actorOf(Props[Marciapiede], "1MO3");
 		marciapiedeOut(2)!"1MO3";
+		marciapiedeOut(2)!contei2;
 		marciapiedeOut+=context.actorOf(Props[Marciapiede], "1MO4");
 		marciapiedeOut(3)!"1MO4";
 		for(x <- 0 to (marciapiedeIn.size-1))
 		{
+			marciapiedeIn(x)!dest;
 			marciapiedeIn(x)!marciapiedeIn.size;
 		}
-		for(x <- 0 to (marciapiedeIn.size-1))
+		for(x <- 0 to (marciapiedeOut.size-1))
 		{
+			marciapiedeOut(x)!dest;
 			marciapiedeOut(x)!marciapiedeOut.size;
 		}
 		for(x <- 0 to (marciapiedeIn.size-1))

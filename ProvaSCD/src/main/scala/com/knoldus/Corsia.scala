@@ -8,12 +8,14 @@ class Corsia extends Actor
 	var nextActor:ActorRef=null;
 	var fermata:ActorRef=null;
 	var id="";
+	var destinazione:ActorRef = null;
 
   	override def receive: Actor.Receive = 
 	{
 		case "AA" => println("Contattato da incrocio");
 		case m:String => start(m);
 		case f:containerFermata => creaFermata(f);
+		case z:containerDestinazione => destinazione=z.destinazione;
 		case m:ActorRef => nextReceived(m);	
 		case m:Mezzo =>	gestisci (m);		   
 	}
@@ -45,16 +47,22 @@ class Corsia extends Actor
 		//Se è X allora è arrivato a destinazione, altrimenti lo mando al prossimo attore
 		if(dove!="X")
 		{
-			if(dove=="F")
-				fermata!m;
-			else
+			if (dove!="R")
 			{
-				if(dove=="Riparti")
-					m.next = -1;
-				nextActor!m;
+				if(dove=="F")
+					fermata!m;
+				else
+				{
+					if(dove=="Riparti")
+						m.next = -1;
+					nextActor!m;
+				}
 			}
 		}
 		else
+		{
+			destinazione!m;
 			println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id);
+		}
 	}	
 }

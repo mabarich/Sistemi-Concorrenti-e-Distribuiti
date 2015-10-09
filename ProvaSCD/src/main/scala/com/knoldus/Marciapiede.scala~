@@ -11,12 +11,14 @@ class Marciapiede extends Actor
 	var fermata:ActorRef=null;
 	var id="";
 	var numMarciapiedi=0;
+	var destinazione:ActorRef = null;
 
   	override def receive: Actor.Receive = 
 	{
 		case p:Int => numMarciapiedi=p;
 		case "AA" => println("Contattato da incrocio");
 		case f:containerFermata => creaFermata(f);	
+		case z:containerDestinazione => destinazione=z.destinazione;
 		case p:String => start(p);
 		case p:ArrayBuffer[ActorRef] => nextReceived(p);	
 		case p:Persona => gestisci (p);		   
@@ -26,6 +28,12 @@ class Marciapiede extends Actor
 	def start (p:String): Unit  =
 	{
 		id=p;
+	}
+
+	//Crea una fermata
+	def creaFermata (f:containerFermata): Unit  =
+	{
+		fermata=f.fermata;
 	}
 
 	//Imposta il destinatario di tutti i messaggi (uno è l'incrocio e l'altro è il marciapiede successivo nel caso il pedone non debba andare per forza all'incrocio)
@@ -44,7 +52,7 @@ class Marciapiede extends Actor
 		//Se è X allora è arrivato a destinazione, altrimenti lo mando al prossimo attore
 		if(dove!="X")
 		{
-			if(dove=="F")
+			if(dove.indexOf("F") != -1)
 			{
 				fermata!p;
 			}
@@ -60,6 +68,9 @@ class Marciapiede extends Actor
 			}
 		}
 		else
+		{
+			destinazione!p;
 			println("Persona "+p.id+" arrivato a destinazione sul marciapiede "+id);
+		}
 	}	
 }

@@ -121,15 +121,7 @@ class Incrocio extends Actor
 			dove=dove.substring(2, pos);
 		else
 			dove=dove.substring(2);
-		println("Dove= "+dove+ "Calcolo: "+(tratti.size-(dove.toInt%tratti.size)));
 		//Caso particolare del calcolo	
-		/*val tratto=dove.toInt%tratti.size;		
-		if(tratto==tratti.size)
-			tratti(tratto)!m;
-		else
-			tratti(tratto-1)!m;*/
-			
-		
 		val tratto=dove.toInt;		
 		if(tratto==1)
 			tratti(tratti.size-1)!m;
@@ -143,23 +135,14 @@ class Incrocio extends Actor
 		println("Persona "+p.id+" arrivato all'incrocio");
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
-		dove=dove.substring(3);
-		/*val striscia=((dove.toInt+2)%strisce.size);	
-		//Caso particolare del calcolo	
-		if(striscia==2)
-			strisce(strisce.size)!p;
-		else
-			strisce(striscia-1)!p;*/
-			
-			
-		val striscia=dove.toInt;	
+		dove=dove.substring(3);	
 		//Casi particolari del calcolo	
-		if(striscia==1)
+		if(dove.toInt==1)
 			strisce(strisce.size-2)!p;
-		else if(striscia==2)
+		else if(dove.toInt==2)
 			strisce(strisce.size-1)!p;
 		else
-			strisce(striscia-3)!p;
+			strisce(dove.toInt-3)!p;
 	}
 }
 

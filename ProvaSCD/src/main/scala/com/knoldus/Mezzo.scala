@@ -49,7 +49,11 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo
 
 class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo 
 {
-	protected var _passeggeri = ArrayBuffer [Persona](new Pedone("P1", ArrayBuffer("1O1", "1O1", "X")));
+	//PROVA DA TOGLIERE
+	var pedone=new Pedone("P1", ArrayBuffer("1FI1", "1MI1", "X"));
+	pedone.inc;
+	//PROVA DA TOGLIERE
+	protected var _passeggeri = ArrayBuffer [Persona](pedone);
 	protected val _limite:Int = 20;
 
 	id = i;
@@ -57,7 +61,7 @@ class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo
 
 	def limite = _limite 
 
-	def togli: ArrayBuffer [Persona] =
+	def togli (idFermata:String) : ArrayBuffer [Persona] =
 	{
 		var discesa= ArrayBuffer [Persona]();
 		if (_passeggeri.size!=0)
@@ -65,8 +69,8 @@ class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo
 			var restanti= ArrayBuffer [Persona]();
 			for (p <- 0 to _passeggeri.size-1)
 			{	
-				var dove=_passeggeri(p).to; //DA CONTROLLARE
-				if (true) //DA CAMBIARE CONDIZIONE
+				var dove=_passeggeri(p).nxt; 
+				if (dove==idFermata) 
 				{
 					discesa+=_passeggeri(p);
 					println("Il passeggero "+_passeggeri(p).id+" è sceso dalla corriera");

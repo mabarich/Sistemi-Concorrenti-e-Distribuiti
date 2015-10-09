@@ -39,7 +39,6 @@ class Tratto extends Actor
 				while(!mezzi.isEmpty)
 				{
 					var m:Mezzo=mezzi(0);
-					println("C'è un mezzo da inviare ("+m.id+")");
 					mezzi.remove(0);
 					self!new mezzoPiuPriorita(m);
 				}	   
@@ -63,7 +62,7 @@ class Tratto extends Actor
 	//Gestisce solo i mezzi provenienti dall'incrocio.
 	def gestisci (m:Mezzo): Unit =
 	{
-		println("Mezzo "+m.id+" arrivato al tratto "+id+" da una strada");
+		println("Mezzo "+m.id+" arrivato al tratto "+id);
 		var dove=m.to;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
@@ -77,7 +76,7 @@ class Tratto extends Actor
 	def gestisci (cm:containerMezzo): Unit =
 	{
 		var m:Mezzo=cm.mezzo;
-		println("Mezzo "+m.id+" arrivato al tratto "+id+" da un altro tratto");
+		println("Mezzo "+m.id+" arrivato al tratto "+id);
 		var dove=m.to;
 		nextActor!m;
 	}	
