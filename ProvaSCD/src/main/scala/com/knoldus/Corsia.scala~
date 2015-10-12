@@ -47,17 +47,27 @@ class Corsia extends Actor
 		//Se è X allora è arrivato a destinazione, altrimenti lo mando al prossimo attore
 		if(dove!="X")
 		{
-			if(dove=="F")
-				fermata!m;
+			if (dove!="R")
+			{
+				if(dove=="F")
+					fermata!m;
+				else
+				{
+					if(dove=="Riparti")
+						m.next = -1;
+					nextActor!m;
+				}
+			}
 			else
 			{
-				if(dove=="Riparti")
-					m.next = -1;
-				nextActor!m;
+				m.reset;
+				destinazione!m;
+				println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id. Il mezzo ha completato il giro e ripartirà.);
 			}
 		}
 		else
 		{
+			m.inc;
 			destinazione!m;
 			println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id);
 		}

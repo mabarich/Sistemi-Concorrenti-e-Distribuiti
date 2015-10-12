@@ -10,7 +10,16 @@ class Destinazione extends Actor
   	override def receive: Actor.Receive = 
 	{
 		case z:ActorRef => zona=z;
-		case p:Persona => p.to; zona!p;
-		case m:Mezzo =>	m.to; zona!m;		   
+		case p:Persona => waitABit; zona!p;
+		case m:Mezzo => waitABit; zona!m;		   
+	}
+
+	def waitABit:Unit = 
+	{
+		var x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;}
 	}
 }

@@ -8,6 +8,8 @@ trait Mezzo
 	protected var _percorso = ArrayBuffer [String]();
 	protected var _next: Int = -1;
 
+	def reset: Unit= _next = -1;
+
 	def inc: Unit = 
 	{
 		_next+=1;
@@ -50,10 +52,10 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo
 class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo 
 {
 	//PROVA DA TOGLIERE
-	var pedone=new Pedone("P1", ArrayBuffer("1FI1", "1MI1", "X"));
+	//var pedone=new Pedone("P1", ArrayBuffer("1FI1", "1MI1", "R"));
 	pedone.inc;
 	//PROVA DA TOGLIERE
-	protected var _passeggeri = ArrayBuffer [Persona](pedone);
+	protected var _passeggeri = ArrayBuffer [Persona]();
 	protected val _limite:Int = 20;
 
 	id = i;
@@ -69,8 +71,8 @@ class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo
 			var restanti= ArrayBuffer [Persona]();
 			for (p <- 0 to _passeggeri.size-1)
 			{	
-				var dove=_passeggeri(p).nxt; //DA CONTROLLARE
-				if (dove==idFermata) //DA CAMBIARE CONDIZIONE
+				var dove=_passeggeri(p).nxt; 
+				if (dove==idFermata) 
 				{
 					discesa+=_passeggeri(p);
 					println("Il passeggero "+_passeggeri(p).id+" è sceso dalla corriera");

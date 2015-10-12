@@ -55,7 +55,7 @@ class Fermata extends Actor
 		codaInEntrata=restanti;
 		if (uscita!=null && uscita.size!=0)
 		{
-			println("Ho "+uscita.size+" persone scese dalla corriera");
+			//println("Ho "+uscita.size+" persone scese dalla corriera");
 			for (p <- 0 to uscita.size-1)
 			{	
 				zona!uscita(p);

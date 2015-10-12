@@ -69,9 +69,16 @@ class Marciapiede extends Actor
 						nextMarciapiede!p;
 				}
 			}
+			else
+			{
+				p.reset;
+				destinazione!p;
+				println("Pedone "+p.id+" arrivato a destinazione sul marciapiede "+id+". Il pedone ha completato il giro e ripartirà.");
+			}
 		}
 		else
 		{
+			p.inc;
 			destinazione!p;
 			println("Persona "+p.id+" arrivato a destinazione sul marciapiede "+id);
 		}

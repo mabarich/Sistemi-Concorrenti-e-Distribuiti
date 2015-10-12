@@ -8,6 +8,8 @@ trait Persona
 	protected var _percorso = ArrayBuffer [String]();
 	protected var _next: Int = -1;
 
+	def reset: Unit= _next = -1;
+
 	def inc: Unit = 
 	{
 		_next+=1;

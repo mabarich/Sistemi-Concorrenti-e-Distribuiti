@@ -58,9 +58,16 @@ class Corsia extends Actor
 					nextActor!m;
 				}
 			}
+			else
+			{
+				m.reset;
+				destinazione!m;
+				println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id+". Il mezzo ha completato il giro e ripartirà.");
+			}
 		}
 		else
 		{
+			m.inc;
 			destinazione!m;
 			println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id);
 		}
