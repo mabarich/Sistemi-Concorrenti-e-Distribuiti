@@ -1,5 +1,18 @@
 package com.knoldus
 
+
+import scalafx.Includes._
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
+import scalafx.scene.Scene
+import scalafx.scene.paint.Color._
+import scalafx.scene.paint.{LinearGradient, Stops}
+import scalafx.scene.shape.Rectangle
+import scalafx.scene.text.Text
+import scalafx.scene.layout.HBox
+
+
+
 import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.Props
@@ -20,8 +33,11 @@ class Zona extends Actor
 	var incrocio: ActorRef=null;
 	var id:String="";
 
+	var scena:Scene=null;
+
   	override def receive: Actor.Receive = 
 	{
+		case s:Scene => scena=s;
 		case "Start" => start;
 		case p:Persona => inviaPedone(p);
 		case m:Mezzo => inviaMezzo(m);
@@ -85,9 +101,15 @@ class Zona extends Actor
 		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X", "1I2", "1O1", "R") , new Pedone ("P1", ArrayBuffer("")));
 		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
 		var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		var mzz2= new Autobus ("A1", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		var mzz3= new Autobus ("A2", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		var mzz4= new Autobus ("A3", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
 		//var mzz= new Autobus ("A0", ArrayBuffer("1I2", "1I1_2", "1I1_1", "X"));
 		//var mzz= new Auto ("M0", ArrayBuffer("1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
-		self!mzz;
+
+		
+		self!mzz; 
+		self!mzz2; self!mzz3; self!mzz4;
 	}
 
 	def creaStrade(xml:scala.xml.Elem): Unit =
@@ -101,6 +123,13 @@ class Zona extends Actor
 			var attr:String= strade(x)\"@id" text;
 			corsiaIn+=context.actorOf(Props[Corsia], attr);
 			corsiaIn(x)!attr;
+
+
+
+			corsiaIn(x)!scena;
+
+
+
 			corsiaInCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
@@ -140,6 +169,13 @@ class Zona extends Actor
 				if(corsiaInCont(x)!=null)
 				{
 					corsiaInCont(x)!dest;
+
+
+
+					corsiaInCont(x)!scena;
+
+
+
 					corsiaInCont(x)!incrocio;
 				}
 			}
@@ -153,6 +189,13 @@ class Zona extends Actor
 			var attr:String= strade(x)\"@id" text;
 			corsiaOut+=context.actorOf(Props[Corsia], attr);
 			corsiaOut(x)!attr;
+
+
+
+			corsiaOut(x)!scena;
+
+
+
 			corsiaOutCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
@@ -171,6 +214,13 @@ class Zona extends Actor
 			var pos= attr.substring(2, 3).toInt; //1O3_2
 			corsiaOutCont(pos-1)=context.actorOf(Props[Corsia], attr);
 			corsiaOutCont(pos-1)!attr;
+			
+
+
+			corsiaOutCont(pos-1)!scena;
+
+
+
 		}	
 		//Imposto le destinazioni delle strade
 		for(x <- 0 to (corsiaOut.size-1))

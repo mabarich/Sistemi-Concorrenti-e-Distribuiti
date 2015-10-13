@@ -35,18 +35,25 @@ class Fermata extends Actor
 		println("Mezzo "+m.id+" arrivato alla fermata"); 
 		var uscita:ArrayBuffer[Persona]=null;
 		uscita=m.togli(id);
+		var num=m.postiLiberi;
 		var restanti= ArrayBuffer[Persona]();
-		if(codaInEntrata.size!=0)
+		if(codaInEntrata.size!=0 && num!=0)
 		{
 			for (p <- 0 to codaInEntrata.size-1)
 			{	
 				var dove=codaInEntrata(p).to; 
-				if (dove.substring(1)==m.id) //.to() ritorna FA0 visto che non ho mai fatto next .inc()
+				if (dove.substring(1)==m.id && num!=0) //.to() ritorna FA0 visto che non ho mai fatto next .inc()
 				{
 					codaInEntrata(p).inc;
 					codaInEntrata(p).inc;
 					m.aggiungi(codaInEntrata(p));
+					num-= 1;
 					println("Il passeggero "+codaInEntrata(p).id+" è salito sulla corriera");
+				}
+				else if (dove.substring(1)==m.id && num==0) 
+				{
+					println("Il passeggero "+codaInEntrata(p).id+" non può salire in corriera perché è piena");
+					restanti+=codaInEntrata(p);
 				}
 				else
 					restanti+=codaInEntrata(p);

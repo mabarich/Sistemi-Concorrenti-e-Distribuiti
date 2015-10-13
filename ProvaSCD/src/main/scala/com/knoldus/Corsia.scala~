@@ -1,5 +1,18 @@
 package com.knoldus
 
+
+import scalafx.Includes._
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
+import scalafx.scene.Scene
+import scalafx.scene.paint.Color._
+import scalafx.scene.paint.{LinearGradient, Stops}
+import scalafx.scene.shape.Rectangle
+import scalafx.scene.text.Text
+import scalafx.scene.layout.HBox
+
+
+
 import akka.actor.Actor
 import akka.actor.ActorRef
 
@@ -9,10 +22,12 @@ class Corsia extends Actor
 	var fermata:ActorRef=null;
 	var id="";
 	var destinazione:ActorRef = null;
+	
+	var scena:Scene=null;
 
   	override def receive: Actor.Receive = 
 	{
-		case "AA" => println("Contattato da incrocio");
+		case s:Scene => scena=s;
 		case m:String => start(m);
 		case f:containerFermata => creaFermata(f);
 		case z:containerDestinazione => destinazione=z.destinazione;
@@ -40,6 +55,29 @@ class Corsia extends Actor
 
 	def gestisci (m:Mezzo): Unit =
 	{
+
+
+		var testo: String= "Strada: "+id+"; Mezzo: "+m.id;
+		runLater(new Runnable 
+		{
+			override def run = 
+			{
+				scena.content= new HBox 
+				{
+					children = Seq( new Text 
+					{
+						text=testo;
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+				}
+			}
+		});
+		
+
+
 		println("Mezzo "+m.id+" arrivato sulla strada "+id);
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		m.inc;
@@ -62,7 +100,7 @@ class Corsia extends Actor
 			{
 				m.reset;
 				destinazione!m;
-				println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id. Il mezzo ha completato il giro e ripartirà.);
+				println("Mezzo "+m.id+" arrivato a destinazione sulla strada "+id+". Il mezzo ha completato il giro e ripartirà.");
 			}
 		}
 		else
