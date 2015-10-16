@@ -23,11 +23,11 @@ class Corsia extends Actor
 	var id="";
 	var destinazione:ActorRef = null;
 	
-	var scena:Scene=null;
+	var scena:HBox=null;
 
   	override def receive: Actor.Receive = 
 	{
-		case s:Scene => scena=s;
+		case h:HBox => scena=h;
 		case m:String => start(m);
 		case f:containerFermata => creaFermata(f);
 		case z:containerDestinazione => destinazione=z.destinazione;
@@ -62,7 +62,7 @@ class Corsia extends Actor
 		{
 			override def run = 
 			{
-				scena.content= new HBox 
+				scena.children= new HBox 
 				{
 					children = Seq( new Text 
 					{
@@ -91,9 +91,16 @@ class Corsia extends Actor
 					fermata!m;
 				else
 				{
-					if(dove=="Riparti")
-						m.next = -1;
-					nextActor!m;
+					if (dove=="FINE")
+					{
+						println("Mezzo "+m.id+" arrivato a destinazione sulla corsia "+id+" e morirà");
+					}
+					else
+					{
+						if(dove=="Riparti")
+							m.next = -1;
+						nextActor!m;
+					}
 				}
 			}
 			else

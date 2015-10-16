@@ -32,7 +32,7 @@ class Fermata extends Actor
 
 	def corrieraRicevuta (m:Autobus, sender: ActorRef): Unit  =
 	{
-		println("Mezzo "+m.id+" arrivato alla fermata"); 
+		println("Mezzo "+m.id+" arrivato alla fermata "+id); 
 		var uscita:ArrayBuffer[Persona]=null;
 		uscita=m.togli(id);
 		var num=m.postiLiberi;

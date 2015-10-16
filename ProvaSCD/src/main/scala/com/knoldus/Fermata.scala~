@@ -32,9 +32,10 @@ class Fermata extends Actor
 
 	def corrieraRicevuta (m:Autobus, sender: ActorRef): Unit  =
 	{
-		println("Mezzo "+m.id+" arrivato alla fermata"); 
+		println("Mezzo "+m.id+" arrivato alla fermata "+id); 
 		var uscita:ArrayBuffer[Persona]=null;
 		uscita=m.togli(id);
+		println("uscita.size: "+uscita.size);
 		var num=m.postiLiberi;
 		var restanti= ArrayBuffer[Persona]();
 		if(codaInEntrata.size!=0 && num!=0)
@@ -59,6 +60,8 @@ class Fermata extends Actor
 					restanti+=codaInEntrata(p);
 			}
 		}
+		else
+			println("L'autobus non ha posti liberi (oppure nessuno deve salire)");
 		codaInEntrata=restanti;
 		if (uscita!=null && uscita.size!=0)
 		{

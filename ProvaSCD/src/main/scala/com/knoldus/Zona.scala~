@@ -21,6 +21,7 @@ import scala.xml.XML
 
 class Zona extends Actor 
 {
+	var zoneVicine = ArrayBuffer[ActorRef]();
 	var corsiaIn = ArrayBuffer[ActorRef]();
 	var corsiaOut = ArrayBuffer[ActorRef]();
 	var corsiaInCont = ArrayBuffer[ActorRef]();
@@ -33,11 +34,13 @@ class Zona extends Actor
 	var incrocio: ActorRef=null;
 	var id:String="";
 
-	var scena:Scene=null;
+	var stampeCorsieIn=ArrayBuffer[HBox]();
+	var stampeCorsieOut=ArrayBuffer[HBox]();
 
   	override def receive: Actor.Receive = 
 	{
-		case s:Scene => scena=s;
+		case h:HBox => stampeCorsieIn+=h;
+		case h:containerHBox => stampeCorsieOut+=h.hb;
 		case "Start" => start;
 		case p:Persona => inviaPedone(p);
 		case m:Mezzo => inviaMezzo(m);
@@ -74,39 +77,93 @@ class Zona extends Actor
 		var xml=XML.loadFile("/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/Z1.xml");
 		id=xml\"Zona"\"@id" text;
 		//Creo i pezzi
+		creaVicini(xml);
 		creaIncrocio(xml);
 		creaStrade(xml);
 		creaMarciapiedi(xml);
 		incrocio!new containerActrf(corsiaOut, marciapiedeOut);
 		incrocio!"Manda";	
 		//Avvio mezzi e pedoni	
-		messaggi;			
+		spostamenti(xml);			
 	}
 
-	def messaggi: Unit =
+	def spostamenti(xml:scala.xml.Elem): Unit =
 	{
 		var x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;} 
 
-		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "FA0", "1FO3", "1MO3", "X", "1MI3", "1MO1", "R"));
-		//var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "1MO3", "X", "1MI3", "1MO1", "R"));
-		     self!prsn;
+		//Creo prima i pedoni
+		var spostamenti = (xml \ "Zona" \ "Pedoni" \ "Pedone");
+		for(x <- 0 to spostamenti.size-1)
+		{
+			var identificativo:String= spostamenti(x)\"@id" text;
+			var percorso:String=spostamenti(x)\"@percorso" text;
+			var ab=ArrayBuffer[String]();
+			ab++=percorso.split(",");
+			var prsn= new Pedone (identificativo, ab);
+			self!prsn;
+		}
 
-		x=0; for (a<-0 to 999999) {x+=1;} 
-		x=0; for (a<-0 to 999999) {x+=1;} 
-		x=0; for (a<-0 to 999999) {x+=1;} 
-		x=0; for (a<-0 to 999999) {x+=1;}
+		//Poi le automobili
+		spostamenti = (xml \ "Zona" \ "Automobili" \ "Automobile");
+		for(x <- 0 to spostamenti.size-1)
+		{
+			var identificativo:String= spostamenti(x)\"@id" text;
+			var percorso:String=spostamenti(x)\"@percorso" text;	
+			var guidatore:String=spostamenti(x)\"@guidatore" text;
+			var ab=ArrayBuffer[String]();
+			ab++=percorso.split(",");
+			var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String]()));
+			self!mzz;
+		}	
 
-		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X", "1I2", "1O1", "R") , new Pedone ("P1", ArrayBuffer("")));
-		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
-		var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
-		//var mzz= new Autobus ("A0", ArrayBuffer("1I2", "1I1_2", "1I1_1", "X"));
-		//var mzz= new Auto ("M0", ArrayBuffer("1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
+		//Ed infine gli autobus
+		spostamenti = (xml \ "Zona" \ "Autobus" \ "Bus");
+		for(x <- 0 to spostamenti.size-1)
+		{
+			var identificativo:String= spostamenti(x)\"@id" text;
+			var percorso:String=spostamenti(x)\"@percorso" text;	
+			var ab=ArrayBuffer[String]();
+			ab++=percorso.split(",");
+			//Dopo aver letto il percorso e l'id devo prendere gli eventuali passeggeri
+			var passeggeri=ArrayBuffer[Persona]();
+			var  pass= (spostamenti \ "Passeggeri" \ "Passeggero");
+			for(x <- 0 to pass.size-1)
+			{
+				var identificativop:String= pass(x)\"@id" text;
+				var percorsop:String=pass(x)\"@percorso" text;
+				var abp=ArrayBuffer[String]();
+				abp++=percorsop.split(",");
+				var passeggero=new Pedone (identificativop, abp);
+				passeggero.inc;
+				passeggeri+=passeggero;
+			}
+			var mzz= new Autobus (identificativo, ab);
+			if(pass.size!=0)
+				mzz.passeggeri=passeggeri;
+			self!mzz;
+		}
+	}
 
-		self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;self!mzz;
-
-		self!mzz;
+	def creaVicini(xml:scala.xml.Elem): Unit =
+	{
+		var vicini = (xml \ "Zona" \ "Vicini" \ "Vicino");
+		for(x <- 0 to vicini.size-1)
+		{
+			var attr:String= vicini(x)\"@id" text;
+			//
+			//
+			//
+			//
+			//
+			//Chiedo l'attore all'actor system e lo aggiungo all'arraybuffer zoneVicine
+			//
+			//
+			//
+			//
+			//
+		}
 	}
 
 	def creaStrade(xml:scala.xml.Elem): Unit =
@@ -123,7 +180,7 @@ class Zona extends Actor
 
 
 
-			corsiaIn(x)!scena;
+			corsiaIn(x)!stampeCorsieIn(x);
 
 
 
@@ -169,7 +226,7 @@ class Zona extends Actor
 
 
 
-					corsiaInCont(x)!scena;
+					//corsiaInCont(x)!scena;
 
 
 
@@ -189,7 +246,7 @@ class Zona extends Actor
 
 
 
-			corsiaOut(x)!scena;
+			corsiaOut(x)!stampeCorsieOut(x);
 
 
 
@@ -231,9 +288,10 @@ class Zona extends Actor
 		for(x <- 0 to (corsiaOutCont.size-1))
 		{
 			if(corsiaOutCont(x)!=null)
+			{
 				corsiaOutCont(x)!dest;
-				//corsiaOutCont(x)!incrocio;
-			//DEVO METTERCI UNA ZONA
+				//corsiaOutCont(x)!zoneVicine(x);
+			}
 		}
 	}
 

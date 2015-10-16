@@ -37,7 +37,8 @@ object PriorityTestApplication extends JFXApp
 			fill = LightGreen
 			content = new HBox 
 			{
-				children = Seq( new Text 
+				
+				/*children = Seq( new Text 
 				{
 					text="SFX";
 					style = "-fx-font-size: 20pt"
@@ -52,9 +53,185 @@ object PriorityTestApplication extends JFXApp
 					fill = new LinearGradient(
 					endX = 0,
 					stops = Stops(PaleGreen, SeaGreen))
-				} )
+				} )*/
+
+
+				children = Seq( new HBox 
+				{
+					fill = Red
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!this;
+				},
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!this;
+				} ,
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!this;
+				},
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!this;
+				}
+
+
+
+
+				,
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!new containerHBox(this);
+				},
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!new containerHBox(this);
+				},
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!new containerHBox(this);
+				},
+				new HBox
+				{
+					fill = Blue
+					children = Seq( new Text 
+					{
+						text="SFX";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					},
+					new Text
+					{
+						text="           SFX2";
+						style = "-fx-font-size: 20pt"
+						fill = new LinearGradient(
+						endX = 0,
+						stops = Stops(PaleGreen, SeaGreen))
+					} )
+					zonaProva!new containerHBox(this);
+				})
+
 			}
-			zonaProva!this;			
+			//zonaProva!this;			
 		}
 	}
 

@@ -30,7 +30,7 @@
 		</StradeCont>
 		<Marciapiedi>
 			<MarciapiediIn>
-				<MarciapiedeIn id="1MI1"/>
+				<MarciapiedeIn id="1MI1" fermata="1FI1"/>
 				<MarciapiedeIn id="1MI2"/>
 				<MarciapiedeIn id="1MI3"/>
 				<MarciapiedeIn id="1MI4"/>
@@ -38,7 +38,7 @@
 			<MarciapiediOut>
 				<MarciapiedeOut id="1MO1"/>
 				<MarciapiedeOut id="1MO2"/>
-				<MarciapiedeOut id="1MO3"/>
+				<MarciapiedeOut id="1MO3" fermata="1FO3"/>
 				<MarciapiedeOut id="1MO4"/>
 			</MarciapiediOut>
 		</Marciapiedi>
@@ -56,5 +56,18 @@
 				<StrisciaPedonale id="1S4"/>
 			</StriscePedonali>
 		</Incrocio>
+		<Pedoni>
+			<Pedone id="P0" percorso="1MI1,FA0,1FO3,1MO3,X,1MI3,1MO1,R" />
+		</Pedoni>
+		<Automobili>
+			<Automobile id="M0" percorso="1I1_1,1I1_2,1O2,X,1I2,1O1,R" guidatore="P1"/>
+		</Automobili>
+		<Autobus>
+			<Bus id="A0" percorso="1I1_1,F,1I1_2,1O3_1,F,1O3_2,R">
+				<Passeggeri>
+					<Passeggero id="P1" percorso="1FI1,1MI1,Fine" />
+				</Passeggeri>
+			</Bus>
+		</Autobus>
 	</Zona>
 </xml>

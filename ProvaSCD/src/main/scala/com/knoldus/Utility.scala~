@@ -2,6 +2,8 @@ package com.knoldus
 
 import akka.actor.ActorRef
 import scala.collection.mutable.ArrayBuffer
+import scalafx.application.JFXApp
+import scalafx.scene.layout.HBox
 
 class containerActrf (c: ArrayBuffer[ActorRef], m: ArrayBuffer[ActorRef])
 {
@@ -41,11 +43,18 @@ class containerPersona (p: Persona)
 
 class containerDestinazione (d: ActorRef)
 {
-	var _destinazione = p;
+	var _destinazione = d;
 
 	def destinazione = _destinazione 
 	def destinazione_= (value:ActorRef):Unit =  { _destinazione = value; }
 }
+
+class containerHBox (h: HBox)
+{
+	def hb = h 
+	def hb_= (value:HBox):Unit =  { h = value; }
+}
+
 
 case object Rosso
 case object Verde

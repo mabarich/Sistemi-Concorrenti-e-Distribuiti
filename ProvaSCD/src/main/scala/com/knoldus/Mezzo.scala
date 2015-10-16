@@ -51,11 +51,6 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo
 
 class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo 
 {
-	//PROVA DA TOGLIERE
-	//var pedone=new Pedone("P1", ArrayBuffer("2FI1", "2MI1", "R"));
-	//pedone.inc;
-	//protected var _passeggeri = ArrayBuffer [Persona](pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone, pedone);
-	//PROVA DA TOGLIERE
 	protected var _passeggeri = ArrayBuffer [Persona]();
 	protected val _limite:Int = 20;
 

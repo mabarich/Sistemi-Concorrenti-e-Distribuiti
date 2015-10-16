@@ -34,13 +34,11 @@ class Zona extends Actor
 	var incrocio: ActorRef=null;
 	var id:String="";
 
-	var stampeCorsieIn=ArrayBuffer[HBox]();
-	var stampeCorsieOut=ArrayBuffer[HBox]();
+	var scena:Scene=null;
 
   	override def receive: Actor.Receive = 
 	{
-		case h:HBox => stampeCorsieIn+=h;
-		case h:containerHBox => stampeCorsieOut+=h.hb;
+		case s:Scene => scena=s;
 		case "Start" => start;
 		case p:Persona => inviaPedone(p);
 		case m:Mezzo => inviaMezzo(m);
@@ -93,7 +91,6 @@ class Zona extends Actor
 		x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;} 
 
-		//Creo prima i pedoni
 		var spostamenti = (xml \ "Zona" \ "Pedoni" \ "Pedone");
 		for(x <- 0 to spostamenti.size-1)
 		{
@@ -101,11 +98,10 @@ class Zona extends Actor
 			var percorso:String=spostamenti(x)\"@percorso" text;
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
-			var prsn= new Pedone (identificativo, ab);
+			var mzz= new Persona (identificativo, percorso);
 			self!prsn;
 		}
 
-		//Poi le automobili
 		spostamenti = (xml \ "Zona" \ "Automobili" \ "Automobile");
 		for(x <- 0 to spostamenti.size-1)
 		{
@@ -114,11 +110,10 @@ class Zona extends Actor
 			var guidatore:String=spostamenti(x)\"@guidatore" text;
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
-			var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String]()));
+			var mzz= new Automobile (identificativo, percorso, new Pedone(guidatore, ArrayBuffer[String]()));
 			self!mzz;
 		}	
 
-		//Ed infine gli autobus
 		spostamenti = (xml \ "Zona" \ "Autobus" \ "Bus");
 		for(x <- 0 to spostamenti.size-1)
 		{
@@ -126,27 +121,36 @@ class Zona extends Actor
 			var percorso:String=spostamenti(x)\"@percorso" text;	
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
-			//Dopo aver letto il percorso e l'id devo prendere gli eventuali passeggeri
 			var passeggeri=ArrayBuffer[Persona]();
 			var  pass= (spostamenti \ "Passeggeri" \ "Passeggero");
-			for(x <- 0 to pass.size-1)
-			{
-				var identificativop:String= pass(x)\"@id" text;
-				var percorsop:String=pass(x)\"@percorso" text;
-				var abp=ArrayBuffer[String]();
-				abp++=percorsop.split(",");
-				var passeggero=new Pedone (identificativop, abp);
-				passeggero.inc;
-				passeggeri+=passeggero;
-			}
-			var mzz= new Autobus (identificativo, ab);
-			if(pass.size!=0)
-				mzz.passeggeri=passeggeri;
+			var mzz= new Autobus (identificativo, percorso, new Pedone(guidatore, ArrayBuffer[String]()));
 			self!mzz;
 		}
+
+		var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "FA0", "1FO3", "1MO3", "X", "1MI3", "1MO1", "R"));
+		//var prsn= new Pedone ("P0", ArrayBuffer("1MI1", "1MO3", "X", "1MI3", "1MO1", "R"));
+		     self!prsn;
+
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;} 
+		x=0; for (a<-0 to 999999) {x+=1;}
+
+		//var mzz= new Auto ("M0", ArrayBuffer("1I1_1", "1I1_2", "1O2", "X", "1I2", "1O1", "R") , new Pedone ("P1", ArrayBuffer("")));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O2", "X"));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		//var mzz2= new Autobus ("A1", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		//var mzz3= new Autobus ("A2", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		//var mzz4= new Autobus ("A3", ArrayBuffer("1I1_1", "F", "1I1_2", "1O3_1", "F", "1O3_2","R"));
+		//var mzz= new Autobus ("A0", ArrayBuffer("1I2", "1I1_2", "1I1_1", "X"));
+		//var mzz= new Auto ("M0", ArrayBuffer("1I2", "1O1", "X") , new Pedone ("P1", ArrayBuffer("")));
+
+		
+		//self!mzz; 
+		//self!mzz2; self!mzz3; self!mzz4;
 	}
 
-	def creaVicini(xml:scala.xml.Elem): Unit =
+	def creaStrade(xml:scala.xml.Elem): Unit =
 	{
 		var vicini = (xml \ "Zona" \ "Vicini" \ "Vicino");
 		for(x <- 0 to vicini.size-1)
@@ -180,7 +184,7 @@ class Zona extends Actor
 
 
 
-			corsiaIn(x)!stampeCorsieIn(x);
+			corsiaIn(x)!scena;
 
 
 
@@ -226,7 +230,7 @@ class Zona extends Actor
 
 
 
-					//corsiaInCont(x)!scena;
+					corsiaInCont(x)!scena;
 
 
 
@@ -246,7 +250,7 @@ class Zona extends Actor
 
 
 
-			corsiaOut(x)!stampeCorsieOut(x);
+			corsiaOut(x)!scena;
 
 
 
@@ -271,7 +275,7 @@ class Zona extends Actor
 			
 
 
-			//corsiaOutCont(pos-1)!scena;
+			corsiaOutCont(pos-1)!scena;
 
 
 

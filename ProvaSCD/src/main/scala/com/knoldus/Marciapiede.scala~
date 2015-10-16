@@ -54,26 +54,33 @@ class Marciapiede extends Actor
 		{
 			if (dove!="R")
 			{
-				if(dove.indexOf("F") != -1)
+				if (dove=="FINE")
 				{
-					fermata!p;
+					println("Pedone "+p.id+" arrivato a destinazione sul marciapiede "+id+" e morirà");
 				}
 				else
-				{			
-					//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
-					var dv=dove.substring(3).toInt;
-					var io=id.substring(3).toInt;
-					if((numMarciapiedi-(io-1))!=dv)
-						nextActor!p;
+				{
+					if(dove.indexOf("F") != -1)
+					{
+						fermata!p;
+					}
 					else
-						nextMarciapiede!p;
+					{			
+						//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
+						var dv=dove.substring(3).toInt;
+						var io=id.substring(3).toInt;
+						if((numMarciapiedi-(io-1))!=dv)
+							nextActor!p;
+						else
+							nextMarciapiede!p;
+					}
 				}
 			}
 			else
 			{
 				p.reset;
 				destinazione!p;
-				println("Pedone "+p.id+" arrivato a destinazione sul marciapiede "+id+". Il pedone ha completato il giro e ripartirà.);
+				println("Pedone "+p.id+" arrivato a destinazione sul marciapiede "+id+". Il pedone ha completato il giro e ripartirà.");
 			}
 		}
 		else
