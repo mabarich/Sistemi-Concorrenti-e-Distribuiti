@@ -39,9 +39,11 @@ class Zona extends Actor
 
   	override def receive: Actor.Receive = 
 	{
+		case v:containerZona => zoneVicine+=v.zona;
 		case h:HBox => stampeCorsieIn+=h;
 		case h:containerHBox => stampeCorsieOut+=h.hb;
 		case "Start" => start;
+		case i:String => id=i;
 		case p:Persona => inviaPedone(p);
 		case m:Mezzo => inviaMezzo(m);
 	}
@@ -66,15 +68,17 @@ class Zona extends Actor
 
 	def start: Unit  =
 	{
-		println("Eccomi");
+		println("Eccomi: "+id);
 		//Creo la destinazione
-		destinazione=context.actorOf(Props[Destinazione], "Destinazione");
+		destinazione=context.actorOf(Props[Destinazione], id+"Destinazione");
 		destinazione!self;
 		//Creo l'incrocio
 		incrocio=context.actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "Incrocio"+id);
 		incrocio!"Start";
 		//Leggo il file XML
-		var xml=XML.loadFile("/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/Z1.xml");
+		var nome="/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/"+id+".xml";
+		println(nome);
+		var xml=XML.loadFile(nome);
 		id=xml\"Zona"\"@id" text;
 		//Creo i pezzi
 		creaVicini(xml);
@@ -180,7 +184,7 @@ class Zona extends Actor
 
 
 
-			corsiaIn(x)!stampeCorsieIn(x);
+			//corsiaIn(x)!stampeCorsieIn(x);
 
 
 
@@ -246,7 +250,7 @@ class Zona extends Actor
 
 
 
-			corsiaOut(x)!stampeCorsieOut(x);
+			//corsiaOut(x)!stampeCorsieOut(x);
 
 
 
@@ -282,15 +286,16 @@ class Zona extends Actor
 			corsiaOut(x)!dest;
 			if(corsiaOutCont(x)!=null)
 				corsiaOut(x)!corsiaOutCont(x);
-			else
-				corsiaOut(x)!incrocio;
+			else if (zoneVicine(x)!=null)
+				corsiaOut(x)!new containerZona(zoneVicine(x));
 		}		
 		for(x <- 0 to (corsiaOutCont.size-1))
 		{
 			if(corsiaOutCont(x)!=null)
 			{
 				corsiaOutCont(x)!dest;
-				//corsiaOutCont(x)!zoneVicine(x);
+				if (zoneVicine(x)!=null)
+					corsiaOutCont(x)!new containerZona(zoneVicine(x));
 			}
 		}
 	}
@@ -339,9 +344,14 @@ class Zona extends Actor
 			marciapiedeOut(x)!marciapiedeOut.size;
 		}
 		for(x <- 0 to (marciapiedeIn.size-1))
-		{
-			val ind=x+1;
-			marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut((4-ind)%4));
+		{	
+			if (x==0)
+				marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(marciapiedeOut.size-1));
+			else
+				marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(x-1));	
+
+			if (zoneVicine(x)!=null)
+				marciapiedeOut(x)!new containerZona(zoneVicine(x));
 		}
 	}
 

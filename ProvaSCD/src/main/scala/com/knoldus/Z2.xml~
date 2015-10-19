@@ -1,8 +1,7 @@
 <xml>
-	<Zona id="Z1">
+	<Zona id="Z2">
 		<Vicini>
-			<Vicino id="Z2" />
-			<Vicino id="Z3" />
+			<Vicino id="Z9" />
 		</Vicini>
 		<Strade>
 			<StradeIn>
@@ -54,19 +53,5 @@
 				<StrisciaPedonale id="1S4"/>
 			</StriscePedonali>
 		</Incrocio>
-		<Pedoni>
-			<!--<Pedone id="P0" percorso="1MI1,FA0,1FO3,1MO3,X,1MI3,1MO1,R" />-->
-			<Pedone id="P0" percorso="1MI1,1MO2,2MI4,2MO3,X,1MI3,1MO1,R" />
-		</Pedoni>
-		<!--<Automobili>
-			<Automobile id="M0" percorso="1I1_1,1I1_2,1O2,X,1I2,1O1,R" guidatore="P1"/>
-		</Automobili>
-		<Autobus>
-			<Bus id="A0" percorso="1I1_1,F,1I1_2,1O3_1,F,1O3_2,R">
-				<Passeggeri>
-					<Passeggero id="P1" percorso="1FI1,1MI1,FINE" />
-				</Passeggeri>
-			</Bus>
-		</Autobus>-->
 	</Zona>
 </xml>

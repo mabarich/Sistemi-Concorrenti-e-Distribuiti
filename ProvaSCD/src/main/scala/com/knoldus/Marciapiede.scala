@@ -15,6 +15,7 @@ class Marciapiede extends Actor
 
   	override def receive: Actor.Receive = 
 	{
+		case v:containerZona => nextActor=v.zona;
 		case p:Int => numMarciapiedi=p;
 		case "AA" => println("Contattato da incrocio");
 		case f:containerFermata => creaFermata(f);	
@@ -69,10 +70,10 @@ class Marciapiede extends Actor
 						//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
 						var dv=dove.substring(3).toInt;
 						var io=id.substring(3).toInt;
-						if((numMarciapiedi-(io-1))!=dv)
-							nextActor!p;
-						else
+						if ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1))
 							nextMarciapiede!p;
+						else
+							nextActor!p;
 					}
 				}
 			}

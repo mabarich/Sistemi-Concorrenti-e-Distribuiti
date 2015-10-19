@@ -24,10 +24,36 @@ object PriorityTestApplication extends JFXApp
 
 	val system = ActorSystem("priority", ConfigFactory.load);
 	//val myPriorityActor = system.actorOf(Props[MyPriorityActor].withDispatcher("prio-dispatcher"));
-	val zonaProva = system.actorOf(Props[Zona], "zonaProva");
-
+	val z1 = system.actorOf(Props[Zona], "Z1");
+	z1!"Z1";
+	val z2 = system.actorOf(Props[Zona], "Z2");
+	z2!"Z2";
+	val z3 = system.actorOf(Props[Zona], "Z3");
+	z3!"Z3";
+	val z4 = system.actorOf(Props[Zona], "Z4");
+	z4!"Z4";
 	
-	stage = new PrimaryStage 
+	z1!new containerZona(null);
+	z1!new containerZona(z2);
+	z1!new containerZona(z3);
+	z1!new containerZona(null);
+
+	z2!new containerZona(null);
+	z2!new containerZona(null);
+	z2!new containerZona(z4);
+	z2!new containerZona(z1);
+
+	z3!new containerZona(z1);
+	z3!new containerZona(z4);
+	z3!new containerZona(null);
+	z3!new containerZona(null);
+	
+	z4!new containerZona(z2);
+	z4!new containerZona(null);
+	z4!new containerZona(null);
+	z4!new containerZona(z3);
+	
+	/*stage = new PrimaryStage 
 	{
 		title.value = "Hello Stage"
 		width = 600
@@ -233,10 +259,13 @@ object PriorityTestApplication extends JFXApp
 			}
 			//zonaProva!this;			
 		}
-	}
+	}*/
 
 
-	zonaProva!"Start";
+	z1!"Start";
+	z2!"Start";
+	z3!"Start";
+	z4!"Start";
 }
 
 

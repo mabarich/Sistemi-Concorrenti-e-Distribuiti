@@ -49,6 +49,14 @@ class containerDestinazione (d: ActorRef)
 	def destinazione_= (value:ActorRef):Unit =  { _destinazione = value; }
 }
 
+class containerZona (z: ActorRef)
+{
+	var _zona = z;
+
+	def zona = _zona 
+	def zona_= (value:ActorRef):Unit =  { _zona = value; }
+}
+
 class containerHBox (h: HBox)
 {
 	var _hb = h;

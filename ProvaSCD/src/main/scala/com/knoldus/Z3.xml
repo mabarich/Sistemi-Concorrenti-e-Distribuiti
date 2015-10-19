@@ -1,0 +1,49 @@
+<xml>
+	<Zona id="Z3">
+		<Vicini>
+			<Vicino id="Z9" />
+		</Vicini>
+		<Strade>
+			<StradeIn>
+				<StradaIn id="3I1"/>
+				<StradaIn id="3I2"/>
+				<StradaIn id="3I3"/>
+				<StradaIn id="3I4"/>
+			</StradeIn>
+			<StradeOut>
+				<StradaOut id="3O1"/>
+				<StradaOut id="3O2"/>
+				<StradaOut id="3O3"/>
+				<StradaOut id="3O4"/>
+			</StradeOut>
+		</Strade>
+		<Marciapiedi>
+			<MarciapiediIn>
+				<MarciapiedeIn id="3MI1"/>
+				<MarciapiedeIn id="3MI2"/>
+				<MarciapiedeIn id="3MI3"/>
+				<MarciapiedeIn id="3MI4"/>
+			</MarciapiediIn>
+			<MarciapiediOut>
+				<MarciapiedeOut id="3MO1"/>
+				<MarciapiedeOut id="3MO2"/>
+				<MarciapiedeOut id="3MO3"/>
+				<MarciapiedeOut id="3MO4"/>
+			</MarciapiediOut>
+		</Marciapiedi>
+		<Incrocio>
+			<Tratti>
+				<Tratto id="3T1"/>
+				<Tratto id="3T2"/>
+				<Tratto id="3T3"/>
+				<Tratto id="3T4"/>
+			</Tratti>
+			<StriscePedonali>
+				<StrisciaPedonale id="3S1"/>
+				<StrisciaPedonale id="3S2"/>
+				<StrisciaPedonale id="3S3"/>
+				<StrisciaPedonale id="3S4"/>
+			</StriscePedonali>
+		</Incrocio>
+	</Zona>
+</xml>

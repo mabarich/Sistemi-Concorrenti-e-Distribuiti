@@ -27,6 +27,7 @@ class Corsia extends Actor
 
   	override def receive: Actor.Receive = 
 	{
+		case v:containerZona => nextActor=v.zona;
 		case h:HBox => scena=h;
 		case m:String => start(m);
 		case f:containerFermata => creaFermata(f);
@@ -57,7 +58,7 @@ class Corsia extends Actor
 	{
 
 
-		var testo: String= "Strada: "+id+"; Mezzo: "+m.id;
+		/*var testo: String= "Strada: "+id+"; Mezzo: "+m.id;
 		javafx.application.Platform.runLater(new Runnable 
 		{
 			override def run = 
@@ -74,7 +75,7 @@ class Corsia extends Actor
 					} )
 				}
 			}
-		});
+		});*/
 		
 
 

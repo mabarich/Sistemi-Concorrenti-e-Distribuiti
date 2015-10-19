@@ -51,8 +51,10 @@ class containerDestinazione (d: ActorRef)
 
 class containerHBox (h: HBox)
 {
-	def hb = h 
-	def hb_= (value:HBox):Unit =  { h = value; }
+	var _hb = h;
+
+	def hb = _hb 
+	def hb_= (value:HBox):Unit =  { _hb = value; }
 }
 
 
