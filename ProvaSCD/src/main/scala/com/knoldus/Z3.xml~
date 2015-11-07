@@ -1,56 +1,51 @@
 <xml>
 	<Zona id="Z3">
 		<Vicini>
-			<Vicino id="Z9" />
+			<Vicino id="Z2" />
+			<Vicino id="Nessuno" />
+			<Vicino id="Nessuno" />
+			<Vicino id="Z3" />
 		</Vicini>
 		<Strade>
 			<StradeIn>
-				<StradaIn id="1I1_1" fermata="1FI1"/>
-				<StradaIn id="1I2"/>
-				<StradaIn id="1I3"/>
-				<StradaIn id="1I4"/>
+				<StradaIn id="3I1"/>
+				<StradaIn id="3I2"/>
+				<StradaIn id="3I3"/>
+				<StradaIn id="3I4"/>
 			</StradeIn>
 			<StradeOut>
-				<StradaOut id="1O1"/>
-				<StradaOut id="1O2"/>
-				<StradaOut id="1O3_1" fermata="1FO3"/>
-				<StradaOut id="1O4"/>
+				<StradaOut id="3O1"/>
+				<StradaOut id="3O2"/>
+				<StradaOut id="3O3"/>
+				<StradaOut id="3O4"/>
 			</StradeOut>
 		</Strade>
-		<StradeCont>
-			<StradeInCont>
-				<StradaInCont id="1I1_2"/>
-			</StradeInCont>
-			<StradeOutCont>
-				<StradaOutCont id="1O3_2"/>
-			</StradeOutCont>
-		</StradeCont>
 		<Marciapiedi>
 			<MarciapiediIn>
-				<MarciapiedeIn id="1MI1" fermata="1FI1"/>
-				<MarciapiedeIn id="1MI2"/>
-				<MarciapiedeIn id="1MI3"/>
-				<MarciapiedeIn id="1MI4"/>
+				<MarciapiedeIn id="3MI1"/>
+				<MarciapiedeIn id="3MI2"/>
+				<MarciapiedeIn id="3MI3"/>
+				<MarciapiedeIn id="3MI4"/>
 			</MarciapiediIn>
 			<MarciapiediOut>
-				<MarciapiedeOut id="1MO1"/>
-				<MarciapiedeOut id="1MO2"/>
-				<MarciapiedeOut id="1MO3" fermata="1FO3"/>
-				<MarciapiedeOut id="1MO4"/>
+				<MarciapiedeOut id="3MO1"/>
+				<MarciapiedeOut id="3MO2"/>
+				<MarciapiedeOut id="3MO3"/>
+				<MarciapiedeOut id="3MO4"/>
 			</MarciapiediOut>
 		</Marciapiedi>
 		<Incrocio>
 			<Tratti>
-				<Tratto id="1T1"/>
-				<Tratto id="1T2"/>
-				<Tratto id="1T3"/>
-				<Tratto id="1T4"/>
+				<Tratto id="3T1"/>
+				<Tratto id="3T2"/>
+				<Tratto id="3T3"/>
+				<Tratto id="3T4"/>
 			</Tratti>
 			<StriscePedonali>
-				<StrisciaPedonale id="1S1"/>
-				<StrisciaPedonale id="1S2"/>
-				<StrisciaPedonale id="1S3"/>
-				<StrisciaPedonale id="1S4"/>
+				<StrisciaPedonale id="3S1"/>
+				<StrisciaPedonale id="3S2"/>
+				<StrisciaPedonale id="3S3"/>
+				<StrisciaPedonale id="3S4"/>
 			</StriscePedonali>
 		</Incrocio>
 	</Zona>

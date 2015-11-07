@@ -57,6 +57,26 @@ class containerZona (z: ActorRef)
 	def zona_= (value:ActorRef):Unit =  { _zona = value; }
 }
 
+class containerVicino (i: String, z: ActorRef)
+{
+	var _zona = z;
+	var _id = i;
+
+	def zona = _zona 
+	def zona_= (value:ActorRef):Unit =  { _zona = value; }
+
+	def id = _id 
+	def id_= (value:String):Unit =  { _id = value; }
+}
+
+class containerId (m: String)
+	{
+		var _id = m;
+
+		def id = _id 
+		def id_= (value:String):Unit =  { _id = value; }
+	}
+
 class containerHBox (h: HBox)
 {
 	var _hb = h;
@@ -69,6 +89,14 @@ class containerHBox (h: HBox)
 case object Rosso
 case object Verde
 case object CambiaSemafori
+case object RequestID
+case object Vicini
+case object Strade
+case object Marciapiedi
+case object Incroci
+case object AggiornaIncrocio
+case object Movimenti
+case object Start
 
 class mezzoPiuPriorita (m: Mezzo)
 {

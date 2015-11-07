@@ -1,7 +1,10 @@
 <xml>
 	<Zona id="Z3">
 		<Vicini>
-			<Vicino id="Z9" />
+			<Vicino id="Z1" />
+			<Vicino id="Z4" />
+			<Vicino id="Nessuno" />
+			<Vicino id="Nessuno" />
 		</Vicini>
 		<Strade>
 			<StradeIn>

@@ -1,4 +1,4 @@
-package com.knoldus
+package com.knoldus;
 
 
 import scalafx.Includes._
@@ -10,6 +10,17 @@ import scalafx.scene.paint.{LinearGradient, Stops}
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.text.Text
 import scalafx.scene.layout.HBox
+import scalafx.scene.layout.BorderPane
+
+
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
 
 import akka.actor.Actor
@@ -19,253 +30,29 @@ import scala.concurrent.duration._
 import akka.actor.Props
 import com.typesafe.config.ConfigFactory
 
-object PriorityTestApplication extends JFXApp 
+object PriorityTestApplication extends JFXApp
 {
-
-	val system = ActorSystem("priority", ConfigFactory.load);
-	//val myPriorityActor = system.actorOf(Props[MyPriorityActor].withDispatcher("prio-dispatcher"));
-	val z1 = system.actorOf(Props[Zona], "Z1");
-	z1!"Z1";
-	val z2 = system.actorOf(Props[Zona], "Z2");
-	z2!"Z2";
-	val z3 = system.actorOf(Props[Zona], "Z3");
-	z3!"Z3";
-	val z4 = system.actorOf(Props[Zona], "Z4");
-	z4!"Z4";
-	
-	z1!new containerZona(null);
-	z1!new containerZona(z2);
-	z1!new containerZona(z3);
-	z1!new containerZona(null);
-
-	z2!new containerZona(null);
-	z2!new containerZona(null);
-	z2!new containerZona(z4);
-	z2!new containerZona(z1);
-
-	z3!new containerZona(z1);
-	z3!new containerZona(z4);
-	z3!new containerZona(null);
-	z3!new containerZona(null);
-	
-	z4!new containerZona(z2);
-	z4!new containerZona(null);
-	z4!new containerZona(null);
-	z4!new containerZona(z3);
-	
-	/*stage = new PrimaryStage 
+	override def main(args: Array[String]) =
 	{
-		title.value = "Hello Stage"
-		width = 600
-		height = 450
-		scene = new Scene 
-		{
-			fill = LightGreen
-			content = new HBox 
-			{
-				
-				/*children = Seq( new Text 
-				{
-					text="SFX";
-					style = "-fx-font-size: 20pt"
-					fill = new LinearGradient(
-					endX = 0,
-					stops = Stops(PaleGreen, SeaGreen))
-				},
-				new Text
-				{
-					text="           SFX2";
-					style = "-fx-font-size: 20pt"
-					fill = new LinearGradient(
-					endX = 0,
-					stops = Stops(PaleGreen, SeaGreen))
-				} )*/
+		new Via("2551","Z1").parti;
+		new Via("2552","Z2").parti;
+		new Via("2553","Z3").parti;
+		new Via("2554","Z4").parti;
+	}
+}
 
-
-				children = Seq( new HBox 
-				{
-					fill = Red
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!this;
-				},
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!this;
-				} ,
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!this;
-				},
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!this;
-				}
-
-
-
-
-				,
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!new containerHBox(this);
-				},
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!new containerHBox(this);
-				},
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!new containerHBox(this);
-				},
-				new HBox
-				{
-					fill = Blue
-					children = Seq( new Text 
-					{
-						text="SFX";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					},
-					new Text
-					{
-						text="           SFX2";
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-					zonaProva!new containerHBox(this);
-				})
-
-			}
-			//zonaProva!this;			
-		}
-	}*/
-
-
-	z1!"Start";
-	z2!"Start";
-	z3!"Start";
-	z4!"Start";
+class Via (p:String, i:String)
+{
+	var port:String=p;
+	var id:String=i;
+	
+	def parti:Unit=
+	{
+		val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").withFallback(ConfigFactory.parseString("akka.cluster.roles = [Zona]")).withFallback(ConfigFactory.load())
+		val system = ActorSystem("Priority", config);
+		val zona = system.actorOf(Props(classOf[Zona],id,port).withDispatcher("prio-dispatcher4"), id);
+		zona!Start;
+	}
 }
 
 

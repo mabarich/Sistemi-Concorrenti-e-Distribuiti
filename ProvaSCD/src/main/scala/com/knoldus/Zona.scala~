@@ -1,6 +1,4 @@
 package com.knoldus
-
-
 import scalafx.Includes._
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
@@ -11,15 +9,25 @@ import scalafx.scene.shape.Rectangle
 import scalafx.scene.text.Text
 import scalafx.scene.layout.HBox
 
-
-
+import akka.cluster.ClusterEvent._
+import akka.cluster.Member
+import akka.cluster.Cluster
+import akka.actor.RootActorPath
 import akka.actor.Actor
 import akka.actor.ActorRef
+import akka.actor.ActorSystem
 import akka.actor.Props
 import scala.collection.mutable.ArrayBuffer
 import scala.xml.XML
+import scala.concurrent.Await
+import akka.util.Timeout
+import scala.concurrent.duration._
+import scala.util.Success
+import com.typesafe.config.Config
+import akka.dispatch.PriorityGenerator
+import akka.dispatch.UnboundedStablePriorityMailbox
 
-class Zona extends Actor 
+class Zona (i:String, p:String) extends Actor 
 {
 	var zoneVicine = ArrayBuffer[ActorRef]();
 	var corsiaIn = ArrayBuffer[ActorRef]();
@@ -32,20 +40,79 @@ class Zona extends Actor
 	var fermateOut = ArrayBuffer[ActorRef]();
 	var destinazione: ActorRef =null;
 	var incrocio: ActorRef=null;
-	var id:String="";
+	var id:String=i;
+	var zone=0;
+	var contZone:Int= -1;
+	var port:String =p;
+	var nomiZone = ArrayBuffer[String]();
+	var xml:scala.xml.Elem=null;
+	val cluster = Cluster(context.system);
 
-	var stampeCorsieIn=ArrayBuffer[HBox]();
-	var stampeCorsieOut=ArrayBuffer[HBox]();
+	override def preStart(): Unit = 
+	{
+		cluster.subscribe(self, initialStateMode = InitialStateAsEvents,classOf[MemberEvent], classOf[UnreachableMember]);
+	}
 
   	override def receive: Actor.Receive = 
 	{
-		case v:containerZona => zoneVicine+=v.zona;
-		case h:HBox => stampeCorsieIn+=h;
-		case h:containerHBox => stampeCorsieOut+=h.hb;
-		case "Start" => start;
-		case i:String => id=i;
+		case num:Int => if(("Z"+num.toString)==id) sender!id;
+		case Start => start;
+
+		case MemberUp(member:Member) => println ("\nmemberUp\n"); if(contZone!=zone) { registra(member); }
+		case Vicini => println("\n Vicini");  if(zone==0 || contZone== -1 || zone!=contZone) self!"Vicini"; else creaResto;
+		case Incroci => println("\nOra creo l'incrocio\n"); creaIncrocio;
+		case Strade => println("\nOra creo le strade\n"); creaStrade;
+		case Marciapiedi => println("\nOra creo i marciapiedi\n"); creaMarciapiedi;
+		case AggiornaIncrocio => incrocio!new containerActrf(corsiaOut, marciapiedeOut);
+		                      	   incrocio!"Manda";
+		case Movimenti => spostamenti;
+		case s:String => aggiungiVicino(s, sender);		
+
 		case p:Persona => inviaPedone(p);
 		case m:Mezzo => inviaMezzo(m);
+	}
+
+	def creaResto:Unit =
+	{
+		//Creo la destinazione
+		destinazione=context.actorOf(Props(classOf[Destinazione], self), id+"Destinazione");
+		//Creo l'incrocio
+		incrocio=context.actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "Incrocio"+id);
+		incrocio!"Start";
+		self!Incroci;
+		self!Strade;
+		self!Marciapiedi;
+		self!AggiornaIncrocio;	
+		//Avvio mezzi e pedoni	
+		self!Movimenti;	
+		println("\nZona "+id+": zone:"+zone+"/contZone:"+contZone+"/nomiZone.size:"+nomiZone.size+"/zoneVicine.size"+zoneVicine.size+"\n");
+		for(l<-0 to nomiZone.size-1)
+		{
+			print(nomiZone(l)+"     ");
+		}
+		for(l<-0 to zoneVicine.size-1)
+		{
+			if(zoneVicine(l)==null)
+				println("zoneVicine("+l+")==null");
+			else
+				println(zoneVicine(l).toString);
+		}
+	}
+
+	def aggiungiVicino(is: String, z: ActorRef): Unit =
+	{
+		for (x<- 0 to nomiZone.size-1)
+		{
+			if(nomiZone(x)==is)
+			{
+				zoneVicine(x)=z;
+				nomiZone(x)="null";
+				if (contZone == -1) 
+					contZone+=1;
+				contZone+=1;
+				println("\n La zona "+id+" ha aggiunto una zona");
+			}
+		}
 	}
 
 	def inviaPedone(p: Persona): Unit =
@@ -68,30 +135,30 @@ class Zona extends Actor
 
 	def start: Unit  =
 	{
-		println("Eccomi: "+id);
-		//Creo la destinazione
-		destinazione=getContext().actorOf(Props[Destinazione], id+"Destinazione");
-		destinazione!self;
-		//Creo l'incrocio
-		incrocio=getContext().actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "Incrocio"+id);
-		incrocio!"Start";
+		val cluster = Cluster(context.system);
+		context.actorOf(Props(classOf[MapActor],id,self), "MapActor");
 		//Leggo il file XML
 		var nome="/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/"+id+".xml";
-		println(nome);
-		var xml=XML.loadFile(nome);
+		xml=XML.loadFile(nome);
 		id=xml\"Zona"\"@id" text;
+		leggiVicini;
 		//Creo i pezzi
-		creaVicini(xml);
-		creaIncrocio(xml);
-		creaStrade(xml);
-		creaMarciapiedi(xml);
-		incrocio!new containerActrf(corsiaOut, marciapiedeOut);
-		incrocio!"Manda";	
-		//Avvio mezzi e pedoni	
-		spostamenti(xml);			
+		self!Vicini;	
 	}
 
-	def spostamenti(xml:scala.xml.Elem): Unit =
+	def registra(member:Member): Unit =
+	{	
+		for(x<- 0 to nomiZone.size-1)
+		{
+			var nome:String=nomiZone(x);
+			if (nome!="null" && !RootActorPath(member.address).toString.contains(port))
+			{
+				context.system.actorSelection(RootActorPath(member.address)/"user"/nome)!nome.substring(1).toInt;	 	
+			}
+		}
+	}
+
+	def spostamenti: Unit =
 	{
 		var x=0; for (a<-0 to 999999) {x+=1;} 
 		x=0; for (a<-0 to 999999) {x+=1;} 
@@ -150,27 +217,26 @@ class Zona extends Actor
 		}
 	}
 
-	def creaVicini(xml:scala.xml.Elem): Unit =
+	def leggiVicini: Unit =
 	{
 		var vicini = (xml \ "Zona" \ "Vicini" \ "Vicino");
 		for(x <- 0 to vicini.size-1)
 		{
+			zoneVicine+=null;
 			var attr:String= vicini(x)\"@id" text;
-			//
-			//
-			//
-			//
-			//
-			//Chiedo l'attore all'actor system e lo aggiungo all'arraybuffer zoneVicine
-			//
-			//
-			//
-			//
-			//
+			if(attr=="Nessuno")
+			{
+				nomiZone+="null";		
+			}	
+			else
+			{
+				nomiZone+=attr;
+				zone+=1;
+			}
 		}
 	}
 
-	def creaStrade(xml:scala.xml.Elem): Unit =
+	def creaStrade: Unit =
 	{
 		var dest=new containerDestinazione(destinazione);
 		//CORSIE ENTRANTI
@@ -179,20 +245,16 @@ class Zona extends Actor
 		{
 			fermateIn+=null;
 			var attr:String= strade(x)\"@id" text;
-			corsiaIn+=getContext().actorOf(Props[Corsia], attr);
+			corsiaIn+=context.actorOf(Props[Corsia], attr);
 			corsiaIn(x)!attr;
 
-
-
 			//corsiaIn(x)!stampeCorsieIn(x);
-
-
 
 			corsiaInCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
 			{
-				fermateIn(x)=getContext().actorOf(Props[Fermata], fermata);
+				fermateIn(x)=context.actorOf(Props[Fermata], fermata);
 				fermateIn(x)!self;
 				fermateIn(x)!fermata;
 				var conteiner=new containerFermata(fermateIn(x));
@@ -205,7 +267,7 @@ class Zona extends Actor
 		{
 			var attr:String= strade(x)\"@id" text;
 			var pos= attr.substring(2, 3).toInt; //1I1_2
-			corsiaInCont(pos-1)=getContext().actorOf(Props[Corsia], attr);
+			corsiaInCont(pos-1)=context.actorOf(Props[Corsia], attr);
 			corsiaInCont(pos-1)!attr;
 		}
 		if(corsiaIn.size!=0)
@@ -228,11 +290,7 @@ class Zona extends Actor
 				{
 					corsiaInCont(x)!dest;
 
-
-
 					//corsiaInCont(x)!scena;
-
-
 
 					corsiaInCont(x)!incrocio;
 				}
@@ -245,20 +303,16 @@ class Zona extends Actor
 		{
 			fermateOut+=null;
 			var attr:String= strade(x)\"@id" text;
-			corsiaOut+=getContext().actorOf(Props[Corsia], attr);
+			corsiaOut+=context.actorOf(Props[Corsia], attr);
 			corsiaOut(x)!attr;
 
-
-
 			//corsiaOut(x)!stampeCorsieOut(x);
-
-
 
 			corsiaOutCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
 			{
-				fermateOut(x)=getContext().actorOf(Props[Fermata], fermata);
+				fermateOut(x)=context.actorOf(Props[Fermata], fermata);
 				fermateOut(x)!self;
 				fermateOut(x)!fermata;
 				var conteiner=new containerFermata(fermateOut(x));
@@ -270,14 +324,10 @@ class Zona extends Actor
 		{
 			var attr:String= strade(x)\"@id" text;
 			var pos= attr.substring(2, 3).toInt; //1O3_2
-			corsiaOutCont(pos-1)=getContext().actorOf(Props[Corsia], attr);
+			corsiaOutCont(pos-1)=context.actorOf(Props[Corsia], attr);
 			corsiaOutCont(pos-1)!attr;
 			
-
-
 			//corsiaOutCont(pos-1)!scena;
-
-
 
 		}	
 		//Imposto le destinazioni delle strade
@@ -300,7 +350,7 @@ class Zona extends Actor
 		}
 	}
 
-	def creaMarciapiedi(xml:scala.xml.Elem): Unit =
+	def creaMarciapiedi: Unit =
 	{
 		var dest=new containerDestinazione(destinazione);
 		//MARCIAPIEDI ENTRANTI
@@ -308,7 +358,7 @@ class Zona extends Actor
 		for(x <- 0 to marciapiedi.size-1)
 		{
 			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeIn+=getContext().actorOf(Props[Marciapiede], attr);
+			marciapiedeIn+=context.actorOf(Props[Marciapiede], attr);
 			marciapiedeIn(x)!attr;
 			var fermata:String= marciapiedi(x)\"@fermata" text;
 			if(fermata!="")
@@ -323,7 +373,7 @@ class Zona extends Actor
 		for(x <- 0 to marciapiedi.size-1)
 		{
 			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeOut+=getContext().actorOf(Props[Marciapiede], attr);
+			marciapiedeOut+=context.actorOf(Props[Marciapiede], attr);
 			marciapiedeOut(x)!attr;
 			var fermata:String= marciapiedi(x)\"@fermata" text;
 			if(fermata!="")
@@ -355,7 +405,7 @@ class Zona extends Actor
 		}
 	}
 
-	def creaIncrocio(xml:scala.xml.Elem): Unit =
+	def creaIncrocio: Unit =
 	{
 		//Creo l'incrocio
 		var tratti = ArrayBuffer[ActorRef]();
@@ -366,7 +416,7 @@ class Zona extends Actor
 		for(x <- 0 to tratto.size-1)
 		{
 			var attr:String= tratto(x)\"@id" text;
-			tratti+=getContext().actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), attr);
+			tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), attr);
 			tratti(x)!attr;
 			if(x%2==0)
 				tratti(x)!Verde;
@@ -379,7 +429,7 @@ class Zona extends Actor
 		for(x <- 0 to striscia.size-1)
 		{
 			var attr:String= striscia(x)\"@id" text;
-			strisce+=getContext().actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), attr);
+			strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), attr);
 			strisce(x)!attr;
 			strisce(x)!Rosso;
 		}
@@ -390,3 +440,19 @@ class Zona extends Actor
 		}
 	}
 }
+
+class ZonaPriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(
+PriorityGenerator 
+{
+	case Start => 0
+	case num:Int => 1
+	case Vicini => 3
+	case Incroci => 4
+	case Strade => 4
+	case Marciapiedi => 4
+	case AggiornaIncrocio => 4	
+	case Movimenti => 4
+	case m:Mezzo => 5
+	case p:Pedone => 5	
+	case _ => 2
+})

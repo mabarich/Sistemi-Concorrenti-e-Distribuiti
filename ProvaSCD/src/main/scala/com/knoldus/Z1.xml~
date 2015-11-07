@@ -56,7 +56,7 @@
 		</Incrocio>
 		<Pedoni>
 			<!--<Pedone id="P0" percorso="1MI1,FA0,1FO3,1MO3,X,1MI3,1MO1,R" />-->
-			<Pedone id="P0" percorso="1MI1,1MO2,2MI4,2MO3,X,1MI3,1MO1,R" />
+			<Pedone id="P0" percorso="1MI1,1MO2,2MI4,2MO3,X,2MI3,2MO4,1MI2,1MO1,R" />
 		</Pedoni>
 		<!--<Automobili>
 			<Automobile id="M0" percorso="1I1_1,1I1_2,1O2,X,1I2,1O1,R" guidatore="P1"/>
