@@ -29,24 +29,33 @@ import akka.dispatch.UnboundedStablePriorityMailbox
 
 class Zona (i:String, p:String) extends Actor 
 {
+	//Zone vicine
 	var zoneVicine = ArrayBuffer[ActorRef]();
+	//Lista corsie e marciapiedi
 	var corsiaIn = ArrayBuffer[ActorRef]();
 	var corsiaOut = ArrayBuffer[ActorRef]();
 	var corsiaInCont = ArrayBuffer[ActorRef]();
 	var corsiaOutCont = ArrayBuffer[ActorRef]();
 	var marciapiedeIn = ArrayBuffer[ActorRef]();
 	var marciapiedeOut = ArrayBuffer[ActorRef]();
+	//Lista fermate
 	var fermateIn = ArrayBuffer[ActorRef]();
 	var fermateOut = ArrayBuffer[ActorRef]();
 	var destinazione: ActorRef =null;
 	var incrocio: ActorRef=null;
 	var id:String=i;
+	//Contatori per la creazione dei vicini
 	var zone=0;
 	var contZone:Int= -1;
-	var port:String =p;
 	var nomiZone = ArrayBuffer[String]();
+	//Porta (per evitare di mandare messaggi a se stesso inutilmente)
+	var port:String =p;
 	var xml:scala.xml.Elem=null;
 	val cluster = Cluster(context.system);
+	var mezziRicevuti = ArrayBuffer[String]();
+	val maxMezzi: Int= 1;
+	var pedoniRicevuti = ArrayBuffer[String]();
+	val maxPedoni: Int= 1;
 
 	override def preStart(): Unit = 
 	{
@@ -60,16 +69,40 @@ class Zona (i:String, p:String) extends Actor
 
 		case MemberUp(member:Member) => if(contZone!=zone) { registra(member); }
 		case Vicini => if(zone==0 || contZone== -1 || zone!=contZone) self!Vicini; else creaResto;
-		case Incroci => println("\nOra creo l'incrocio\n"); creaIncrocio;
-		case Strade => println("\nOra creo le strade\n"); creaStrade;
-		case Marciapiedi => println("\nOra creo i marciapiedi\n"); creaMarciapiedi;
+		case Incroci => creaIncrocio;
+		case Strade => creaStrade;
+		case Marciapiedi => creaMarciapiedi;
 		case AggiornaIncrocio => incrocio!new containerActrf(corsiaOut, marciapiedeOut);
 		                      	   incrocio!"Manda";
 		case Movimenti => spostamenti;
 		case s:String => aggiungiVicino(s, sender);		
 
-		case p:Persona => inviaPedone(p);
-		case m:Mezzo => inviaMezzo(m);
+		case p:Persona => sender!true; if(checkPedoni(p)) inviaPedone(p);
+		case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
+	}
+
+	def checkPedoni(p:Persona): Boolean =
+	{
+		val idPedone=p.id;
+		val result= pedoniRicevuti.contains(idPedone);
+		if(pedoniRicevuti.size==maxPedoni)
+		{
+			pedoniRicevuti.remove(0);	
+		}
+		pedoniRicevuti+=idPedone;
+		!result;
+	}
+
+	def checkMezzi(m:Mezzo): Boolean =
+	{
+		val idMezzo=m.id;
+		val result= mezziRicevuti.contains(idMezzo);
+		if(mezziRicevuti.size==maxMezzi)
+		{
+			mezziRicevuti.remove(0);	
+		}
+		mezziRicevuti+=idMezzo;
+		!result;
 	}
 
 	def creaResto:Unit =
@@ -85,18 +118,6 @@ class Zona (i:String, p:String) extends Actor
 		self!AggiornaIncrocio;	
 		//Avvio mezzi e pedoni	
 		self!Movimenti;	
-		println("\nZona "+id+": zone:"+zone+"/contZone:"+contZone+"/nomiZone.size:"+nomiZone.size+"/zoneVicine.size"+zoneVicine.size+"\n");
-		for(l<-0 to nomiZone.size-1)
-		{
-			print(nomiZone(l)+"     ");
-		}
-		for(l<-0 to zoneVicine.size-1)
-		{
-			if(zoneVicine(l)==null)
-				println("zoneVicine("+l+")==null");
-			else
-				println(zoneVicine(l).toString);
-		}
 	}
 
 	def aggiungiVicino(is: String, z: ActorRef): Unit =
@@ -246,9 +267,6 @@ class Zona (i:String, p:String) extends Actor
 			var attr:String= strade(x)\"@id" text;
 			corsiaIn+=context.actorOf(Props[Corsia], attr);
 			corsiaIn(x)!attr;
-
-			//corsiaIn(x)!stampeCorsieIn(x);
-
 			corsiaInCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
@@ -288,9 +306,6 @@ class Zona (i:String, p:String) extends Actor
 				if(corsiaInCont(x)!=null)
 				{
 					corsiaInCont(x)!dest;
-
-					//corsiaInCont(x)!scena;
-
 					corsiaInCont(x)!incrocio;
 				}
 			}
@@ -325,9 +340,6 @@ class Zona (i:String, p:String) extends Actor
 			var pos= attr.substring(2, 3).toInt; //1O3_2
 			corsiaOutCont(pos-1)=context.actorOf(Props[Corsia], attr);
 			corsiaOutCont(pos-1)!attr;
-			
-			//corsiaOutCont(pos-1)!scena;
-
 		}	
 		//Imposto le destinazioni delle strade
 		for(x <- 0 to (corsiaOut.size-1))

@@ -1,17 +1,10 @@
 package com.knoldus
 
 
-import scalafx.Includes._
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.scene.Scene
-import scalafx.scene.paint.Color._
-import scalafx.scene.paint.{LinearGradient, Stops}
-import scalafx.scene.shape.Rectangle
-import scalafx.scene.text.Text
-import scalafx.scene.layout.HBox
-
-
+import scala.concurrent.Await
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.duration._
 
 import akka.actor.Actor
 import akka.actor.ActorRef
@@ -23,12 +16,9 @@ class Corsia extends Actor
 	var id="";
 	var destinazione:ActorRef = null;
 	
-	var scena:HBox=null;
-
   	override def receive: Actor.Receive = 
 	{
 		case v:containerZona => nextActor=v.zona;
-		case h:HBox => scena=h;
 		case m:String => start(m);
 		case f:containerFermata => creaFermata(f);
 		case z:containerDestinazione => destinazione=z.destinazione;
@@ -56,29 +46,7 @@ class Corsia extends Actor
 
 	def gestisci (m:Mezzo): Unit =
 	{
-
-
-		/*var testo: String= "Strada: "+id+"; Mezzo: "+m.id;
-		javafx.application.Platform.runLater(new Runnable 
-		{
-			override def run = 
-			{
-				scena.children= new HBox 
-				{
-					children = Seq( new Text 
-					{
-						text=testo;
-						style = "-fx-font-size: 20pt"
-						fill = new LinearGradient(
-						endX = 0,
-						stops = Stops(PaleGreen, SeaGreen))
-					} )
-				}
-			}
-		});*/
-		
-
-
+		implicit val timeout = Timeout(5 seconds)
 		println("Mezzo "+m.id+" arrivato sulla strada "+id);
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		m.inc;
@@ -100,7 +68,23 @@ class Corsia extends Actor
 					{
 						if(dove=="Riparti")
 							m.next = -1;
-						nextActor!m;
+						//nextActor!m;
+						
+						if(id.contains("I") || id.contains("_1"))
+							nextActor!m;
+						//Uso il Future solo se mando ad altre zone, ovvero se ho una corsia uscente
+						else
+						{
+							var result: Boolean=false;
+							while(!result)
+							{
+								val future = nextActor ? m; 
+								val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+								if (bool)
+									result=true;
+							}
+						}
+
 					}
 				}
 			}

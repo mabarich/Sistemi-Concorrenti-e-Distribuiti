@@ -4,6 +4,11 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import scala.collection.mutable.ArrayBuffer
 
+import scala.concurrent.Await
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.duration._
+
 class Marciapiede extends Actor 
 {	
 	var nextActor:ActorRef=null;
@@ -46,6 +51,7 @@ class Marciapiede extends Actor
 
 	def gestisci (p:Persona): Unit =
 	{
+		implicit val timeout = Timeout(5 seconds)
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		println("Persona "+p.id+" arrivato sul marciapiede "+id);
 		p.inc;
@@ -71,9 +77,26 @@ class Marciapiede extends Actor
 						var dv=dove.substring(3).toInt;
 						var io=id.substring(3).toInt;
 						if ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1))
+						{
 							nextMarciapiede!p;
+						}						
 						else
-							nextActor!p;
+						{
+							if(id.contains("MI"))
+								nextActor!p;
+							//Uso il Future solo se mando ad altre zone, ovvero se ho un marciapiede uscente
+							else
+							{
+								var result: Boolean=false;
+								while(!result)
+								{
+									val future = nextActor ? p; 
+									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+									if (bool)
+										result=true;
+								}
+							}
+						}
 					}
 				}
 			}

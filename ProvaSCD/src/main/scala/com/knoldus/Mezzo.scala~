@@ -70,7 +70,6 @@ class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo
 			for (p <- 0 to _passeggeri.size-1)
 			{	
 				var dove=_passeggeri(p).nxt; 
-				println("dove: "+dove+"; id fermata: "+idFermata);
 				if (dove==idFermata) 
 				{
 					discesa+=_passeggeri(p);

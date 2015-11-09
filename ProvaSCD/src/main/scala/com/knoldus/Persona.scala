@@ -33,7 +33,7 @@ trait Persona
 	def percorso_= (value:ArrayBuffer [String]):Unit =  { _percorso = value; }
 }
 
-class Pedone (i: String, p: ArrayBuffer [String]) extends Persona 
+class Pedone (i: String, p: ArrayBuffer [String]) extends Persona with Serializable
 {
 	id = i;
 	percorso = p;

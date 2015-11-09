@@ -36,7 +36,7 @@ trait Mezzo
 	def next_= (value:Int):Unit =  { _next = value; }
 }
 
-class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo 
+class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo with Serializable
 {
 	protected var _guidatore:Persona=null;
 
@@ -49,7 +49,7 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo
 	def guidatore_= (value:Persona):Unit =  { _guidatore = value; }
 }
 
-class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo 
+class Autobus (i: String, p: ArrayBuffer [String]) extends Mezzo with Serializable
 {
 	protected var _passeggeri = ArrayBuffer [Persona]();
 	protected val _limite:Int = 20;
