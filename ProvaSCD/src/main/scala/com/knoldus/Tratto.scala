@@ -88,7 +88,10 @@ PriorityGenerator
 	case Verde => 0
 	case Rosso => 0
 	case m: mezzoPiuPriorita => 1
+	case m: mezzoDeviatoPiuPriorita => 1
 	case m: Mezzo => 2
+	case m: mezzoDeviato => 2
 	case m: containerMezzo => 2
+	case m: containerMezzoDeviato => 2
 	case _ => 3
 })

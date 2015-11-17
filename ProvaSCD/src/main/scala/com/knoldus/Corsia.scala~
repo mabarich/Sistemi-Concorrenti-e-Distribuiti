@@ -46,7 +46,6 @@ class Corsia extends Actor
 
 	def gestisci (m:Mezzo): Unit =
 	{
-		implicit val timeout = Timeout(5 seconds)
 		println("Mezzo "+m.id+" arrivato sulla strada "+id);
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		m.inc;
@@ -70,18 +69,29 @@ class Corsia extends Actor
 							m.next = -1;
 						//nextActor!m;
 						
-						if(id.contains("I") || id.contains("O_1"))
+						if(id.contains("I") || id.contains("_1"))
 							nextActor!m;
 						//Uso il Future solo se mando ad altre zone, ovvero se ho una corsia uscente
 						else
 						{
+							implicit val timeout = Timeout(10 seconds)
 							var result: Boolean=false;
-							while(!result)
+							var tentativi: Int=0;
+							while(!result && tentativi<10)
 							{
 								val future = nextActor ? m; 
 								val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
 								if (bool)
 									result=true;
+								else
+									tentativi+=1;
+							}
+							if(tentativi==10)
+							{
+							//
+							//
+							//
+							//
 							}
 						}
 

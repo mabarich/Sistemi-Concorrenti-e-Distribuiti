@@ -9,12 +9,13 @@ import scala.concurrent.duration._
 import akka.actor.Actor
 import akka.actor.ActorRef
 
-class Corsia extends Actor 
+class Corsia (z:ActorRef) extends Actor 
 {	
 	var nextActor:ActorRef=null;
 	var fermata:ActorRef=null;
 	var id="";
 	var destinazione:ActorRef = null;
+	var zona:ActorRef=z;
 	
   	override def receive: Actor.Receive = 
 	{
@@ -46,7 +47,6 @@ class Corsia extends Actor
 
 	def gestisci (m:Mezzo): Unit =
 	{
-		implicit val timeout = Timeout(5 seconds)
 		println("Mezzo "+m.id+" arrivato sulla strada "+id);
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		m.inc;
@@ -75,13 +75,24 @@ class Corsia extends Actor
 						//Uso il Future solo se mando ad altre zone, ovvero se ho una corsia uscente
 						else
 						{
+							implicit val timeout = Timeout(10 seconds)
 							var result: Boolean=false;
-							while(!result)
+							var tentativi: Int=0;
+							while(!result && tentativi<10)
 							{
 								val future = nextActor ? m; 
 								val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
 								if (bool)
 									result=true;
+								else
+									tentativi+=1;
+							}
+							if(tentativi==10)
+							{
+							//
+							//
+							//
+							//
 							}
 						}
 

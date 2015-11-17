@@ -57,7 +57,7 @@ class StrisciaPedonale extends Actor
 
 	def gestisci (p:Persona): Unit =
 	{
-		println("Persona "+p.id+" arrivata alla striscia "+id+" e deve continuare");
+		println("Persona "+p.id+" arrivata alla striscia "+id);
 		val dove=p.to;
 		val io=id.substring(2); //1S3
 		val to=dove.substring(3); //1MO3
@@ -86,8 +86,11 @@ PriorityGenerator
 {
 	case Verde => 0
 	case Rosso => 0
-	case m: personaPiuPriorita => 1
-	case m: Persona => 2
-	case m: containerPersona => 2
+	case p: personaPiuPriorita => 1
+	case p: personaDeviataPiuPriorita => 1
+	case p: Persona => 2
+	case p: PersonaDeviata => 2
+	case p: containerPersona => 2
+	case p: containerPersonaDeviata => 2
 	case _ => 3
 })

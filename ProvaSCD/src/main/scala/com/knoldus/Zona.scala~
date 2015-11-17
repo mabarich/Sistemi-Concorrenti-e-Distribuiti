@@ -1,16 +1,15 @@
 package com.knoldus
-import scalafx.Includes._
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.scene.Scene
-import scalafx.scene.paint.Color._
-import scalafx.scene.paint.{LinearGradient, Stops}
-import scalafx.scene.shape.Rectangle
-import scalafx.scene.text.Text
-import scalafx.scene.layout.HBox
+
+import scalax.collection.GraphPredef._
+import scalax.collection.Graph,
+       scalax.collection.GraphEdge._
+import scalax.collection.edge.LDiEdge
+import scalax.collection.edge.WDiEdge
+import scalax.collection.edge.Implicits._
 
 import akka.cluster.ClusterEvent._
 import akka.cluster.Member
+import akka.cluster.MemberStatus
 import akka.cluster.Cluster
 import akka.actor.RootActorPath
 import akka.actor.Actor
@@ -27,7 +26,7 @@ import com.typesafe.config.Config
 import akka.dispatch.PriorityGenerator
 import akka.dispatch.UnboundedStablePriorityMailbox
 
-class Zona (i:String, p:String) extends Actor 
+class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor 
 {
 	//Zone vicine
 	var zoneVicine = ArrayBuffer[ActorRef]();
@@ -48,6 +47,7 @@ class Zona (i:String, p:String) extends Actor
 	var zone=0;
 	var contZone:Int= -1;
 	var nomiZone = ArrayBuffer[String]();
+	var nomiZone2 = ArrayBuffer[String]();
 	//Porta (per evitare di mandare messaggi a se stesso inutilmente)
 	var port:String =p;
 	var xml:scala.xml.Elem=null;
@@ -56,6 +56,12 @@ class Zona (i:String, p:String) extends Actor
 	val maxMezzi: Int= 1;
 	var pedoniRicevuti = ArrayBuffer[String]();
 	val maxPedoni: Int= 1;
+
+	
+	var members = ArrayBuffer[Member]();
+	val listaNomi:ArrayBuffer[String]=ln;
+	var listeVicini=ArrayBuffer[ArrayBuffer[String]]();
+	var graph=null;
 
 	override def preStart(): Unit = 
 	{
@@ -67,7 +73,11 @@ class Zona (i:String, p:String) extends Actor
 		case num:Int => if(("Z"+num.toString)==id) sender!id;
 		case Start => start;
 
-		case MemberUp(member:Member) => if(contZone!=zone) { registra(member); }
+		case Grafo => chiediVicini;
+		case Blocco2 => if (listeVicini.size!=members.size-1) self!Blocco2; else creaGrafo;
+		case ChiediVicini => sender!new CostruzioneGrafo(ArrayBuffer[String](id)++nomiZone2);
+		case c: CostruzioneGrafo => salvaVicini(c.vicini);
+		case MemberUp(member:Member) => members+=member; if(contZone!=zone) { registra(member); }
 		case Vicini => if(zone==0 || contZone== -1 || zone!=contZone) self!Vicini; else creaResto;
 		case Incroci => creaIncrocio;
 		case Strade => creaStrade;
@@ -79,6 +89,52 @@ class Zona (i:String, p:String) extends Actor
 
 		case p:Persona => sender!true; if(checkPedoni(p)) inviaPedone(p);
 		case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
+	}
+
+	def creaGrafo: Unit =
+	{
+		var g=scalax.collection.mutable.Graph(id, id~id);
+		for(x<-0 to listeVicini.size-1)
+		{
+			val l=listeVicini(x);
+			g+=l(0)
+		}
+		for(x<-0 to nomiZone2.size-1)
+		{
+			if(nomiZone2(x)!="null")
+				g += (id~nomiZone2(x));
+		}
+		for(x<-0 to listeVicini.size-1)
+		{
+			val l=listeVicini(x);
+			for(y<-1 to l.size-1)
+			{
+				if(l(y)!="null")
+					g += (l(0)~l(y));
+			}
+		}
+		g -= (id~id);
+		
+		/*val g = Graph(1~2 % 4, 2~3 % 2, 1~>3 % 5, 1~5  % 3, 3~5 % 2, 3~4 % 1, 4~>4 % 1, 4~>5 % 0);
+		def n(outer: Int): g.NodeT = g get outer 
+		val spO = n(3) shortestPathTo n(1); // Path(3, 3~4 %1, 4, 4~>5 %0, 5, 1~5 %3, 1)
+		val sp = spO.get;                  // here we know spO is defined
+		println("\n"+id+": percorso più breve");
+		println(sp.nodes.toString.substring(6));
+		println(id+": Fine\n");*/
+	}
+
+	def chiediVicini: Unit =
+	{
+		for (x<- 0 to members.size-1)
+		{		
+			context.system.actorSelection(RootActorPath(members(x).address)/"user"/"Map")!new ChiediVicini(id);
+		}
+	}
+
+	def salvaVicini (vi: ArrayBuffer[String]): Unit =
+	{
+		listeVicini+=vi;
 	}
 
 	def checkPedoni(p:Persona): Boolean =
@@ -101,12 +157,14 @@ class Zona (i:String, p:String) extends Actor
 		{
 			mezziRicevuti.remove(0);	
 		}
-		mezzoRicevuti+=idMezzo;
+		mezziRicevuti+=idMezzo;
 		!result;
 	}
 
 	def creaResto:Unit =
 	{
+		self!Grafo;
+		self!Blocco2;
 		//Creo la destinazione
 		destinazione=context.actorOf(Props(classOf[Destinazione], self), id+"Destinazione");
 		//Creo l'incrocio
@@ -155,8 +213,8 @@ class Zona (i:String, p:String) extends Actor
 
 	def start: Unit  =
 	{
+		var act=context.system.actorOf(Props(classOf[MapActor],id,self), "Map");
 		val cluster = Cluster(context.system);
-		context.actorOf(Props(classOf[MapActor],id,self), "MapActor");
 		//Leggo il file XML
 		var nome="/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/"+id+".xml";
 		xml=XML.loadFile(nome);
@@ -246,11 +304,13 @@ class Zona (i:String, p:String) extends Actor
 			var attr:String= vicini(x)\"@id" text;
 			if(attr=="Nessuno")
 			{
-				nomiZone+="null";		
+				nomiZone+="null";
+				nomiZone2+="null";		
 			}	
 			else
 			{
 				nomiZone+=attr;
+				nomiZone2+=attr;
 				zone+=1;
 			}
 		}
@@ -265,7 +325,7 @@ class Zona (i:String, p:String) extends Actor
 		{
 			fermateIn+=null;
 			var attr:String= strade(x)\"@id" text;
-			corsiaIn+=context.actorOf(Props[Corsia], attr);
+			corsiaIn+=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaIn(x)!attr;
 			corsiaInCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
@@ -284,7 +344,7 @@ class Zona (i:String, p:String) extends Actor
 		{
 			var attr:String= strade(x)\"@id" text;
 			var pos= attr.substring(2, 3).toInt; //1I1_2
-			corsiaInCont(pos-1)=context.actorOf(Props[Corsia], attr);
+			corsiaInCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaInCont(pos-1)!attr;
 		}
 		if(corsiaIn.size!=0)
@@ -317,11 +377,8 @@ class Zona (i:String, p:String) extends Actor
 		{
 			fermateOut+=null;
 			var attr:String= strade(x)\"@id" text;
-			corsiaOut+=context.actorOf(Props[Corsia], attr);
+			corsiaOut+=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaOut(x)!attr;
-
-			//corsiaOut(x)!stampeCorsieOut(x);
-
 			corsiaOutCont+=null;
 			var fermata:String= strade(x)\"@fermata" text;
 			if(fermata!="")
@@ -338,7 +395,7 @@ class Zona (i:String, p:String) extends Actor
 		{
 			var attr:String= strade(x)\"@id" text;
 			var pos= attr.substring(2, 3).toInt; //1O3_2
-			corsiaOutCont(pos-1)=context.actorOf(Props[Corsia], attr);
+			corsiaOutCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaOutCont(pos-1)!attr;
 		}	
 		//Imposto le destinazioni delle strade
@@ -369,7 +426,7 @@ class Zona (i:String, p:String) extends Actor
 		for(x <- 0 to marciapiedi.size-1)
 		{
 			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeIn+=context.actorOf(Props[Marciapiede], attr);
+			marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self), attr);
 			marciapiedeIn(x)!attr;
 			var fermata:String= marciapiedi(x)\"@fermata" text;
 			if(fermata!="")
@@ -384,7 +441,7 @@ class Zona (i:String, p:String) extends Actor
 		for(x <- 0 to marciapiedi.size-1)
 		{
 			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeOut+=context.actorOf(Props[Marciapiede], attr);
+			marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self), attr);
 			marciapiedeOut(x)!attr;
 			var fermata:String= marciapiedi(x)\"@fermata" text;
 			if(fermata!="")
@@ -458,12 +515,20 @@ PriorityGenerator
 	case Start => 0
 	case num:Int => 1
 	case Vicini => 3
-	case Incroci => 4
-	case Strade => 4
-	case Marciapiedi => 4
-	case AggiornaIncrocio => 4	
-	case Movimenti => 4
-	case m:Mezzo => 5
-	case p:Pedone => 5	
+		
+	case Grafo => 4
+	case c: ChiediVicini => 4
+	case c: CostruzioneGrafo => 4
+	case Blocco2 => 5
+	
+	case Incroci => 6
+	case Strade => 6
+	case Marciapiedi => 6
+	case AggiornaIncrocio => 6	
+	case Movimenti => 6
+	case m:Mezzo => 7
+	case p:Persona => 7	
+	case m:mezzoDeviato => 7
+	case p:pedonaDeviata => 7
 	case _ => 2
 })

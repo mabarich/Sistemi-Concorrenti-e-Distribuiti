@@ -36,6 +36,29 @@ trait Mezzo
 	def next_= (value:Int):Unit =  { _next = value; }
 }
 
+class mezzoDeviato (m:Mezzo) extends Serializable
+{
+	var _mezzo:Mezzo=m;
+	var _trattiFatti=ArrayBuffer[String]();	
+	var _trattiDaFare=ArrayBuffer[String]();
+
+	def mezzo = _mezzo 
+	def mezzo_= (value:Mezzo):Unit =  { _mezzo = value; }
+
+	def trattiFatti = _trattiFatti 
+	def trattiFatti_= (value:ArrayBuffer[String]):Unit =  { _trattiFatti = value; }
+		
+	def trattiDaFare = _trattiDaFare 
+	def trattiDaFare_= (value:ArrayBuffer[String]):Unit =  { _trattiDaFare = value; }
+
+	def trattoFatto: Unit =
+	{	
+		val tratto:String=trattiDaFare(0);
+		trattiDaFare.remove(0);
+		trattiFatti+=tratto;
+	}
+}
+
 class Auto (i: String, p: ArrayBuffer [String], g: Persona) extends Mezzo with Serializable
 {
 	protected var _guidatore:Persona=null;

@@ -86,8 +86,11 @@ PriorityGenerator
 {
 	case Verde => 0
 	case Rosso => 0
-	case m: personaPiuPriorita => 1
-	case m: Persona => 2
-	case m: containerPersona => 2
+	case p: personaPiuPriorita => 1
+	case p: personaDeviataPiuPriorita => 1
+	case p: Persona => 2
+	case p: personaDeviata => 2
+	case p: containerPersona => 2
+	case p: containerPersonaDeviata => 2
 	case _ => 3
 })

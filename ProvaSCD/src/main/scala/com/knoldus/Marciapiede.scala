@@ -9,7 +9,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
 
-class Marciapiede extends Actor 
+class Marciapiede (z:ActorRef) extends Actor 
 {	
 	var nextActor:ActorRef=null;
 	var nextMarciapiede:ActorRef=null;
@@ -17,6 +17,7 @@ class Marciapiede extends Actor
 	var id="";
 	var numMarciapiedi=0;
 	var destinazione:ActorRef = null;
+	var zona:ActorRef=z;
 
   	override def receive: Actor.Receive = 
 	{
@@ -51,7 +52,6 @@ class Marciapiede extends Actor
 
 	def gestisci (p:Persona): Unit =
 	{
-		implicit val timeout = Timeout(5 seconds)
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		println("Persona "+p.id+" arrivato sul marciapiede "+id);
 		p.inc;
@@ -87,13 +87,24 @@ class Marciapiede extends Actor
 							//Uso il Future solo se mando ad altre zone, ovvero se ho un marciapiede uscente
 							else
 							{
+								implicit val timeout = Timeout(10 seconds)
 								var result: Boolean=false;
-								while(!result)
+								var tentativi: Int=0;
+								while(!result && tentativi<10)
 								{
 									val future = nextActor ? p; 
 									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
 									if (bool)
 										result=true;
+									else
+										tentativi+=1;
+								}
+								if(tentativi==10)
+								{
+								//
+								//
+								//
+								//
 								}
 							}
 						}

@@ -2,8 +2,6 @@ package com.knoldus
 
 import akka.actor.ActorRef
 import scala.collection.mutable.ArrayBuffer
-import scalafx.application.JFXApp
-import scalafx.scene.layout.HBox
 
 class containerActrf (c: ArrayBuffer[ActorRef], m: ArrayBuffer[ActorRef])
 {
@@ -33,12 +31,28 @@ class containerMezzo (m: Mezzo)
 	def mezzo_= (value:Mezzo):Unit =  { _mezzo = value; }
 }
 
+class containerMezzoDeviato (m: mezzoDeviato)
+{
+	var _mezzo = m;
+
+	def mezzo = _mezzo 
+	def mezzo_= (value:mezzoDeviato):Unit =  { _mezzo = value; }
+}
+
 class containerPersona (p: Persona)
 {
 	var _persona = p;
 
 	def persona = _persona 
 	def persona_= (value:Persona):Unit =  { _persona = value; }
+}
+
+class containerPersonaDeviata (p: personaDeviata)
+{
+	var _persona = p;
+
+	def persona = _persona 
+	def persona_= (value:personaDeviata):Unit =  { _persona = value; }
 }
 
 class containerDestinazione (d: ActorRef)
@@ -70,19 +84,11 @@ class containerVicino (i: String, z: ActorRef)
 }
 
 class containerId (m: String)
-	{
-		var _id = m;
-
-		def id = _id 
-		def id_= (value:String):Unit =  { _id = value; }
-	}
-
-class containerHBox (h: HBox)
 {
-	var _hb = h;
+	var _id = m;
 
-	def hb = _hb 
-	def hb_= (value:HBox):Unit =  { _hb = value; }
+	def id = _id 
+	def id_= (value:String):Unit =  { _id = value; }
 }
 
 
@@ -97,6 +103,10 @@ case object Incroci
 case object AggiornaIncrocio
 case object Movimenti
 case object Start
+case object Grafo
+case class ChiediVicini (id: String) extends Serializable
+case class CostruzioneGrafo (vicini: ArrayBuffer[String]) extends Serializable
+case object Blocco2 
 
 class mezzoPiuPriorita (m: Mezzo)
 {
@@ -112,4 +122,20 @@ class personaPiuPriorita (p: Persona)
 
 	def persona = _persona 
 	def persona_= (value:Persona):Unit =  { _persona = value; }
+}
+
+class mezzoDeviatoPiuPriorita (m: mezzoDeviato)
+{
+	var _mezzo: mezzoDeviato = m;
+
+	def mezzo = _mezzo 
+	def mezzo_= (value:mezzoDeviato):Unit =  { _mezzo = value; }
+}
+
+class personaDeviataPiuPriorita (p: personaDeviata)
+{
+	var _persona:personaDeviata = p;
+
+	def persona = _persona 
+	def persona_= (value:personaDeviata):Unit =  { _persona = value; }
 }

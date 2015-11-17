@@ -51,7 +51,6 @@ class Marciapiede extends Actor
 
 	def gestisci (p:Persona): Unit =
 	{
-		implicit val timeout = Timeout(5 seconds)
 		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
 		println("Persona "+p.id+" arrivato sul marciapiede "+id);
 		p.inc;
@@ -87,13 +86,24 @@ class Marciapiede extends Actor
 							//Uso il Future solo se mando ad altre zone, ovvero se ho un marciapiede uscente
 							else
 							{
+								implicit val timeout = Timeout(10 seconds)
 								var result: Boolean=false;
-								while(!result)
+								var tentativi: Int=0;
+								while(!result && tentativi<10)
 								{
 									val future = nextActor ? p; 
-									bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
 									if (bool)
-									result=true;
+										result=true;
+									else
+										tentativi+=1;
+								}
+								if(tentativi==10)
+								{
+								//
+								//
+								//
+								//
 								}
 							}
 						}

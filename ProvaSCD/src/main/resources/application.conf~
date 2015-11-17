@@ -31,8 +31,10 @@ akka
 		{
 			"com.knoldus.Mezzo" = java			
 			"com.knoldus.Persona" = java
+			"com.knoldus.ChiediVicini" = java			
+			"com.knoldus.CostruzioneGrafo" = java
 		}
-		#serialize-messages = on
+		akka.actor.warn-about-java-serializer-usage=off;
 	}
 	remote 
 	{
