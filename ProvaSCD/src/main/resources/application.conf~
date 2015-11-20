@@ -26,6 +26,7 @@ akka
 		serializers 
 		{
 			java = "akka.serialization.JavaSerializer"
+			akka.actor.warn-about-java-serializer-usage=off
 		}
 		serialization-bindings 
 		{
@@ -33,8 +34,9 @@ akka
 			"com.knoldus.Persona" = java
 			"com.knoldus.ChiediVicini" = java			
 			"com.knoldus.CostruzioneGrafo" = java
+			akka.actor.warn-about-java-serializer-usage=off
 		}
-		akka.actor.warn-about-java-serializer-usage=off;
+		akka.actor.warn-about-java-serializer-usage=off
 	}
 	remote 
 	{
@@ -70,3 +72,5 @@ akka
 #akka.cluster.metrics.native-library-extract-folder=${user.dir}/target/native
 
 akka.log-dead-letters=off
+
+akka.actor.warn-about-java-serializer-usage=off

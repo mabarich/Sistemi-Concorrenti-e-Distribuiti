@@ -18,16 +18,17 @@ class Marciapiede (z:ActorRef) extends Actor
 	var numMarciapiedi=0;
 	var destinazione:ActorRef = null;
 	var zona:ActorRef=z;
+	val maxTentativi: Int = 4;
 
   	override def receive: Actor.Receive = 
 	{
 		case v:containerZona => nextActor=v.zona;
 		case p:Int => numMarciapiedi=p;
-		case "AA" => println("Contattato da incrocio");
 		case f:containerFermata => creaFermata(f);	
 		case z:containerDestinazione => destinazione=z.destinazione;
 		case p:String => start(p);
-		case p:ArrayBuffer[ActorRef] => nextReceived(p);	
+		case p:ArrayBuffer[ActorRef] => nextReceived(p);
+		case p:personaDeviata => gestisciD (p);		
 		case p:Persona => gestisci (p);		   
 	}
 
@@ -48,6 +49,47 @@ class Marciapiede (z:ActorRef) extends Actor
 	{
 		nextActor=p(0);
 		nextMarciapiede=p(1);
+	}
+
+	def gestisciD (p:personaDeviata): Unit =
+	{
+		//Prendo il pezzo successivo della stringa (inc fa ++ e to mi prende quello dopo ancora)
+		println("Persona (deviata) "+p.id+" arrivato sul marciapiede "+id);
+		val dove=p.to;
+		p.inc;
+		//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
+		var dv=dove.substring(3).toInt;
+		var io=id.substring(3).toInt;
+		if (id.contains("MI") && ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1)))
+		{
+			nextMarciapiede!p;
+		}						
+		else
+		{
+			if(id.contains("I"))
+				nextActor!p;
+			//Uso il Future solo se mando ad altre zone, ovvero se ho una corsia uscente
+			else
+			{
+				implicit val timeout = Timeout(10 seconds)
+				var result: Boolean=false;
+				var tentativi: Int=0;
+				while(!result && tentativi<maxTentativi)
+				{
+					val future = nextActor ? p; 
+					val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+					if (bool)
+						result=true;
+					else
+						tentativi+=1;
+				}
+				if(tentativi==maxTentativi)
+				{
+					println("La zona non risponde. Il pedone dovrà seguire un'altra strada.");
+					zona!new containerPersonaDeviata(new personaDeviata(p.id, p.persona));
+				}
+			}
+		}
 	}
 
 	def gestisci (p:Persona): Unit =
@@ -76,7 +118,7 @@ class Marciapiede (z:ActorRef) extends Actor
 						//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
 						var dv=dove.substring(3).toInt;
 						var io=id.substring(3).toInt;
-						if ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1))
+						if (id.contains("MI") && ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1)))
 						{
 							nextMarciapiede!p;
 						}						
@@ -87,10 +129,10 @@ class Marciapiede (z:ActorRef) extends Actor
 							//Uso il Future solo se mando ad altre zone, ovvero se ho un marciapiede uscente
 							else
 							{
-								implicit val timeout = Timeout(10 seconds)
+								implicit val timeout = Timeout(15 seconds)
 								var result: Boolean=false;
 								var tentativi: Int=0;
-								while(!result && tentativi<10)
+								while(!result && tentativi<maxTentativi)
 								{
 									val future = nextActor ? p; 
 									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
@@ -99,12 +141,10 @@ class Marciapiede (z:ActorRef) extends Actor
 									else
 										tentativi+=1;
 								}
-								if(tentativi==10)
+								if(tentativi==maxTentativi)
 								{
-								//
-								//
-								//
-								//
+									println("La zona non risponde. Il pedone dovrà seguire un'altra strada.");
+									zona!new containerPersonaDeviata(new personaDeviata(p.id, p));
 								}
 							}
 						}
@@ -121,6 +161,8 @@ class Marciapiede (z:ActorRef) extends Actor
 		else
 		{
 			p.inc;
+			p.incZona;
+			p.incZona;
 			destinazione!p;
 			println("Persona "+p.id+" arrivato a destinazione sul marciapiede "+id);
 		}

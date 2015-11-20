@@ -1,8 +1,17 @@
-- Akka clustering
+- Akka clustering (OK)
 - Creazione da file (OK)
 - Discesa da corriera (OK)
 - Destinazione (OK)
 - Ripartire (OK)
 - ACK (OK)
 - Eventuali invii multipli (OK)
-- Gestione zone che cadono
+- Zone con una strada (non legge marciapiedi)
+- Gestione dinamica delle porte senza i new messi a mano
+- Deviazioni sottotipi di mezzi (OK)
+- Gestione zone che cadono (OK per pedoni) 
+	- Controllo che nella zona giù non ci sia una fermata o una destinazione
+	- Nel pezzo finale della deviazione devo reimpostare il next correttamente (OK) 
+	- Marciapiede adiacente (OK)
+	- Assenza di percorsi minimi (java.util.NoSuchElementException a riga 123)
+	- Gestisco il catch del timeout
+	- LOOP PEDONI HA PROBLEMA (OK, era il checkPedoni)

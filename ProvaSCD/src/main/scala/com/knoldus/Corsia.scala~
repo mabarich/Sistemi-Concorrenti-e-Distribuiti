@@ -9,12 +9,14 @@ import scala.concurrent.duration._
 import akka.actor.Actor
 import akka.actor.ActorRef
 
-class Corsia extends Actor 
+class Corsia (z:ActorRef) extends Actor 
 {	
 	var nextActor:ActorRef=null;
 	var fermata:ActorRef=null;
 	var id="";
 	var destinazione:ActorRef = null;
+	var zona:ActorRef=z;
+	val maxTentativi: Int = 4;
 	
   	override def receive: Actor.Receive = 
 	{
@@ -23,6 +25,7 @@ class Corsia extends Actor
 		case f:containerFermata => creaFermata(f);
 		case z:containerDestinazione => destinazione=z.destinazione;
 		case m:ActorRef => nextReceived(m);	
+		case m:mezzoDeviato =>	gestisciD (m);
 		case m:Mezzo =>	gestisci (m);		   
 	}
 
@@ -42,6 +45,33 @@ class Corsia extends Actor
 	def nextReceived (m:ActorRef): Unit  =
 	{
 		nextActor=m;
+	}
+
+	def gestisciD (m:mezzoDeviato): Unit =
+	{
+		if(id.contains("I") || id.contains("_1"))
+			nextActor!m;
+		//Uso il Future solo se mando ad altre zone, ovvero se ho una corsia uscente
+		else
+		{
+			implicit val timeout = Timeout(10 seconds)
+			var result: Boolean=false;
+			var tentativi: Int=0;
+			while(!result && tentativi<10)
+			{
+				val future = nextActor ? m; 
+				val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+				if (bool)
+					result=true;
+				else
+					tentativi+=1;
+			}
+			if(tentativi==maxTentativi)
+			{
+				//zona!new containerMezzoDeviato(new mezzoDeviato(m.mezzo));
+			}
+		}
+
 	}
 
 	def gestisci (m:Mezzo): Unit =
@@ -86,12 +116,9 @@ class Corsia extends Actor
 								else
 									tentativi+=1;
 							}
-							if(tentativi==10)
+							if(tentativi==maxTentativi)
 							{
-							//
-							//
-							//
-							//
+								//zona!new containerMezzoDeviato(new mezzoDeviato(m));
 							}
 						}
 

@@ -1,9 +1,8 @@
 <xml>
 	<Zona id="Z2">
 		<Vicini>
-			<Vicino id="Nessuno" />
-			<Vicino id="Nessuno" />
-			<Vicino id="Z4" />
+			<Vicino id="Z6" />
+			<Vicino id="Z5" />
 			<Vicino id="Z1" />
 		</Vicini>
 		<Strade>
@@ -11,13 +10,11 @@
 				<StradaIn id="2I1"/>
 				<StradaIn id="2I2"/>
 				<StradaIn id="2I3"/>
-				<StradaIn id="2I4"/>
 			</StradeIn>
 			<StradeOut>
 				<StradaOut id="2O1"/>
 				<StradaOut id="2O2"/>
 				<StradaOut id="2O3"/>
-				<StradaOut id="2O4"/>
 			</StradeOut>
 		</Strade>
 		<Marciapiedi>
@@ -25,13 +22,11 @@
 				<MarciapiedeIn id="2MI1"/>
 				<MarciapiedeIn id="2MI2"/>
 				<MarciapiedeIn id="2MI3"/>
-				<MarciapiedeIn id="2MI4"/>
 			</MarciapiediIn>
 			<MarciapiediOut>
 				<MarciapiedeOut id="2MO1"/>
 				<MarciapiedeOut id="2MO2"/>
 				<MarciapiedeOut id="2MO3"/>
-				<MarciapiedeOut id="2MO4"/>
 			</MarciapiediOut>
 		</Marciapiedi>
 		<Incrocio>
@@ -39,13 +34,11 @@
 				<Tratto id="2T1"/>
 				<Tratto id="2T2"/>
 				<Tratto id="2T3"/>
-				<Tratto id="2T4"/>
 			</Tratti>
 			<StriscePedonali>
 				<StrisciaPedonale id="2S1"/>
 				<StrisciaPedonale id="2S2"/>
 				<StrisciaPedonale id="2S3"/>
-				<StrisciaPedonale id="2S4"/>
 			</StriscePedonali>
 		</Incrocio>
 	</Zona>

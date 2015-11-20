@@ -61,7 +61,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 	var members = ArrayBuffer[Member]();
 	val listaNomi:ArrayBuffer[String]=ln;
 	var listeVicini=ArrayBuffer[ArrayBuffer[String]]();
-	var graph=null;
+	var grafo=scalax.collection.mutable.Graph(id, id~id);
 
 	override def preStart(): Unit = 
 	{
@@ -82,27 +82,123 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		case Incroci => creaIncrocio;
 		case Strade => creaStrade;
 		case Marciapiedi => creaMarciapiedi;
-		case AggiornaIncrocio => incrocio!new containerActrf(corsiaOut, marciapiedeOut);
-		                      	   incrocio!"Manda";
+		case AggiornaIncrocio => if(incrocio!=null) {incrocio!new containerActrf(corsiaOut, marciapiedeOut);
+		                      	   incrocio!"Manda"; }
 		case Movimenti => spostamenti;
 		case s:String => aggiungiVicino(s, sender);		
 
-		case p:Persona => sender!true; if(checkPedoni(p)) inviaPedone(p);
+		case p:personaDeviata => sender!true; deviaPersona(p); //Check
+		//case p:Persona => if (id=="Z5") sender!false; else { sender!true; /*if(checkPedoni(p))*/ inviaPedone(p); }
+		case p:Persona => if (id=="Z5") sender!false; else { sender!true; inviaPedone(p); }
 		case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
+		case p:containerPersonaDeviata => deviaPersona(p.persona);
+	} 
+
+	def deviaPersona (pd:personaDeviata) : Unit =
+	{
+		if(pd.trattiDaFare.size==0 && pd.trattiFatti.size==0)
+		{
+			var go=true;
+			val p: Persona=pd.persona;
+			var arrivato=p.next;
+			var percorso=p.percorso;
+			for (k<-1 to 4) //Guardo i prossimi 4 punti perché nel caso peggiore posso avere 6I1_1-F-6I1_2-6O1_1-F-6O1_2
+			{
+				if( (percorso(arrivato+k).contains("FINE") || percorso(arrivato+k).contains("X") || percorso(arrivato+k).contains("F")))
+				{
+					//
+					//
+					//SEGNO CHE E'E' UNA DESTINAZIONE NON RAGGIUNGIBILE E CHIUDO TUTTO
+					//
+					go=false;
+				}
+			}
+			if(go)
+			{
+				//Prendo la zona dopo prossimaZona
+				var next:String=p.to2Zona;
+				//percorso minimo
+				grafo-="Z"+p.toZona;
+				val gr=grafo; //Non vuole la variabile grafo
+				def n(outer: String): gr.NodeT = gr get outer
+				println("Deviazione da "+id+" a Z"+next);
+				val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
+				val sp = spO.get;
+				var listaZone:String=sp.nodes.toString.substring(6)
+				listaZone=listaZone.substring(0, listaZone.size-1)
+				var abz=ArrayBuffer[String]();
+				abz++=listaZone.split(", ");
+				//Creo lista in personaDeviata
+				pd.trattiDaFare=abz;	
+			}
+		}
+		pd.resetPercorso;
+		pd.trattoFatto;
+		if(pd.trattiFatti.size==1)
+		{
+			pd.percorso+=id.substring(1)+"MI"; //CONTROLLO CHE LO FACCIA VERAMENTE
+			var marciapiede:String=pd.persona.nxt.substring(pd.persona.nxt.indexOf("O")+1);
+			pd.percorso(0)+=marciapiede; //CONTROLLO CHE LO FACCIA VERAMENTE
+		}
+		else if(pd.trattiDaFare.size!=0)
+		{ 
+			pd.next= -1;
+			pd.percorso+=id.substring(1)+"MI"; 
+			var marciapiede:String="";
+			for (k<-0 to nomiZone2.size-1)
+			{	
+				if(nomiZone2(k)==pd.trattiFatti(pd.trattiFatti.size-2))
+					marciapiede=(k+1).toString;
+			}
+			//marciapiede+=1;
+			pd.percorso(0)+=marciapiede; 
+		}
+
+		if(pd.trattiDaFare.size!=0)
+		{
+			pd.percorso+=id.substring(1)+"MO";
+			var marciapiede:String="";
+			for (k<-0 to nomiZone2.size-1)
+			{
+				if(nomiZone2(k)==pd.trattiDaFare(0))
+					marciapiede=(k+1).toString;
+			}
+			//marciapiede+=1;
+			if(marciapiede.startsWith("0"))
+				marciapiede=marciapiede.substring(1); //Tolgo lo 0 all'inizio altrimenti in incrocio ciclerà
+			pd.percorso(1)+=marciapiede; 
+			marciapiedeIn(pd.percorso(0).substring(3).toInt-1)!pd;
+		}
+		else
+		{ 
+			var pedone:Persona=pd.persona;
+			while(!pedone.to.startsWith(id.substring(1)))
+			{
+				println("\n\n"+pedone.to+"\n\n");
+				pedone.inc;
+			}
+			//pedone.inc;
+
+			println("\n\nOK"+pedone.to+"\n\n");
+
+			var dove=pedone.to;
+			dove=dove.substring(3);
+			marciapiedeIn(dove.toInt-1)!pedone;		
+		}
 	}
 
 	def creaGrafo: Unit =
 	{
-		var g=scalax.collection.mutable.Graph(id, id~id);
+		//var g=scalax.collection.mutable.Graph(id, id~id);
 		for(x<-0 to listeVicini.size-1)
 		{
 			val l=listeVicini(x);
-			g+=l(0)
+			grafo+=l(0)
 		}
 		for(x<-0 to nomiZone2.size-1)
 		{
 			if(nomiZone2(x)!="null")
-				g += (id~nomiZone2(x));
+				grafo += (id~nomiZone2(x));
 		}
 		for(x<-0 to listeVicini.size-1)
 		{
@@ -110,18 +206,10 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			for(y<-1 to l.size-1)
 			{
 				if(l(y)!="null")
-					g += (l(0)~l(y));
+					grafo += (l(0)~l(y));
 			}
 		}
-		g -= (id~id);
-		
-		/*val g = Graph(1~2 % 4, 2~3 % 2, 1~>3 % 5, 1~5  % 3, 3~5 % 2, 3~4 % 1, 4~>4 % 1, 4~>5 % 0);
-		def n(outer: Int): g.NodeT = g get outer 
-		val spO = n(3) shortestPathTo n(1); // Path(3, 3~4 %1, 4, 4~>5 %0, 5, 1~5 %3, 1)
-		val sp = spO.get;                  // here we know spO is defined
-		println("\n"+id+": percorso più breve");
-		println(sp.nodes.toString.substring(6));
-		println(id+": Fine\n");*/
+		grafo -= (id~id);
 	}
 
 	def chiediVicini: Unit =
@@ -167,9 +255,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		self!Blocco2;
 		//Creo la destinazione
 		destinazione=context.actorOf(Props(classOf[Destinazione], self), id+"Destinazione");
-		//Creo l'incrocio
-		incrocio=context.actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "Incrocio"+id);
-		incrocio!"Start";
 		self!Incroci;
 		self!Strade;
 		self!Marciapiedi;
@@ -179,7 +264,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 	}
 
 	def aggiungiVicino(is: String, z: ActorRef): Unit =
-	{
+	{		
 		for (x<- 0 to nomiZone.size-1)
 		{
 			if(nomiZone(x)==is)
@@ -195,6 +280,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def inviaPedone(p: Persona): Unit =
 	{
+		p.incZona;
 		var dove=p.to;
 		dove=dove.substring(3);
 		marciapiedeIn(dove.toInt-1)!p;
@@ -202,6 +288,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def inviaMezzo(m: Mezzo): Unit =
 	{
+		m.incZona;
 		var dove=m.to;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
@@ -250,7 +337,10 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			var percorso:String=spostamenti(x)\"@percorso" text;
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
-			var prsn= new Pedone (identificativo, ab);
+			var zone:String=spostamenti(x)\"@zone" text;
+			var abz=ArrayBuffer[String]();
+			abz++=zone.split(",");
+			var prsn= new Pedone (identificativo, ab, abz);
 			self!prsn;
 		}
 
@@ -263,7 +353,10 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			var guidatore:String=spostamenti(x)\"@guidatore" text;
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
-			var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String]()));
+			var zone:String=spostamenti(x)\"@zone" text;
+			var abz=ArrayBuffer[String]();
+			abz++=zone.split(",");
+			var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String](), ArrayBuffer[String]()), abz);
 			self!mzz;
 		}	
 
@@ -275,6 +368,9 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			var percorso:String=spostamenti(x)\"@percorso" text;	
 			var ab=ArrayBuffer[String]();
 			ab++=percorso.split(",");
+			var zone:String=spostamenti(x)\"@zone" text;
+			var abz=ArrayBuffer[String]();
+			abz++=zone.split(",");
 			//Dopo aver letto il percorso e l'id devo prendere gli eventuali passeggeri
 			var passeggeri=ArrayBuffer[Persona]();
 			var  pass= (spostamenti \ "Passeggeri" \ "Passeggero");
@@ -284,11 +380,11 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				var percorsop:String=pass(x)\"@percorso" text;
 				var abp=ArrayBuffer[String]();
 				abp++=percorsop.split(",");
-				var passeggero=new Pedone (identificativop, abp);
+				var passeggero=new Pedone (identificativop, abp, ArrayBuffer[String]());
 				passeggero.inc;
 				passeggeri+=passeggero;
 			}
-			var mzz= new Autobus (identificativo, ab);
+			var mzz= new Autobus (identificativo, ab, abz);
 			if(pass.size!=0)
 				mzz.passeggeri=passeggeri;
 			self!mzz;
@@ -354,7 +450,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				corsiaIn(x)!dest;
 				if(corsiaInCont(x)!=null)
 					corsiaIn(x)!corsiaInCont(x);
-				else
+				else if(incrocio!=null)
 					corsiaIn(x)!incrocio;
 			}
 		}
@@ -481,30 +577,39 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 		//TRATTI
 		var tratto = (xml \ "Zona" \ "Incrocio" \ "Tratti" \ "Tratto");
-		for(x <- 0 to tratto.size-1)
+		if(tratto.size!=0)
 		{
-			var attr:String= tratto(x)\"@id" text;
-			tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), attr);
-			tratti(x)!attr;
-			if(x%2==0)
-				tratti(x)!Verde;
-			else
-				tratti(x)!Rosso;
+			//Creo l'incrocio
+			incrocio=context.actorOf(Props[Incrocio].withDispatcher("prio-dispatcher3"), "Incrocio"+id);
+			incrocio!"Start";			
+			for(x <- 0 to tratto.size-1)
+			{
+				var attr:String= tratto(x)\"@id" text;
+				tratti+=context.actorOf(Props[Tratto].withDispatcher("prio-dispatcher"), attr);
+				tratti(x)!attr;
+				if(x%2==0)
+					tratti(x)!Verde;
+				else
+					tratti(x)!Rosso;
+			}
 		}
 
 		//STRISCE
 		var striscia = (xml \ "Zona" \ "Incrocio" \ "StriscePedonali" \ "StrisciaPedonale");
-		for(x <- 0 to striscia.size-1)
+		if(striscia.size!=0)
 		{
-			var attr:String= striscia(x)\"@id" text;
-			strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), attr);
-			strisce(x)!attr;
-			strisce(x)!Rosso;
-		}
-		//Invio tratti e strisce all'incrocio
-		for(x <- 0 to (tratti.size-1))
-		{
-			incrocio!ArrayBuffer(tratti(x), strisce(x));
+			for(x <- 0 to striscia.size-1)
+			{
+				var attr:String= striscia(x)\"@id" text;
+				strisce+=context.actorOf(Props[StrisciaPedonale].withDispatcher("prio-dispatcher2"), attr);
+				strisce(x)!attr;
+				strisce(x)!Rosso;
+			}
+			//Invio tratti e strisce all'incrocio
+			for(x <- 0 to (tratti.size-1))
+			{
+				incrocio!ArrayBuffer(tratti(x), strisce(x));
+			}
 		}
 	}
 }
@@ -526,9 +631,11 @@ PriorityGenerator
 	case Marciapiedi => 6
 	case AggiornaIncrocio => 6	
 	case Movimenti => 6
+	case m:mezzoDeviato => 7
+	case p:personaDeviata => 7
 	case m:Mezzo => 7
 	case p:Persona => 7	
-	case m:mezzoDeviato => 7
-	case p:pedonaDeviata => 7
+	case m:containerMezzoDeviato => 7
+	case p:containerPersonaDeviata => 7
 	case _ => 2
 })

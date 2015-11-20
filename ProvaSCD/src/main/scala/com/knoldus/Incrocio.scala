@@ -22,13 +22,15 @@ class Incrocio extends Actor
 	override def preStart: Unit = 
 	{
 		import context.dispatcher
-		this.context.system.scheduler.schedule(0 seconds, 12 seconds, self, CambiaSemafori)
+		this.context.system.scheduler.schedule(0 seconds, 8 seconds, self, CambiaSemafori)
 	}
 
   	override def receive: Actor.Receive = 
 	{
 		case m:containerActrf => ricevuto(m);
 		case m:ArrayBuffer[ActorRef] => start(m);
+		case m:mezzoDeviato =>	//gestisciMezzoD (m);
+		case p:personaDeviata => gestisciPedoneD (p);
 		case m:Mezzo =>	gestisciMezzo (m);
 		case p:Persona => gestisciPedone (p);
 		case "Manda" =>	aggiornaTrattiEStrisce;
@@ -132,7 +134,42 @@ class Incrocio extends Actor
 	//Invia i pedoni alle strisce giuste
 	def gestisciPedone (p:Persona): Unit  =
 	{
-		println("Persona "+p.id+" arrivato all'incrocio");
+		println("Persona "+p.id+" arrivata all'incrocio");
+		//Guardo su che striscia deve andare
+		var dove=p.nxt;
+		dove=dove.substring(3);	
+		//Casi particolari del calcolo	
+		if(dove.toInt==1)
+			strisce(strisce.size-2)!p;
+		else if(dove.toInt==2)
+			strisce(strisce.size-1)!p;
+		else
+			strisce(dove.toInt-3)!p;
+	}
+
+	//Invia i mezzi ai tratti giusti
+	/*def gestisciMezzoD (m:mezzoDeviato): Unit  =
+	{
+		println("Mezzo (deviato)"+m.id+" arrivato all'incrocio");
+		//Guardo su che tratto deve andare
+		var dove=m.nxt;
+		val pos=dove.indexOf("_"); 
+		if (pos>=0)
+			dove=dove.substring(2, pos);
+		else
+			dove=dove.substring(2);
+		//Caso particolare del calcolo	
+		val tratto=dove.toInt;		
+		if(tratto==1)
+			tratti(tratti.size-1)!m;
+		else
+			tratti(tratto-2)!m;
+	}*/
+
+	//Invia i pedoni alle strisce giuste
+	def gestisciPedoneD (p:personaDeviata): Unit  =
+	{
+		println("Persona (deviata) "+p.id+" arrivata all'incrocio");
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
 		dove=dove.substring(3);	

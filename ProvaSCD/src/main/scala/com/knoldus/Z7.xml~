@@ -1,0 +1,46 @@
+<xml>
+	<Zona id="Z7">
+		<Vicini>
+			<Vicino id="Z4" />
+		</Vicini>
+		<Strade>
+			<StradeIn>
+				<StradaIn id="7I1"/>
+			</StradeIn>
+			<StradeOut>
+				<StradaOut id="7O1"/>
+				<StradaOut id="7O2"/>
+				<StradaOut id="7O3"/>
+				<StradaOut id="7O4"/>
+			</StradeOut>
+		</Strade>
+		<Marciapiedi>
+			<MarciapiediIn>
+				<MarciapiedeIn id="7MI1"/>
+				<MarciapiedeIn id="7MI2"/>
+				<MarciapiedeIn id="7MI3"/>
+				<MarciapiedeIn id="7MI4"/>
+			</MarciapiediIn>
+			<MarciapiediOut>
+				<MarciapiedeOut id="7MO1"/>
+				<MarciapiedeOut id="7MO2"/>
+				<MarciapiedeOut id="7MO3"/>
+				<MarciapiedeOut id="7MO4"/>
+			</MarciapiediOut>
+		</Marciapiedi>
+		<Incrocio>
+			<Tratti>
+				<Tratto id="7T1"/>
+				<Tratto id="7T2"/>
+				<Tratto id="7T3"/>
+				<Tratto id="7T4"/>
+			</Tratti>
+			<StriscePedonali>
+				<StrisciaPedonale id="7S1"/>
+				<StrisciaPedonale id="7S2"/>
+				<StrisciaPedonale id="7S3"/>
+				<StrisciaPedonale id="7S4"/>
+			</StriscePedonali>
+		</Incrocio>
+	</Zona>
+</xml>

@@ -124,18 +124,18 @@ class personaPiuPriorita (p: Persona)
 	def persona_= (value:Persona):Unit =  { _persona = value; }
 }
 
-class mezzoDeviatoPiuPriorita (m: mezzoDeviato)
+class mezzoDeviatoPiuPriorita (m: Mezzo)
 {
-	var _mezzo: mezzoDeviato = m;
+	var _mezzo: Mezzo = m;
 
 	def mezzo = _mezzo 
-	def mezzo_= (value:mezzoDeviato):Unit =  { _mezzo = value; }
+	def mezzo_= (value:Mezzo):Unit =  { _mezzo = value; }
 }
 
-class personaDeviataPiuPriorita (p: personaDeviata)
+class personaDeviataPiuPriorita (p: Persona)
 {
-	var _persona:personaDeviata = p;
+	var _persona:Persona = p;
 
 	def persona = _persona 
-	def persona_= (value:personaDeviata):Unit =  { _persona = value; }
+	def persona_= (value:Persona):Unit =  { _persona = value; }
 }

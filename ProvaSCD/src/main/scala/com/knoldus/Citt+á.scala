@@ -16,13 +16,21 @@ object Città
 	{
 		listaNomi+="Z1";
 		listaNomi+="Z2";
-		listaNomi+="Z3";
+		//listaNomi+="Z3";
 		listaNomi+="Z4";
+		
+		listaNomi+="Z5";
+		listaNomi+="Z6";
+		listaNomi+="Z7";
+
 
 		zone+=new Pezzo("2551","Z1", listaNomi)
 		zone+=new Pezzo("2552","Z2", listaNomi)
-		zone+=new Pezzo("2553","Z3", listaNomi)
+		//zone+=new Pezzo("2553","Z3", listaNomi)
 		zone+=new Pezzo("2554","Z4", listaNomi)
+		zone+=new Pezzo("2555","Z5", listaNomi)
+		zone+=new Pezzo("2556","Z6", listaNomi)
+		zone+=new Pezzo("2557","Z7", listaNomi)
 
 		for (x<-0 to zone.size-1)
 			zone(x).start;

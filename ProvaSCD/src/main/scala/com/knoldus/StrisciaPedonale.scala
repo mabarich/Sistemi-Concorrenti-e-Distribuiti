@@ -20,8 +20,10 @@ class StrisciaPedonale extends Actor
 	{
 		case p:String => start(p);
 		case p:ArrayBuffer[ActorRef] => datiRicevuti(p);
+		case p:personaDeviata => gestisci (p);
 		case p:Persona => gestisci (p);
-		case p:containerPersona => gestisci (p);
+		//case p:containerPersona => gestisci (p);
+		case p:personaDeviataPiuPriorita => gestisci (p.persona);
 		case p:personaPiuPriorita => gestisci (p.persona);
 		case Rosso =>	context.become(redReceiver, false);		   
 	}
@@ -31,15 +33,19 @@ class StrisciaPedonale extends Actor
 	{
 		case p:String => start(p);
 		case p:ArrayBuffer[ActorRef] => datiRicevuti(p);
+		case p:personaDeviata => pedoni+=p; println("Persona (deviata) "+p.id+" in coda alla striscia "+id);
 		case p:Persona => pedoni+=p; println("Persona "+p.id+" in coda alla striscia "+id);	
-		case p:containerPersona => gestisci (p);
+		//case p:containerPersona => gestisci (p);
 		case Verde =>	context.unbecome();	
 				while(!pedoni.isEmpty)
 				{
 					var p:Persona=pedoni(0);
 					pedoni.remove(0);
-					self!new personaPiuPriorita(p);
-				}	   
+					if(!p.deviata)
+						self!new personaPiuPriorita(p);
+					else
+						self!new personaDeviataPiuPriorita(p);
+				}
 	}
 	
 	//Setto l'id
@@ -67,7 +73,7 @@ class StrisciaPedonale extends Actor
 			nextS!p;
 	}	
 
-	def gestisci (cp:containerPersona): Unit =
+	/*def gestisci (cp:containerPersona): Unit =
 	{
 		var p:Persona=cp.persona;
 		println("Persona "+p.id+" arrivata alla striscia "+id);
@@ -78,7 +84,7 @@ class StrisciaPedonale extends Actor
 			marciapiede!p;
 		else
 			self!p;
-	}
+	}*/
 }
 
 class StrisciaPriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(
@@ -86,11 +92,11 @@ PriorityGenerator
 {
 	case Verde => 0
 	case Rosso => 0
-	case p: personaPiuPriorita => 1
 	case p: personaDeviataPiuPriorita => 1
-	case p: Persona => 2
+	case p: personaPiuPriorita => 1
 	case p: personaDeviata => 2
-	case p: containerPersona => 2
-	case p: containerPersonaDeviata => 2
+	case p: Persona => 2
+	/*case p: containerPersona => 2
+	case p: containerPersonaDeviata => 2*/
 	case _ => 3
 })

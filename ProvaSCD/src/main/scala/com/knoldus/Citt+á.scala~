@@ -16,8 +16,13 @@ object Città
 	{
 		listaNomi+="Z1";
 		listaNomi+="Z2";
-		listaNomi+="Z3";
+		//listaNomi+="Z3";
 		listaNomi+="Z4";
+		
+		listaNomi+="Z5";
+		listaNomi+="Z6";
+		listaNomi+="Z7";
+
 
 		zone+=new Pezzo("2551","Z1", listaNomi)
 		zone+=new Pezzo("2552","Z2", listaNomi)
@@ -29,10 +34,11 @@ object Città
 	}
 }
 
-class Pezzo (p:String, i:String, listaNomi:ArrayBuffer[String])
+class Pezzo (p:String, i:String, ln:ArrayBuffer[String])
 {
 	var port:String=p;
 	var id:String=i;
+	var listaNomi:ArrayBuffer[String]=ln;
 	
 	def start:Unit=
 	{
