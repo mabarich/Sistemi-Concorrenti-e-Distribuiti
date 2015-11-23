@@ -29,7 +29,7 @@ class Incrocio extends Actor
 	{
 		case m:containerActrf => ricevuto(m);
 		case m:ArrayBuffer[ActorRef] => start(m);
-		case m:mezzoDeviato =>	//gestisciMezzoD (m);
+		case m:mezzoDeviato =>	gestisciMezzoD (m);
 		case p:personaDeviata => gestisciPedoneD (p);
 		case m:Mezzo =>	gestisciMezzo (m);
 		case p:Persona => gestisciPedone (p);
@@ -148,9 +148,9 @@ class Incrocio extends Actor
 	}
 
 	//Invia i mezzi ai tratti giusti
-	/*def gestisciMezzoD (m:mezzoDeviato): Unit  =
+	def gestisciMezzoD (m:mezzoDeviato): Unit  =
 	{
-		println("Mezzo (deviato)"+m.id+" arrivato all'incrocio");
+		println("Mezzo (deviato) "+m.id+" arrivato all'incrocio");
 		//Guardo su che tratto deve andare
 		var dove=m.nxt;
 		val pos=dove.indexOf("_"); 
@@ -164,7 +164,7 @@ class Incrocio extends Actor
 			tratti(tratti.size-1)!m;
 		else
 			tratti(tratto-2)!m;
-	}*/
+	}
 
 	//Invia i pedoni alle strisce giuste
 	def gestisciPedoneD (p:personaDeviata): Unit  =

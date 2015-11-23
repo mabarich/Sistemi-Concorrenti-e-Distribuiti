@@ -85,7 +85,7 @@ class Marciapiede (z:ActorRef) extends Actor
 				}
 				if(tentativi==maxTentativi)
 				{
-					println("La zona non risponde. Il pedone dovrà seguire un'altra strada.");
+					println("La zona non risponde. Il pedone (deviato) dovrà seguire un'altra strada.");
 					zona!new containerPersonaDeviata(new personaDeviata(p.id, p.persona));
 				}
 			}

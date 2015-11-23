@@ -136,8 +136,8 @@ class Marciapiede (z:ActorRef) extends Actor
 								{
 									val future = nextActor ? p; 
 									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
-									if (bool) {
-										result=true; println("Messaggio ricevuto"); }
+									if (bool)
+										result=true;
 									else
 										tentativi+=1;
 								}

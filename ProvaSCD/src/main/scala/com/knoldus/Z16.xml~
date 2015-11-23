@@ -29,7 +29,7 @@
 				<MarciapiedeOut id="6MO2"/>
 			</MarciapiediOut>
 		</Marciapiedi>
-		<Incrocio>
+		<!--<Incrocio>
 			<Tratti>
 				<Tratto id="6T1"/>
 				<Tratto id="6T2"/>
@@ -38,6 +38,6 @@
 				<StrisciaPedonale id="6S1"/>
 				<StrisciaPedonale id="6S2"/>
 			</StriscePedonali>
-		</Incrocio>
+		</Incrocio>-->
 	</Zona>
 </xml>

@@ -87,12 +87,133 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		case Movimenti => spostamenti;
 		case s:String => aggiungiVicino(s, sender);		
 
+		case m:mezzoDeviato => sender!true; deviaMezzo(m); //Check
 		case p:personaDeviata => sender!true; deviaPersona(p); //Check
-		//case p:Persona => if (id=="Z5") sender!false; else { sender!true; /*if(checkPedoni(p))*/ inviaPedone(p); }
-		case p:Persona => if (id=="Z5") sender!false; else { sender!true; inviaPedone(p); }
-		case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
+		//case p:Persona => if (id=="Z15") sender!false; else { sender!true; /*if(checkPedoni(p))*/ inviaPedone(p); }
+		case p:Persona => if (id=="Z15") sender!false; else { sender!true; inviaPedone(p); }
+		//case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
+		case m:Mezzo => if (id=="Z15") sender!false; else { sender!true; inviaMezzo(m); }
 		case p:containerPersonaDeviata => deviaPersona(p.persona);
+		case m:containerMezzoDeviato => deviaMezzo(m.mezzo);
 	} 
+
+	def deviaMezzo (md:mezzoDeviato) : Unit =
+	{
+		if(md.trattiDaFare.size==0 && md.trattiFatti.size==0)
+		{
+			var go=true;
+			val m: Mezzo=md.mezzo;
+			var arrivato=m.next;
+			var percorso=m.percorso;
+			for (k<-1 to 4) //Guardo i prossimi 4 punti perché nel caso peggiore posso avere 6I1_1-F-6I1_2-6O1_1-F-6O1_2
+			{
+				if( (percorso(arrivato+k).contains("FINE") || percorso(arrivato+k).contains("X") || percorso(arrivato+k).contains("F")))
+				{
+					//
+					//
+					//SEGNO CHE E'E' UNA DESTINAZIONE NON RAGGIUNGIBILE E CHIUDO TUTTO
+					//
+					//go=false;
+				}
+			}
+			if(go)
+			{
+				//Prendo la zona dopo prossimaZona
+				var next:String=m.to2Zona;
+				//percorso minimo
+				grafo-="Z"+m.toZona;
+				val gr=grafo; //Non vuole la variabile grafo
+				def n(outer: String): gr.NodeT = gr get outer
+				println("Deviazione mezzo da "+id+" a Z"+next);
+				val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
+				val sp = spO.get;
+				var listaZone:String=sp.nodes.toString.substring(6)
+				listaZone=listaZone.substring(0, listaZone.size-1)
+				var abz=ArrayBuffer[String]();
+				abz++=listaZone.split(", ");
+				//Creo lista in personaDeviata
+				md.trattiDaFare=abz;	
+			}
+		}
+		md.resetPercorso;
+		md.trattoFatto;
+		var pos:Int=0;
+		if(md.trattiFatti.size==1)
+		{
+			md.percorso+=id.substring(1)+"I"; 
+			var corsia:String=md.mezzo.nxt.substring(md.mezzo.nxt.indexOf("O")+1);
+			md.percorso(pos)+=corsia; 
+			if(corsiaInCont(corsia.toInt-1)!=null)
+			{
+				md.percorso(pos)+="_1";
+				pos+=1;
+				md.percorso+=id.substring(1)+"I"+corsia+"_2";
+			}
+		}
+		else if(md.trattiDaFare.size!=0)
+		{ 
+			md.next= -1;
+			md.percorso+=id.substring(1)+"I"; 
+			var corsia:String="";
+			for (k<-0 to nomiZone2.size-1)
+			{	
+				if(nomiZone2(k)==md.trattiFatti(md.trattiFatti.size-2))	
+				{
+					corsia=(k+1).toString;
+					if(corsiaInCont(k)!=null)
+					{
+						md.percorso(pos)+=corsia+"_1";
+						md.percorso+=id.substring(1)+"I"+"_2"+corsia;
+						pos+=1;
+					}
+					else
+						md.percorso(pos)+=corsia; 
+				}
+			}
+		}
+		pos+=1;
+		if(md.trattiDaFare.size!=0)
+		{
+			md.percorso+=id.substring(1)+"O";
+			var corsia:String="";
+			for (k<-0 to nomiZone2.size-1)
+			{
+				if(nomiZone2(k)==md.trattiDaFare(0))
+				{
+					corsia=(k+1).toString;
+					if(corsia.startsWith("0"))
+					corsia=corsia.substring(1); //Tolgo lo 0 all'inizio altrimenti in incrocio ciclerà
+					if(corsiaOutCont(k)!=null)
+					{
+						md.percorso(pos)+=corsia+"_1";
+						md.percorso+=id.substring(1)+"O"+"_2"+corsia;
+						pos+=1;
+					}
+					else
+						md.percorso(pos)+=corsia; 
+				}
+			}	
+			val dove:String=md.percorso(0);	
+			if(dove.contains("_1"))
+				corsiaIn(dove.substring(2,dove.indexOf("_")).toInt-1)!md;
+			else	
+				corsiaIn(dove.substring(2).toInt-1)!md;
+		}
+		else
+		{ 
+			var mezzo:Mezzo=md.mezzo;
+			while(!mezzo.to.startsWith(id.substring(1)))
+			{
+				mezzo.inc;
+			}
+			var dove=mezzo.to;
+			if(dove.contains("_1"))
+				dove=dove.substring(2,dove.indexOf("_"));
+			else	
+				dove=dove.substring(2);
+			corsiaIn(dove.toInt-1)!mezzo;		
+		}
+	}
 
 	def deviaPersona (pd:personaDeviata) : Unit =
 	{
@@ -121,7 +242,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				grafo-="Z"+p.toZona;
 				val gr=grafo; //Non vuole la variabile grafo
 				def n(outer: String): gr.NodeT = gr get outer
-				println("Deviazione da "+id+" a Z"+next);
+				println("Deviazione persona da "+id+" a Z"+next);
 				val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
 				val sp = spO.get;
 				var listaZone:String=sp.nodes.toString.substring(6)
@@ -163,7 +284,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				if(nomiZone2(k)==pd.trattiDaFare(0))
 					marciapiede=(k+1).toString;
 			}
-			//marciapiede+=1;
 			if(marciapiede.startsWith("0"))
 				marciapiede=marciapiede.substring(1); //Tolgo lo 0 all'inizio altrimenti in incrocio ciclerà
 			pd.percorso(1)+=marciapiede; 
@@ -176,7 +296,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			{
 				pedone.inc;
 			}
-			//pedone.inc;
 			var dove=pedone.to;
 			dove=dove.substring(3);
 			marciapiedeIn(dove.toInt-1)!pedone;		
@@ -247,6 +366,9 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def creaResto:Unit =
 	{
+
+		println("\n\n\nCreaResto\n\n\n");
+		
 		self!Grafo;
 		self!Blocco2;
 		//Creo la destinazione
@@ -261,6 +383,11 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def aggiungiVicino(is: String, z: ActorRef): Unit =
 	{		
+
+		
+		println("\n\n\nAggiungiVicino\n\n\n");		
+
+		
 		for (x<- 0 to nomiZone.size-1)
 		{
 			if(nomiZone(x)==is)
@@ -296,10 +423,19 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def start: Unit  =
 	{
+		
+		println("\n\n\nStart: "+id+"\n\n\n");		
+
+		
 		var act=context.system.actorOf(Props(classOf[MapActor],id,self), "Map");
 		val cluster = Cluster(context.system);
 		//Leggo il file XML
 		var nome="/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/"+id+".xml";
+		
+
+		println("\n\n\n"+nome+"\n\n\n");	
+
+
 		xml=XML.loadFile(nome);
 		id=xml\"Zona"\"@id" text;
 		leggiVicini;
@@ -309,11 +445,17 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 	def registra(member:Member): Unit =
 	{	
+		println("\n\n\nnomiZone: "+nomiZone+"\n\n\n");	
+	
 		for(x<- 0 to nomiZone.size-1)
 		{
 			var nome:String=nomiZone(x);
 			if (nome!="null" && !RootActorPath(member.address).toString.contains(port))
 			{
+				
+				println("\n\n\n"+RootActorPath(member.address)/"user"/nome+"\n\n\n");		
+
+		
 				context.system.actorSelection(RootActorPath(member.address)/"user"/nome)!nome.substring(1).toInt;	 	
 			}
 		}
@@ -327,69 +469,80 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 		//Creo prima i pedoni
 		var spostamenti = (xml \ "Zona" \ "Pedoni" \ "Pedone");
-		for(x <- 0 to spostamenti.size-1)
+		if(spostamenti.size!=0)
 		{
-			var identificativo:String= spostamenti(x)\"@id" text;
-			var percorso:String=spostamenti(x)\"@percorso" text;
-			var ab=ArrayBuffer[String]();
-			ab++=percorso.split(",");
-			var zone:String=spostamenti(x)\"@zone" text;
-			var abz=ArrayBuffer[String]();
-			abz++=zone.split(",");
-			var prsn= new Pedone (identificativo, ab, abz);
-			self!prsn;
+			for(x <- 0 to spostamenti.size-1)
+			{
+				var identificativo:String= spostamenti(x)\"@id" text;
+				var percorso:String=spostamenti(x)\"@percorso" text;
+				var ab=ArrayBuffer[String]();
+				ab++=percorso.split(",");
+				var zone:String=spostamenti(x)\"@zone" text;
+				var abz=ArrayBuffer[String]();
+				abz++=zone.split(",");
+				var prsn= new Pedone (identificativo, ab, abz);
+				self!prsn;
+			}
 		}
-
 		//Poi le automobili
 		spostamenti = (xml \ "Zona" \ "Automobili" \ "Automobile");
-		for(x <- 0 to spostamenti.size-1)
+		if(spostamenti.size!=0)
 		{
-			var identificativo:String= spostamenti(x)\"@id" text;
-			var percorso:String=spostamenti(x)\"@percorso" text;	
-			var guidatore:String=spostamenti(x)\"@guidatore" text;
-			var ab=ArrayBuffer[String]();
-			ab++=percorso.split(",");
-			var zone:String=spostamenti(x)\"@zone" text;
-			var abz=ArrayBuffer[String]();
-			abz++=zone.split(",");
-			var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String](), ArrayBuffer[String]()), abz);
-			self!mzz;
-		}	
-
+			for(x <- 0 to spostamenti.size-1)
+			{
+				var identificativo:String= spostamenti(x)\"@id" text;
+				var percorso:String=spostamenti(x)\"@percorso" text;	
+				var guidatore:String=spostamenti(x)\"@guidatore" text;
+				var ab=ArrayBuffer[String]();
+				ab++=percorso.split(",");
+				var zone:String=spostamenti(x)\"@zone" text;
+				var abz=ArrayBuffer[String]();
+				abz++=zone.split(",");
+				var mzz= new Auto (identificativo, ab, new Pedone(guidatore, ArrayBuffer[String](), ArrayBuffer[String]()), abz);
+				self!mzz;
+			}	
+		}
 		//Ed infine gli autobus
 		spostamenti = (xml \ "Zona" \ "Autobus" \ "Bus");
-		for(x <- 0 to spostamenti.size-1)
+		if(spostamenti.size!=0)
 		{
-			var identificativo:String= spostamenti(x)\"@id" text;
-			var percorso:String=spostamenti(x)\"@percorso" text;	
-			var ab=ArrayBuffer[String]();
-			ab++=percorso.split(",");
-			var zone:String=spostamenti(x)\"@zone" text;
-			var abz=ArrayBuffer[String]();
-			abz++=zone.split(",");
-			//Dopo aver letto il percorso e l'id devo prendere gli eventuali passeggeri
-			var passeggeri=ArrayBuffer[Persona]();
-			var  pass= (spostamenti \ "Passeggeri" \ "Passeggero");
-			for(x <- 0 to pass.size-1)
+			for(x <- 0 to spostamenti.size-1)
 			{
-				var identificativop:String= pass(x)\"@id" text;
-				var percorsop:String=pass(x)\"@percorso" text;
-				var abp=ArrayBuffer[String]();
-				abp++=percorsop.split(",");
-				var passeggero=new Pedone (identificativop, abp, ArrayBuffer[String]());
-				passeggero.inc;
-				passeggeri+=passeggero;
+				var identificativo:String= spostamenti(x)\"@id" text;
+				var percorso:String=spostamenti(x)\"@percorso" text;	
+				var ab=ArrayBuffer[String]();
+				ab++=percorso.split(",");
+				var zone:String=spostamenti(x)\"@zone" text;
+				var abz=ArrayBuffer[String]();
+				abz++=zone.split(",");
+				//Dopo aver letto il percorso e l'id devo prendere gli eventuali passeggeri
+				var passeggeri=ArrayBuffer[Persona]();
+				var  pass= (spostamenti \ "Passeggeri" \ "Passeggero");
+				for(x <- 0 to pass.size-1)
+				{
+					var identificativop:String= pass(x)\"@id" text;
+					var percorsop:String=pass(x)\"@percorso" text;
+					var abp=ArrayBuffer[String]();
+					abp++=percorsop.split(",");
+					var passeggero=new Pedone (identificativop, abp, ArrayBuffer[String]());
+					passeggero.inc;
+					passeggeri+=passeggero;
+				}
+				var mzz= new Autobus (identificativo, ab, abz);
+				if(pass.size!=0)
+					mzz.passeggeri=passeggeri;
+				self!mzz;
 			}
-			var mzz= new Autobus (identificativo, ab, abz);
-			if(pass.size!=0)
-				mzz.passeggeri=passeggeri;
-			self!mzz;
 		}
 	}
 
 	def leggiVicini: Unit =
 	{
 		var vicini = (xml \ "Zona" \ "Vicini" \ "Vicino");
+
+		println("\n\n\nVicini: "+vicini+"\n\n\n");	
+
+
 		for(x <- 0 to vicini.size-1)
 		{
 			zoneVicine+=null;
@@ -439,22 +592,21 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			corsiaInCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaInCont(pos-1)!attr;
 		}
-		if(corsiaIn.size!=0)
+		if(corsiaIn.size!=0 && corsiaIn.size!=2)
 		{
 			for(x <- 0 to (corsiaIn.size-1))
 			{
 				corsiaIn(x)!dest;
 				if(corsiaInCont(x)!=null)
 					corsiaIn(x)!corsiaInCont(x);
-				else if(incrocio!=null)
+				else if(corsiaInCont(x)==null && incrocio!=null)
 					corsiaIn(x)!incrocio;
 			}
 		}
-		if(corsiaInCont.size!=0)
+		if(corsiaInCont.size!=0 && corsiaIn.size!=2)
 		{
 			for(x <- 0 to (corsiaInCont.size-1))
-			{
-				
+			{			
 				if(corsiaInCont(x)!=null)
 				{
 					corsiaInCont(x)!dest;
@@ -490,7 +642,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			corsiaOutCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
 			corsiaOutCont(pos-1)!attr;
 		}	
-		//Imposto le destinazioni delle strade
+		//Imposto le destinazioni delle strade uscenti
 		for(x <- 0 to (corsiaOut.size-1))
 		{
 			corsiaOut(x)!dest;
@@ -508,6 +660,21 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 					corsiaOutCont(x)!new containerZona(zoneVicine(x));
 			}
 		}
+
+		if(corsiaIn.size==2)
+		{
+			for(x <- 0 to 1)
+			{
+				corsiaIn(x)!dest;
+				if(corsiaInCont(x)!=null)
+				{
+					corsiaIn(x)!corsiaInCont(x);
+					corsiaInCont(x)!corsiaOut(corsiaIn.size-1-x);
+				}
+				else
+					corsiaIn(x)!corsiaOut(corsiaIn.size-1-x);
+			}
+		}
 	}
 
 	def creaMarciapiedi: Unit =
@@ -515,31 +682,36 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		var dest=new containerDestinazione(destinazione);
 		//MARCIAPIEDI ENTRANTI
 		var marciapiedi = (xml \ "Zona" \ "Marciapiedi" \ "MarciapiediIn" \ "MarciapiedeIn");
-		for(x <- 0 to marciapiedi.size-1)
+		if(marciapiedi.size!=0)
 		{
-			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self), attr);
-			marciapiedeIn(x)!attr;
-			var fermata:String= marciapiedi(x)\"@fermata" text;
-			if(fermata!="")
+			for(x <- 0 to marciapiedi.size-1)
 			{
-				var conteiner=new containerFermata(fermateIn(x));
-				marciapiedeIn(x)!conteiner;
+				var attr:String= marciapiedi(x)\"@id" text;
+				marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self), attr);
+				marciapiedeIn(x)!attr;
+				var fermata:String= marciapiedi(x)\"@fermata" text;
+				if(fermata!="")
+				{
+					var conteiner=new containerFermata(fermateIn(x));
+					marciapiedeIn(x)!conteiner;
+				}
 			}
 		}
-
 		//MARCIAPIEDI USCENTI
 		marciapiedi = (xml \ "Zona" \ "Marciapiedi" \ "MarciapiediOut" \ "MarciapiedeOut");
-		for(x <- 0 to marciapiedi.size-1)
+		if(marciapiedi.size!=0)
 		{
-			var attr:String= marciapiedi(x)\"@id" text;
-			marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self), attr);
-			marciapiedeOut(x)!attr;
-			var fermata:String= marciapiedi(x)\"@fermata" text;
-			if(fermata!="")
+			for(x <- 0 to marciapiedi.size-1)
 			{
-				var conteiner=new containerFermata(fermateIn(x));
-				marciapiedeOut(x)!conteiner;
+				var attr:String= marciapiedi(x)\"@id" text;
+				marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self), attr);
+				marciapiedeOut(x)!attr;
+				var fermata:String= marciapiedi(x)\"@fermata" text;
+				if(fermata!="")
+				{
+					var conteiner=new containerFermata(fermateIn(x));
+					marciapiedeOut(x)!conteiner;
+				}
 			}
 		}
 		//Imposto le destinazioni dei vari marciapiedi
@@ -553,15 +725,24 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			marciapiedeOut(x)!dest;
 			marciapiedeOut(x)!marciapiedeOut.size;
 		}
-		for(x <- 0 to (marciapiedeIn.size-1))
-		{	
-			if (x==0)
-				marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(marciapiedeOut.size-1));
-			else
-				marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(x-1));	
+		//Se ho solo due strade, vuol dire che non mi serve l'incrocio e imposto le destinazioni a mano
+		if(marciapiedeIn.size==2)
+		{
+			marciapiedeIn(0)!ArrayBuffer(marciapiedeOut(1), marciapiedeOut(1));
+			marciapiedeIn(1)!ArrayBuffer(marciapiedeOut(0), marciapiedeOut(0));
+		}
+		else
+		{
+			for(x <- 0 to (marciapiedeIn.size-1))
+			{	
+				if (x==0)
+					marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(marciapiedeOut.size-1));
+				else
+					marciapiedeIn(x)!ArrayBuffer(incrocio, marciapiedeOut(x-1));	
 
-			if (zoneVicine(x)!=null)
-				marciapiedeOut(x)!new containerZona(zoneVicine(x));
+				if (zoneVicine(x)!=null)
+					marciapiedeOut(x)!new containerZona(zoneVicine(x));
+			}
 		}
 	}
 

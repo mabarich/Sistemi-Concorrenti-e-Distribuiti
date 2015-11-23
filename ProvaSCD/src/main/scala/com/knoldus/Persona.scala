@@ -73,18 +73,13 @@ trait Persona
 
 class personaDeviata (i:String, p:Persona) extends Persona with Serializable
 {
-	//protected var _id: String=i;
 	protected var _persona:Persona=p;
 	protected var _trattiFatti=ArrayBuffer[String]();	
 	protected var _trattiDaFare=ArrayBuffer[String]();
-	//protected var _percorso = ArrayBuffer [String]();
 
 	_deviata=true;
 
 	_id=i;
-
-	/*def id = _id 
-	def id_= (value:String):Unit =  { _id = value; }*/
 	
 	def persona = _persona 
 	def persona_= (value:Persona):Unit =  { _persona = value; }
@@ -94,9 +89,6 @@ class personaDeviata (i:String, p:Persona) extends Persona with Serializable
 		
 	def trattiDaFare = _trattiDaFare 
 	def trattiDaFare_= (value:ArrayBuffer[String]):Unit =  { _trattiDaFare = value; }
-
-	/*def percorso = _percorso 
-	def percorso_= (value:ArrayBuffer [String]):Unit =  { _percorso = value; }*/
 
 	def trattoFatto: Unit =
 	{	

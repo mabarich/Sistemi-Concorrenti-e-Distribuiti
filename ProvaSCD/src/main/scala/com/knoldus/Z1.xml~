@@ -29,7 +29,7 @@
 				<MarciapiedeOut id="1MO2"/>
 			</MarciapiediOut>
 		</Marciapiedi>
-		<Incrocio>
+		<!--<Incrocio>
 			<Tratti>
 				<Tratto id="1T1"/>
 				<Tratto id="1T2"/>
@@ -39,8 +39,15 @@
 				<StrisciaPedonale id="1S2"/>
 			</StriscePedonali>
 		</Incrocio>
-		<Pedoni>
-			<Pedone id="P0" zone="1,4,5,6,6,5,4,1" percorso="1MI1,1MO2,4MI1,4MO2,5MI3,5MO2,6MI2,6MO1,X,6MI1,6MO2,5MI1,5MO3,4MI2,4MO1,1MI2,1MO1,R" />	
-		</Pedoni>
+		<!--<Pedoni>-->
+			<Pedone id="P0" zone="1,4,5,6,6,5,4,1" percorso="1MI1,1MO2,4MI1,4MO2,5MI3,5MO2,6MI2,6MO1,X,6MI1,6MO2,5MI2,5MO3,4MI2,4MO1,1MI2,1MO1,R" />	
+		</Pedoni>-->
+		<Autobus>
+			<Bus id="A0" zone="1,4,5,6,6,5,4,1" percorso="1I1_1,1I1_2,1O2,4I1,4O2,5I3,5O2,6I2_1,F,6I2_2,6O1,X,6I1,6O2,5I2,5O3,4I2,4O1,1I2,1O1,R">
+				<Passeggeri>
+					<Passeggero id="P1" percorso="6FI2,6MI2,FINE"/>
+				</Passeggeri>
+			</Bus>
+		</Autobus>
 	</Zona>
 </xml>

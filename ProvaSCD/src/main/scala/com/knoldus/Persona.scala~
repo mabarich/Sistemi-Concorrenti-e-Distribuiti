@@ -11,7 +11,11 @@ trait Persona
 	protected var _nextZona: Int = -1;
 	protected var _deviata:Boolean = false;
 
-	def reset: Unit= _next = -1;
+	def reset: Unit= 
+	{
+		_next = -1;
+		_nextZona = -1;
+	}
 
 	def inc: Unit = 
 	{

@@ -14,23 +14,23 @@ object Città
 	var listaNomi = ArrayBuffer[String]();
 	def main(args: Array[String]): Unit =
 	{
-		listaNomi+="Z1";
-		listaNomi+="Z2";
+		listaNomi+="Z11";
+		listaNomi+="Z12";
 		//listaNomi+="Z3";
-		listaNomi+="Z4";
+		listaNomi+="Z14";
 		
-		listaNomi+="Z5";
-		listaNomi+="Z6";
-		listaNomi+="Z7";
+		listaNomi+="Z15";
+		listaNomi+="Z16";
+		listaNomi+="Z17";
 
 
-		zone+=new Pezzo("2551","Z1", listaNomi)
-		zone+=new Pezzo("2552","Z2", listaNomi)
-		//zone+=new Pezzo("2553","Z3", listaNomi)
-		zone+=new Pezzo("2554","Z4", listaNomi)
-		zone+=new Pezzo("2555","Z5", listaNomi)
-		zone+=new Pezzo("2556","Z6", listaNomi)
-		zone+=new Pezzo("2557","Z7", listaNomi)
+		zone+=new Pezzo("2551","Z11", listaNomi)
+		zone+=new Pezzo("2552","Z12", listaNomi)
+		//zone+=new Pezzo("2553","Z13", listaNomi)
+		zone+=new Pezzo("2554","Z14", listaNomi)
+		zone+=new Pezzo("2555","Z15", listaNomi)
+		zone+=new Pezzo("2556","Z16", listaNomi)
+		zone+=new Pezzo("2557","Z17", listaNomi)
 
 		for (x<-0 to zone.size-1)
 			zone(x).start;
@@ -47,6 +47,11 @@ class Pezzo (p:String, i:String, ln:ArrayBuffer[String])
 	{
 		val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").withFallback(ConfigFactory.parseString("akka.cluster.roles = [Zona]")).withFallback(ConfigFactory.load())
 		val system = ActorSystem("Priority", config);
+
+		
+		println("\n\n\n"+id+"\n\n\n");		
+
+
 		val zona = system.actorOf(Props(classOf[Zona],id,port, listaNomi).withDispatcher("prio-dispatcher4"), id);
 		zona!Start;
 	}

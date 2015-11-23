@@ -1,0 +1,45 @@
+<xml>
+	<Z1ona id="Z15">
+		<Vicini>
+			<Vicino id="Z12" />
+			<Vicino id="Z16" />
+			<Vicino id="Z14" />
+		</Vicini>
+		<Strade>
+			<StradeIn>
+				<StradaIn id="15I1"/>
+				<StradaIn id="15I2"/>
+				<StradaIn id="15I3"/>
+			</StradeIn>
+			<StradeOut>
+				<StradaOut id="15O1"/>
+				<StradaOut id="15O2"/>
+				<StradaOut id="15O3"/>
+			</StradeOut>
+		</Strade>
+		<Marciapiedi>
+			<MarciapiediIn>
+				<MarciapiedeIn id="15MI1"/>
+				<MarciapiedeIn id="15MI2"/>
+				<MarciapiedeIn id="15MI3"/>
+			</MarciapiediIn>
+			<MarciapiediOut>
+				<MarciapiedeOut id="15MO1"/>
+				<MarciapiedeOut id="15MO2"/>
+				<MarciapiedeOut id="15MO3"/>
+			</MarciapiediOut>
+		</Marciapiedi>
+		<Incrocio>
+			<Tratti>
+				<Tratto id="15T1"/>
+				<Tratto id="15T2"/>
+				<Tratto id="15T3"/>
+			</Tratti>
+			<StriscePedonali>
+				<StrisciaPedonale id="15S1"/>
+				<StrisciaPedonale id="15S2"/>
+				<StrisciaPedonale id="15S3"/>
+			</StriscePedonali>
+		</Incrocio>
+	</Z1ona>
+</xml>
