@@ -9,7 +9,6 @@ class Destinazione (z:ActorRef) extends Actor
 	var zona:ActorRef=z;
   	override def receive: Actor.Receive = 
 	{
-		case z:ActorRef => zona=z;
 		case p:Persona => waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; zona!p;
 		case m:Mezzo => waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; waitABit; zona!m;		   
 	}

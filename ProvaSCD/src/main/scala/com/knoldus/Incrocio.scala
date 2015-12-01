@@ -132,22 +132,6 @@ class Incrocio (iz:String) extends Actor
 			tratti(tratto-2)!m;
 	}
 
-	//Invia i pedoni alle strisce giuste
-	def gestisciPedone (p:Persona): Unit  =
-	{
-		println("Persona "+p.id+" arrivata all'incrocio");
-		//Guardo su che striscia deve andare
-		var dove=p.nxt;
-		dove=dove.substring(idZona.length+1);	
-		//Casi particolari del calcolo	
-		if(dove.toInt==1)
-			strisce(strisce.size-2)!p;
-		else if(dove.toInt==2)
-			strisce(strisce.size-1)!p;
-		else
-			strisce(dove.toInt-3)!p;
-	}
-
 	//Invia i mezzi ai tratti giusti
 	def gestisciMezzoD (m:mezzoDeviato): Unit  =
 	{
@@ -165,6 +149,22 @@ class Incrocio (iz:String) extends Actor
 			tratti(tratti.size-1)!m;
 		else
 			tratti(tratto-2)!m;
+	}
+
+	//Invia i pedoni alle strisce giuste
+	def gestisciPedone (p:Persona): Unit  =
+	{
+		println("Persona "+p.id+" arrivata all'incrocio");
+		//Guardo su che striscia deve andare
+		var dove=p.nxt;
+		dove=dove.substring(idZona.length+1);	
+		//Casi particolari del calcolo	
+		if(dove.toInt==1)
+			strisce(strisce.size-2)!p;
+		else if(dove.toInt==2)
+			strisce(strisce.size-1)!p;
+		else
+			strisce(dove.toInt-3)!p;
 	}
 
 	//Invia i pedoni alle strisce giuste

@@ -156,9 +156,9 @@ class Incrocio (iz:String) extends Actor
 		var dove=m.nxt;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
-			dove=dove.substring(2, pos);
+			dove=dove.substring(idZona.length, pos);
 		else
-			dove=dove.substring(2);
+			dove=dove.substring(idZona.length);
 		//Caso particolare del calcolo	
 		val tratto=dove.toInt;		
 		if(tratto==1)
@@ -173,7 +173,7 @@ class Incrocio (iz:String) extends Actor
 		println("Persona (deviata) "+p.id+" arrivata all'incrocio");
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
-		dove=dove.substring(3);	
+		dove=dove.substring(idZona.length+1);	
 		//Casi particolari del calcolo	
 		if(dove.toInt==1)
 			strisce(strisce.size-2)!p;

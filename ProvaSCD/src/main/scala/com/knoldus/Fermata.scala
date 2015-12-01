@@ -4,24 +4,17 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import scala.collection.mutable.ArrayBuffer
 
-class Fermata extends Actor 
+class Fermata (z: ActorRef, i: String) extends Actor 
 {	
 	var codaInEntrata = ArrayBuffer[Persona]();
 	var codaInUscita = ArrayBuffer[Persona]();
-	var zona: ActorRef=null;
-	var id="";
+	var zona: ActorRef=z;
+	var id=i;
 
   	override def receive: Actor.Receive = 
 	{
-		case z:ActorRef => zona=z;
-		case m:String => start(m);
 		case p:Persona => personaRicevuta(p);	
 		case m:Autobus =>	corrieraRicevuta (m, sender);		   
-	}
-
-	def start (m:String): Unit  =
-	{
-		id=m;
 	}
 
 	def personaRicevuta (p:Persona): Unit  =

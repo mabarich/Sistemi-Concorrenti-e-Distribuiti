@@ -10,39 +10,30 @@ import akka.util.Timeout
 import scala.concurrent.duration._
 import java.util.concurrent.TimeoutException
 
-class Marciapiede (z:ActorRef) extends Actor 
+import akka.dispatch.UnboundedStablePriorityMailbox
+import com.typesafe.config.Config
+import akka.dispatch.PriorityGenerator
+import akka.actor.ActorSystem
+
+class Marciapiede (z:ActorRef, i: String, f: ActorRef, d: ActorRef, n: Int) extends Actor 
 {	
 	var nextActor:ActorRef=null;
 	var nextMarciapiede:ActorRef=null;
 	var fermata:ActorRef=null;
-	var id="";
-	var numMarciapiedi=0;
-	var destinazione:ActorRef = null;
+	var id=i;
+	var numMarciapiedi=n;
+	var destinazione:ActorRef = d;
 	var zona:ActorRef=z;
 	val maxTentativi: Int = 4;
+	var nextDown: Boolean= false;
 
   	override def receive: Actor.Receive = 
 	{
-		case v:containerZona => nextActor=v.zona;
-		case p:Int => numMarciapiedi=p;
-		case f:containerFermata => creaFermata(f);	
-		case z:containerDestinazione => destinazione=z.destinazione;
-		case p:String => start(p);
+		case v:containerZona => println("\n\nnextActor passa da: "+nextActor+" a "+v.zona+".\n\n"); nextActor=v.zona;
 		case p:ArrayBuffer[ActorRef] => nextReceived(p);
 		case p:personaDeviata => gestisciD (p);		
-		case p:Persona => gestisci (p);		   
-	}
-
-	//Imposta l'id
-	def start (p:String): Unit  =
-	{
-		id=p;
-	}
-
-	//Crea una fermata
-	def creaFermata (f:containerFermata): Unit  =
-	{
-		fermata=f.fermata;
+		case p:Persona => gestisci (p);	
+		case m:ActorRef => nextActor=m;		   
 	}
 
 	//Imposta il destinatario di tutti i messaggi (uno è l'incrocio e l'altro è il marciapiede successivo nel caso il pedone non debba andare per forza all'incrocio)
@@ -87,7 +78,13 @@ class Marciapiede (z:ActorRef) extends Actor
 				if(tentativi==maxTentativi)
 				{
 					println("La zona non risponde. Il pedone (deviato) dovrà seguire un'altra strada.");
+					nextDown=true;
 					zona!new containerPersonaDeviata(new personaDeviata(p.id, p.persona));
+				}
+				else if(nextDown)
+				{
+					nextDown=false;
+					zona!new CorreggiGrafo("Z"+p.toZona);
 				}
 			}
 		}
@@ -152,7 +149,13 @@ class Marciapiede (z:ActorRef) extends Actor
 								if(tentativi==maxTentativi)
 								{
 									println("La zona non risponde. Il pedone dovrà seguire un'altra strada.");
+									nextDown=true;
 									zona!new containerPersonaDeviata(new personaDeviata(p.id, p));
+								}
+								else if(nextDown)
+								{
+									nextDown=false;
+									zona!new CorreggiGrafo("Z"+p.toZona);
 								}
 							}
 						}
@@ -176,3 +179,11 @@ class Marciapiede (z:ActorRef) extends Actor
 		}
 	}	
 }
+
+class MarciapiedePriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(
+PriorityGenerator 
+{
+	case p:personaDeviata => 1
+	case p:Persona => 1
+	case _ => 0
+})

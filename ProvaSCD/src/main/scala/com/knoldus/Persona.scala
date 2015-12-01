@@ -17,15 +17,9 @@ trait Persona
 		_nextZona = -1;
 	}
 
-	def inc: Unit = 
-	{
-		_next+=1;
-	}
+	def inc: Unit = _next+=1;
 
-	def incZona: Unit = 
-	{
-		_nextZona+=1;
-	}
+	def incZona: Unit = _nextZona+=1;
 
 	def to: String = 
 	{
@@ -33,15 +27,9 @@ trait Persona
 		_percorso(n);
 	}
 
-	def nxt: String = 
-	{
-		_percorso(_next);
-	}
+	def nxt: String = _percorso(_next);
 
-	def nxtZona: String = 
-	{
-		_zone(_nextZona);
-	}
+	def nxtZona: String = _zone(_nextZona);
 
 	def toZona: String = 
 	{
@@ -109,15 +97,11 @@ class personaDeviata (i:String, p:Persona) extends Persona with Serializable
 		_trattiDaFare(n);
 	}
 
-	override def nxtZona: String = 
-	{
-		_zone(_nextZona);
-	}
+	override def nxtZona: String = _zone(_nextZona);
 
-	def resetPercorso: Unit = 
-	{
-		_percorso = ArrayBuffer [String]();
-	}
+	def zona: String= trattiFatti(trattiFatti.size-1);
+
+	def resetPercorso: Unit = _percorso = ArrayBuffer [String]();
 }
 
 class Pedone (i: String, p: ArrayBuffer [String], z: ArrayBuffer [String]) extends Persona with Serializable

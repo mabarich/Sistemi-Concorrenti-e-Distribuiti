@@ -18,6 +18,11 @@ prio-dispatcher4
 	mailbox-type = "com.knoldus.ZonaPriorityActorMailbox" 
 }
 
+prio-dispatcher5 
+{
+	mailbox-type = "com.knoldus.CorsiaPriorityActorMailbox" 
+}
+
 akka 
 {
 	actor 
@@ -49,7 +54,7 @@ akka
 	{
 		seed-nodes = 
 		[
-			"akka.tcp://Priority@127.0.0.1:2551",
+			"akka.tcp://Priority@127.0.0.1:2551"
 		]
 		auto-down-unreachable-after = 10s
 	}

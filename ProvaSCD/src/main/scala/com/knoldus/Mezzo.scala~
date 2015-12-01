@@ -17,15 +17,9 @@ trait Mezzo
 		_nextZona = -1;
 	}
 
-	def inc: Unit = 
-	{
-		_next+=1;
-	}
+	def inc: Unit = _next+=1;
 
-	def incZona: Unit = 
-	{
-		_nextZona+=1;
-	}
+	def incZona: Unit = _nextZona+=1;
 
 	def to: String = 
 	{
@@ -33,15 +27,9 @@ trait Mezzo
 		_percorso(n);
 	}
 
-	def nxt: String = 
-	{
-		_percorso(_next);
-	}
+	def nxt: String = _percorso(_next);
 
-	def nxtZona: String = 
-	{
-		_zone(_nextZona);
-	}
+	def nxtZona: String = _zone(_nextZona);
 
 	def toZona: String = 
 	{
@@ -77,7 +65,7 @@ class mezzoDeviato (i:String, m:Mezzo) extends Mezzo with Serializable
 	protected var _trattiFatti=ArrayBuffer[String]();	
 	protected var _trattiDaFare=ArrayBuffer[String]();
 
-	_deviata=true;
+	_deviato=true;
 
 	_id=i;
 
@@ -109,15 +97,11 @@ class mezzoDeviato (i:String, m:Mezzo) extends Mezzo with Serializable
 		_trattiDaFare(n);
 	}
 
-	override def nxtZona: String = 
-	{
-		_zone(_nextZona);
-	}
+	override def nxtZona: String = _zone(_nextZona);
 
-	def resetPercorso: Unit = 
-	{
-		_percorso = ArrayBuffer [String]();
-	}
+	def zona: String= trattiFatti(trattiFatti.size-1);
+
+	def resetPercorso: Unit = _percorso = ArrayBuffer [String]();
 }
 
 class Auto (i: String, p: ArrayBuffer [String], g: Persona, z: ArrayBuffer [String]) extends Mezzo with Serializable
@@ -128,7 +112,6 @@ class Auto (i: String, p: ArrayBuffer [String], g: Persona, z: ArrayBuffer [Stri
 	percorso = p;
 	guidatore = g;
 	zone=z;
-
 
 	def guidatore = _guidatore 
 	def guidatore_= (value:Persona):Unit =  { _guidatore = value; }
@@ -170,10 +153,7 @@ class Autobus (i: String, p: ArrayBuffer [String], z: ArrayBuffer [String]) exte
 		discesa;
 	}
 
-	def aggiungi (p: Persona): Unit =
-	{
-		_passeggeri+=p;
-	}
+	def aggiungi (p: Persona): Unit =_passeggeri+=p;
 
 	def passeggeri = _passeggeri 
 	def passeggeri_= (value:ArrayBuffer [Persona]):Unit =  { _passeggeri = value; }

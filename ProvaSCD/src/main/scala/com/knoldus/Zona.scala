@@ -63,11 +63,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 	var listeVicini=ArrayBuffer[ArrayBuffer[String]]();
 	var grafo=scalax.collection.mutable.Graph(id, id~id);
 
-
-
-	var simul:Int=0;
-
-
 	override def preStart(): Unit = 
 	{
 		cluster.subscribe(self, initialStateMode = InitialStateAsEvents,classOf[MemberEvent], classOf[UnreachableMember]);
@@ -84,8 +79,9 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		case Start => start;
 
 		case FermaTutto => stop; 
-		case c: ZonaCaduta => println("Mi hanno detto di togliere il nodo "+c.id+" dal grafo."); grafo-= c.id;
-		case c: ZonaTornata => println("Mi hanno detto di riaggiungere il nodo "+c.id+" al grafo."); aggiornaGrafo(c.id);
+		case c: CorreggiGrafo => println("\n\nDevo dire a tutti di rimettere la zona "+c.id+".\n\n");
+		case c: ZonaCaduta => println("Mi hanno detto di togliere il nodo "+c.id+" dal grafo."); grafo-= c.id; zoneCadute+=c.id;
+		case c: ZonaTornata => riaggiungi(c.id);
 		case Grafo => chiediVicini;
 		case Blocco2 => if (listeVicini.size!=members.size-1) self!Blocco2; else creaGrafo;
 		case ChiediVicini => sender!new CostruzioneGrafo(ArrayBuffer[String](id)++nomiZone2);
@@ -102,13 +98,41 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 
 		case m:mezzoDeviato => sender!true; deviaMezzo(m); 
 		case p:personaDeviata => sender!true; deviaPersona(p); 
-		//case p:Persona => if (id=="Z15") sender!false; else { sender!true; /*if(checkPedoni(p))*/ inviaPedone(p); }
-		case p:Persona => if (id=="Z15" && simul<21) { sender!false; simul+=1; } else if (id=="Z15" && simul>=21) { sender!true; inviaPedone(p); } else { sender!true; inviaPedone(p); }
-		//case m:Mezzo => sender!true; if(checkMezzi(m)) inviaMezzo(m);
-		case m:Mezzo => if (id=="Z15") sender!false; else { sender!true; inviaMezzo(m); }
+		case p:Persona => sender!true; /*if(checkPedoni(p))*/ inviaPedone(p); 
+		case m:Mezzo => sender!true; /*if(checkMezzi(m))*/ inviaMezzo(m);
 		case p:containerPersonaDeviata => deviaPersona(p.persona);
 		case m:containerMezzoDeviato => deviaMezzo(m.mezzo);
 	} 
+
+	def riaggiungi(i: String): Unit=
+	{
+		if (zoneCadute.contains(i))
+		{ 
+			println("Mi hanno detto di riaggiungere il nodo "+i+" al grafo."); 
+			aggiornaGrafo(i); 
+			zoneCadute-= i; 
+			aggiornaUscite(i); 
+		}
+	}
+
+	def aggiornaUscite(i: String) =
+	{
+		if(nomiZone2.contains(i))
+		{
+			val pos=nomiZone2.indexOf(i);
+
+
+			println("Devo aggiornare strade("+pos+") e marciapiedi("+pos+")!!");
+
+
+
+			if(corsiaOutCont(pos)!=null)
+				corsiaOutCont(pos)!new containerZona(zoneVicine(pos));
+			else
+				corsiaOut(pos)!new containerZona(zoneVicine(pos));
+			marciapiedeOut(pos)!new containerZona(zoneVicine(pos));
+		}
+	}
 
 	def stop: Unit =
 	{
@@ -133,9 +157,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				context.stop(marciapiedeIn(x));
 			if(marciapiedeOut(x)!=null)
 				context.stop(marciapiedeOut(x));
-		}
-		for (x<- 0 to corsiaIn.size-1)
-		{
 			if(corsiaIn(x)!=null)
 				context.stop(corsiaIn(x));
 			if(corsiaInCont(x)!=null)
@@ -151,6 +172,28 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			context.stop(incrocio);
 		context.stop(self);
 		println("Zona "+id+" fermata");
+	}
+
+	def cercaZonaNelGrafo (zonaCaduta:String): Unit =
+	{
+		grafo find zonaCaduta match 
+		{
+		    	case Some(i) => avvisoZonaCaduta(zonaCaduta); grafo-=zonaCaduta; zoneCadute+=zonaCaduta;
+			case None => println("Non devo togliere il nodo "+zonaCaduta+" perché non c'è già più.");
+		}
+	}
+
+	def cercaPercorsoMinimo (next:String) : ArrayBuffer[String] =
+	{
+		val gr=grafo; //Non vuole la variabile grafo
+		def n(outer: String): gr.NodeT = gr get outer
+		val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
+		val sp = spO.get;
+		var listaZone:String=sp.nodes.toString.substring(6)
+		listaZone=listaZone.substring(0, listaZone.size-1)
+		var abz=ArrayBuffer[String]();
+		abz++=listaZone.split(", ");
+		abz;
 	}
 
 	def deviaMezzo (md:mezzoDeviato) : Unit =
@@ -181,24 +224,11 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				//percorso minimo
 				val zonaCaduta:String="Z"+m.toZona;
 				//Avviso tutte le zone che una è caduta. Se non lo faccio, potrebbero verificarsi dei lup (io calcolo un percorso, quello dopo ne calcola un altro e lo rimanda a me)
-				grafo find zonaCaduta match 
-				{
-				    	case Some(i) => avvisoZonaCaduta(zonaCaduta); grafo-=zonaCaduta; zoneCadute+=zonaCaduta;
-					case None => println("Non devo togliere il nodo "+zonaCaduta+" perché non c'è già più.");
-				}		
-				val gr=grafo; //Non vuole la variabile grafo
-				def n(outer: String): gr.NodeT = gr get outer
+				cercaZonaNelGrafo(zonaCaduta);		
 				println("Deviazione mezzo da "+id+" a Z"+next);
 				try 
 				{
-					val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
-					val sp = spO.get;
-					var listaZone:String=sp.nodes.toString.substring(6)
-					listaZone=listaZone.substring(0, listaZone.size-1)
-					var abz=ArrayBuffer[String]();
-					abz++=listaZone.split(", ");
-					//Creo lista in personaDeviata
-					md.trattiDaFare=abz;
+					md.trattiDaFare=cercaPercorsoMinimo(next);
 				}
 				catch
 				{
@@ -317,24 +347,12 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				//percorso minimo
 				val zonaCaduta:String="Z"+p.toZona;
 				//Avviso tutte le zone che una è caduta. Se non lo faccio, potrebbero verificarsi dei lup (io calcolo un percorso, quello dopo ne calcola un altro e lo rimanda a me)
-				grafo find zonaCaduta match 
-				{
-				    	case Some(i) => avvisoZonaCaduta(zonaCaduta); grafo-=zonaCaduta; zoneCadute+=zonaCaduta;
-					case None => println("Non devo togliere il nodo "+zonaCaduta+" perché non c'è già più.");
-				}
-				val gr=grafo; //Non vuole la variabile grafo
-				def n(outer: String): gr.NodeT = gr get outer
+				cercaZonaNelGrafo(zonaCaduta);
 				println("Deviazione persona da "+id+" a Z"+next);
 				try 
 				{
-					val spO = n(id) shortestPathTo n("Z"+next); //ECCEZIONE java.util.NoSuchElementException se non lo trova
-					val sp = spO.get;
-					var listaZone:String=sp.nodes.toString.substring(6)
-					listaZone=listaZone.substring(0, listaZone.size-1)
-					var abz=ArrayBuffer[String]();
-					abz++=listaZone.split(", ");
 					//Creo lista in personaDeviata
-					pd.trattiDaFare=abz;
+					pd.trattiDaFare=cercaPercorsoMinimo(next);
 				}
 				catch
 				{
@@ -460,10 +478,7 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		}
 	}
 
-	def salvaVicini (vi: ArrayBuffer[String]): Unit =
-	{
-		listeVicini+=vi;
-	}
+	def salvaVicini (vi: ArrayBuffer[String]): Unit = listeVicini+=vi;
 
 	def checkPedoni(p:Persona): Boolean =
 	{
@@ -509,10 +524,9 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 		{
 			if( (nomiZone(x)==is) || (zoneCadute.contains(is) && nomiZone2(x)==is) )
 			{
-
-
 				if(zoneCadute.contains(is))
 				{
+					zoneVicine(x)=z;
 					println("\n\n"+is+" è tornata UP\n\n");
 					for (x<- 0 to members.size-1)
 					{		
@@ -723,18 +737,15 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				{
 					fermateIn+=null;
 					var attr:String= strade(x)\"@id" text;
-					corsiaIn+=context.actorOf(Props(classOf[Corsia], self), attr);
-					corsiaIn(x)!attr;
 					corsiaInCont+=null;
 					var fermata:String= strade(x)\"@fermata" text;
 					if(fermata!="")
 					{
-						fermateIn(x)=context.actorOf(Props[Fermata], fermata);
-						fermateIn(x)!self;
-						fermateIn(x)!fermata;
-						var conteiner=new containerFermata(fermateIn(x));
-						corsiaIn(x)!conteiner;
+						fermateIn(x)=context.actorOf(Props(classOf[Fermata], self, fermata), fermata);
+						corsiaIn+=context.actorOf(Props(classOf[Corsia], self, attr, fermateIn(x), destinazione).withDispatcher("prio-dispatcher5"), attr);
 					}
+					else 
+						corsiaIn+=context.actorOf(Props(classOf[Corsia], self, attr, null, destinazione).withDispatcher("prio-dispatcher5"), attr);
 				} 
 				strade = (arrZone(z) \\ "StradeCont" \ "StradeInCont" \ "StradaInCont");
 				//Imposto le destinazioni delle strade
@@ -742,14 +753,12 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				{
 					var attr:String= strade(x)\"@id" text;
 					var pos= attr.substring(id.length, id.length+1).toInt; //1I1_2
-					corsiaInCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
-					corsiaInCont(pos-1)!attr;
+					corsiaInCont(pos-1)=context.actorOf(Props(classOf[Corsia], self, attr, null, destinazione).withDispatcher("prio-dispatcher5"), attr);
 				}
 				if(corsiaIn.size!=0 && corsiaIn.size!=2)
 				{
 					for(x <- 0 to (corsiaIn.size-1))
 					{
-						corsiaIn(x)!dest;
 						if(corsiaInCont(x)!=null)
 							corsiaIn(x)!corsiaInCont(x);
 						else if(corsiaInCont(x)==null && incrocio!=null)
@@ -762,7 +771,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 					{			
 						if(corsiaInCont(x)!=null)
 						{
-							corsiaInCont(x)!dest;
 							corsiaInCont(x)!incrocio;
 						}
 					}
@@ -774,31 +782,26 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				{
 					fermateOut+=null;
 					var attr:String= strade(x)\"@id" text;
-					corsiaOut+=context.actorOf(Props(classOf[Corsia], self), attr);
-					corsiaOut(x)!attr;
 					corsiaOutCont+=null;
 					var fermata:String= strade(x)\"@fermata" text;
 					if(fermata!="")
 					{
-						fermateOut(x)=context.actorOf(Props[Fermata], fermata);
-						fermateOut(x)!self;
-						fermateOut(x)!fermata;
-						var conteiner=new containerFermata(fermateOut(x));
-						corsiaOut(x)!conteiner;
+						fermateOut(x)=context.actorOf(Props(classOf[Fermata], self, fermata), fermata);
+						corsiaOut+=context.actorOf(Props(classOf[Corsia], self, attr, fermateOut(x), destinazione).withDispatcher("prio-dispatcher5"), attr);
 					}
+					else
+						corsiaOut+=context.actorOf(Props(classOf[Corsia], self, attr, null, destinazione).withDispatcher("prio-dispatcher5"), attr);
 				}
 				strade = (arrZone(z) \\ "StradeCont" \ "StradeOutCont" \ "StradaOutCont");
 				for(x <- 0 to strade.size-1)
 				{
 					var attr:String= strade(x)\"@id" text;
 					var pos= attr.substring(id.length, id.length+1).toInt; //1O3_2
-					corsiaOutCont(pos-1)=context.actorOf(Props(classOf[Corsia], self), attr);
-					corsiaOutCont(pos-1)!attr;
+					corsiaOutCont(pos-1)=context.actorOf(Props(classOf[Corsia], self, attr, null, destinazione).withDispatcher("prio-dispatcher5"), attr);
 				}	
 				//Imposto le destinazioni delle strade uscenti
 				for(x <- 0 to (corsiaOut.size-1))
 				{
-					corsiaOut(x)!dest;
 					if(corsiaOutCont(x)!=null)
 						corsiaOut(x)!corsiaOutCont(x);
 					else if (zoneVicine(x)!=null)
@@ -808,7 +811,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				{
 					if(corsiaOutCont(x)!=null)
 					{
-						corsiaOutCont(x)!dest;
 						if (zoneVicine(x)!=null)
 							corsiaOutCont(x)!new containerZona(zoneVicine(x));
 					}
@@ -818,7 +820,6 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 				{
 					for(x <- 0 to 1)
 					{
-						corsiaIn(x)!dest;
 						if(corsiaInCont(x)!=null)
 						{
 							corsiaIn(x)!corsiaInCont(x);
@@ -841,50 +842,29 @@ class Zona (i:String, p:String, ln:ArrayBuffer[String]) extends Actor
 			var idz:String= arrZone(z)\"@id" text;
 			if(idz==id)
 			{
-				//MARCIAPIEDI ENTRANTI
 				var marciapiedi = (arrZone(z) \\ "Marciapiedi" \ "MarciapiediIn" \ "MarciapiedeIn");
+				var marciapiediO = (arrZone(z) \\ "Marciapiedi" \ "MarciapiediOut" \ "MarciapiedeOut");
 				if(marciapiedi.size!=0)
 				{
-					for(x <- 0 to marciapiedi.size-1)
+					val nMarciapiedi=marciapiedi.size;
+					for(x <- 0 to nMarciapiedi-1)
 					{
+						//MARCIAPIEDI ENTRANTI
 						var attr:String= marciapiedi(x)\"@id" text;
-						marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self), attr);
-						marciapiedeIn(x)!attr;
 						var fermata:String= marciapiedi(x)\"@fermata" text;
 						if(fermata!="")
-						{
-							var conteiner=new containerFermata(fermateIn(x));
-							marciapiedeIn(x)!conteiner;
-						}
-					}
-				}
-				//MARCIAPIEDI USCENTI
-				marciapiedi = (arrZone(z) \\ "Marciapiedi" \ "MarciapiediOut" \ "MarciapiedeOut");
-				if(marciapiedi.size!=0)
-				{
-					for(x <- 0 to marciapiedi.size-1)
-					{
-						var attr:String= marciapiedi(x)\"@id" text;
-						marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self), attr);
-						marciapiedeOut(x)!attr;
-						var fermata:String= marciapiedi(x)\"@fermata" text;
+							marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self, attr, fermateIn(x), destinazione, nMarciapiedi).withDispatcher("prio-dispatcher6"), attr);
+						else
+							marciapiedeIn+=context.actorOf(Props(classOf[Marciapiede], self, attr, null, destinazione, nMarciapiedi).withDispatcher("prio-dispatcher6"), attr);
+						
+						//MARCIAPIEDI USCENTI
+						var attrO:String= marciapiediO(x)\"@id" text;
+						fermata= marciapiediO(x)\"@fermata" text;
 						if(fermata!="")
-						{
-							var conteiner=new containerFermata(fermateIn(x));
-							marciapiedeOut(x)!conteiner;
-						}
+							marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self, attrO, fermateOut(x), destinazione, nMarciapiedi).withDispatcher("prio-dispatcher6"), attrO);
+						else
+							marciapiedeOut+=context.actorOf(Props(classOf[Marciapiede], self, attrO, null, destinazione, nMarciapiedi).withDispatcher("prio-dispatcher6"), attrO);
 					}
-				}
-				//Imposto le destinazioni dei vari marciapiedi
-				for(x <- 0 to (marciapiedeIn.size-1))
-				{
-					marciapiedeIn(x)!dest;
-					marciapiedeIn(x)!marciapiedeIn.size;
-				}
-				for(x <- 0 to (marciapiedeOut.size-1))
-				{
-					marciapiedeOut(x)!dest;
-					marciapiedeOut(x)!marciapiedeOut.size;
 				}
 				//Se ho solo due strade, vuol dire che non mi serve l'incrocio e imposto le destinazioni a mano
 				if(marciapiedeIn.size==2)
@@ -981,6 +961,7 @@ PriorityGenerator
 	case c: CostruzioneGrafo => 4
 	case c: ZonaTornata => 4
 	case c: ZonaCaduta => 4
+	case c: CorreggiGrafo => 4
 	case Blocco2 => 5
 	//Creazione componenti
 	case Incroci => 6

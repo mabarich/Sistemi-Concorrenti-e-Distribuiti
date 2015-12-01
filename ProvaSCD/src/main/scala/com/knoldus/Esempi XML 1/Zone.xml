@@ -26,7 +26,7 @@
 				</MarciapiediOut>
 			</Marciapiedi>
 			<Pedoni>
-				<Pedone id="P0" zone="1,3,4,2" percorso="1MI1,1MO2,3MI1,3MO2,4MI2,4MO1,2MI1,2MO2,R" />			
+				<Pedone id="P0" zone="1,3,4,2,1" percorso="1MI1,1MO2,3MI1,3MO2,4MI2,4MO1,2MI1,2MO2,1MI1,R" />			
 			</Pedoni>
 			<!--<Automobili>
 				<Automobile id="M0" zone="1,1" percorso="1I1_1,1I1_2,1O2,X,1I2,1O1,R" guidatore="P1"/>

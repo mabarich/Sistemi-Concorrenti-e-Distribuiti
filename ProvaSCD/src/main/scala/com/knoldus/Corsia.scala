@@ -9,36 +9,27 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import java.util.concurrent.TimeoutException
 
-class Corsia (z:ActorRef) extends Actor 
+import akka.dispatch.UnboundedStablePriorityMailbox
+import com.typesafe.config.Config
+import akka.dispatch.PriorityGenerator
+import akka.actor.ActorSystem
+
+class Corsia (z:ActorRef, i: String, f: ActorRef, d: ActorRef) extends Actor 
 {	
 	var nextActor:ActorRef=null;
-	var fermata:ActorRef=null;
-	var id="";
-	var destinazione:ActorRef = null;
+	var fermata:ActorRef=f;
+	var id=i;
+	var destinazione:ActorRef = d;
 	var zona:ActorRef=z;
 	val maxTentativi: Int = 4;
+	var nextDown: Boolean= false;
 	
   	override def receive: Actor.Receive = 
 	{
 		case v:containerZona => nextActor=v.zona;
-		case m:String => start(m);
-		case f:containerFermata => creaFermata(f);
-		case z:containerDestinazione => destinazione=z.destinazione;
 		case m:ActorRef => nextReceived(m);	
 		case m:mezzoDeviato =>	gestisciD (m);
 		case m:Mezzo =>	gestisci (m);		   
-	}
-
-	//Imposta l'id
-	def start (m:String): Unit  =
-	{
-		id=m;
-	}
-
-	//Crea una fermata
-	def creaFermata (f:containerFermata): Unit  =
-	{
-		fermata=f.fermata;
 	}
 
 	//Imposta il destinatario di tutti i messaggi
@@ -73,7 +64,13 @@ class Corsia (z:ActorRef) extends Actor
 			if(tentativi==maxTentativi)
 			{
 				println("La zona non risponde. Il pedone (deviato) dovrà seguire un'altra strada.");
+				nextDown=true;
 				zona!new containerMezzoDeviato(new mezzoDeviato(m.mezzo.id, m.mezzo));
+			}
+			else if(nextDown)
+			{
+				nextDown=false;
+				zona!new CorreggiGrafo("Z"+m.zona);
 			}
 		}
 
@@ -131,7 +128,13 @@ class Corsia (z:ActorRef) extends Actor
 							if(tentativi==maxTentativi)
 							{
 								println("La zona non risponde. Il mezzo dovrà seguire un'altra strada.");
+								nextDown=true;
 								zona!new containerMezzoDeviato(new mezzoDeviato(m.id, m));
+							}
+							else if(nextDown)
+							{
+								nextDown=false;
+								zona!new CorreggiGrafo("Z"+m.toZona);
 							}
 						}
 
@@ -155,3 +158,11 @@ class Corsia (z:ActorRef) extends Actor
 		}
 	}	
 }
+
+class CorsiaPriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(
+PriorityGenerator 
+{
+	case m:mezzoDeviato => 1
+	case m:Mezzo => 1
+	case _ => 0
+})

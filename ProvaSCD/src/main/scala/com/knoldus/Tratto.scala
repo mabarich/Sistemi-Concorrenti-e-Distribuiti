@@ -50,20 +50,11 @@ class Tratto extends Actor
 				}	   
 	}
 
-	def start (m:String): Unit  =
-	{
-		id=m;
-	}
+	def start (m:String): Unit  =	id=m;
 
-	def trattiRicevuti (m:ArrayBuffer[ActorRef]): Unit  =
-	{
-		tratti=m;
-	}
+	def trattiRicevuti (m:ArrayBuffer[ActorRef]): Unit  =	tratti=m;
 
-	def nextReceived (m:ActorRef): Unit  =
-	{
-		nextActor=m;
-	}
+	def nextReceived (m:ActorRef): Unit  =	nextActor=m;
 
 	//Gestisce solo i mezzi provenienti dall'incrocio.
 	def gestisci (m:Mezzo): Unit =

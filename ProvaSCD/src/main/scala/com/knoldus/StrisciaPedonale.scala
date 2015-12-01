@@ -22,7 +22,6 @@ class StrisciaPedonale extends Actor
 		case p:ArrayBuffer[ActorRef] => datiRicevuti(p);
 		case p:personaDeviata => gestisci (p);
 		case p:Persona => gestisci (p);
-		//case p:containerPersona => gestisci (p);
 		case p:personaDeviataPiuPriorita => gestisci (p.persona);
 		case p:personaPiuPriorita => gestisci (p.persona);
 		case Rosso =>	context.become(redReceiver, false);		   
@@ -49,10 +48,7 @@ class StrisciaPedonale extends Actor
 	}
 	
 	//Setto l'id
-	def start (p:String): Unit  =
-	{
-		id=p;
-	}
+	def start (p:String): Unit  = id=p;
 
 	//Imposta il destinatario di tutti i messaggi (uno è l'uscita e l'altro è la striscia pedonale successiva)
 	def datiRicevuti (p:ArrayBuffer[ActorRef]): Unit  =
@@ -72,19 +68,6 @@ class StrisciaPedonale extends Actor
 		else
 			nextS!p;
 	}	
-
-	/*def gestisci (cp:containerPersona): Unit =
-	{
-		var p:Persona=cp.persona;
-		println("Persona "+p.id+" arrivata alla striscia "+id);
-		val dove=p.to;
-		val io=id.substring(id.indexOf("S")+1); //1S3
-		val to=dove.substring(id.indexOf("S")+2); //1MO3
-		if(io==to)
-			marciapiede!p;
-		else
-			self!p;
-	}*/
 }
 
 class StrisciaPriorityActorMailbox(settings: ActorSystem.Settings, config: Config) extends UnboundedStablePriorityMailbox(

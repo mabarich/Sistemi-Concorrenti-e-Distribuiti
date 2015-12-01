@@ -49,10 +49,7 @@ class StrisciaPedonale extends Actor
 	}
 	
 	//Setto l'id
-	def start (p:String): Unit  =
-	{
-		id=p;
-	}
+	def start (p:String): Unit  = id=p;
 
 	//Imposta il destinatario di tutti i messaggi (uno è l'uscita e l'altro è la striscia pedonale successiva)
 	def datiRicevuti (p:ArrayBuffer[ActorRef]): Unit  =
@@ -79,7 +76,7 @@ class StrisciaPedonale extends Actor
 		println("Persona "+p.id+" arrivata alla striscia "+id);
 		val dove=p.to;
 		val io=id.substring(id.indexOf("S")+1); //1S3
-		val to=dove.substring(3); //1MO3
+		val to=dove.substring(id.indexOf("S")+2); //1MO3
 		if(io==to)
 			marciapiede!p;
 		else

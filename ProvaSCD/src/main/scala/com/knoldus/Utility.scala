@@ -107,6 +107,7 @@ case object Grafo
 case class ChiediVicini (id: String) extends Serializable
 case class ZonaCaduta (id: String) extends Serializable
 case class ZonaTornata (id: String) extends Serializable
+case class CorreggiGrafo (id: String)
 case class CostruzioneGrafo (vicini: ArrayBuffer[String]) extends Serializable
 case object FermaTutto
 case object Blocco2 
