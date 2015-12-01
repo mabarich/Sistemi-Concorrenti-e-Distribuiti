@@ -26,7 +26,6 @@ akka
 		serializers 
 		{
 			java = "akka.serialization.JavaSerializer"
-			akka.actor.warn-about-java-serializer-usage=off
 		}
 		serialization-bindings 
 		{
@@ -34,9 +33,7 @@ akka
 			"com.knoldus.Persona" = java
 			"com.knoldus.ChiediVicini" = java			
 			"com.knoldus.CostruzioneGrafo" = java
-			akka.actor.warn-about-java-serializer-usage=off
 		}
-		akka.actor.warn-about-java-serializer-usage=off
 	}
 	remote 
 	{
@@ -53,9 +50,6 @@ akka
 		seed-nodes = 
 		[
 			"akka.tcp://Priority@127.0.0.1:2551",
-			"akka.tcp://Priority@127.0.0.1:2552",
-			"akka.tcp://Priority@127.0.0.1:2553",
-			"akka.tcp://Priority@127.0.0.1:2554"
 		]
 		auto-down-unreachable-after = 10s
 	}

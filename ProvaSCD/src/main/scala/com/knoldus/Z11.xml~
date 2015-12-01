@@ -1,5 +1,5 @@
 <xml>
-	<Z1ona id="Z11">
+	<Zona id="Z11">
 		<Vicini>
 			<Vicino id="Z12" />
 			<Vicino id="Z14" />
@@ -29,25 +29,15 @@
 				<MarciapiedeOut id="11MO2"/>
 			</MarciapiediOut>
 		</Marciapiedi>
-		<!--<Incrocio>
-			<Tratti>
-				<Tratto id="11T1"/>
-				<Tratto id="11T2"/>
-			</Tratti>
-			<StriscePedonali>
-				<StrisciaPedonale id="11S1"/>
-				<StrisciaPedonale id="11S2"/>
-			</StriscePedonali>
-		</Incrocio>-->
 		<!--<Pedoni>
-			<Pedone id="P0" Z1one="11,14,15,16,16,15,14,11" percorso="11MI1,11MO2,14MI1,14MO2,15MI3,15MO2,16MI2,16MO1,X,16MI1,16MO2,15MI2,15MO3,14MI2,14MO1,11MI2,11MO1,R" />	
+			<Pedone id="P0" Zone="11,14,15,16,16,15,14,11" percorso="11MI1,11MO2,14MI1,14MO2,15MI3,15MO2,16MI2,16MO1,X,16MI1,16MO2,15MI2,15MO3,14MI2,14MO1,11MI2,11MO1,R" />	
 		</Pedoni>-->
 		<Autobus>
-			<Bus id="A0" Z1one="11,14,15,16,16,15,14,11" percorso="11I1_1,11I1_2,11O2,14I1,14O2,15I3,15O2,16I2_1,F,16I2_2,16O1,X,16I1,16O2,15I2,15O3,14I2,14O1,11I2,11O1,R">
+			<Bus id="A0" Zone="11,14,15,16,16,15,14,11" percorso="11I1_1,11I1_2,11O2,14I1,14O2,15I3,15O2,16I2_1,F,16I2_2,16O1,X,16I1,16O2,15I2,15O3,14I2,14O1,11I2,11O1,R">
 				<Passeggeri>
-					<Passeggero id="P1" percorso="6FI2,6MI2,FINE"/>
+					<Passeggero id="P1" percorso="16FI2,16MI2,FINE"/>
 				</Passeggeri>
 			</Bus>
 		</Autobus>
-	</Z1ona>
+	</Zona>
 </xml>

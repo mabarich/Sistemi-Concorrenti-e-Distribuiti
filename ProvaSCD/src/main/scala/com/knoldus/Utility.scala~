@@ -105,7 +105,9 @@ case object Movimenti
 case object Start
 case object Grafo
 case class ChiediVicini (id: String) extends Serializable
+case class ZonaCaduta (id: String) extends Serializable
 case class CostruzioneGrafo (vicini: ArrayBuffer[String]) extends Serializable
+case object FermaTutto
 case object Blocco2 
 
 class mezzoPiuPriorita (m: Mezzo)
@@ -126,7 +128,7 @@ class personaPiuPriorita (p: Persona)
 
 class mezzoDeviatoPiuPriorita (m: Mezzo)
 {
-	var _mezzo: mezzoDeviato = m;
+	var _mezzo: Mezzo = m;
 
 	def mezzo = _mezzo 
 	def mezzo_= (value:Mezzo):Unit =  { _mezzo = value; }
@@ -134,7 +136,7 @@ class mezzoDeviatoPiuPriorita (m: Mezzo)
 
 class personaDeviataPiuPriorita (p: Persona)
 {
-	var _persona:personaDeviata = p;
+	var _persona:Persona = p;
 
 	def persona = _persona 
 	def persona_= (value:Persona):Unit =  { _persona = value; }

@@ -8,6 +8,7 @@ import scala.concurrent.Await
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
+import java.util.concurrent.TimeoutException
 
 class Marciapiede (z:ActorRef) extends Actor 
 {	
@@ -58,8 +59,8 @@ class Marciapiede (z:ActorRef) extends Actor
 		val dove=p.to;
 		p.inc;
 		//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
-		var dv=dove.substring(3).toInt;
-		var io=id.substring(3).toInt;
+		var dv=dove.substring(id.indexOf("M")+2).toInt;
+		var io=id.substring(id.indexOf("M")+2).toInt;
 		if (id.contains("MI") && ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1)))
 		{
 			nextMarciapiede!p;
@@ -116,8 +117,8 @@ class Marciapiede (z:ActorRef) extends Actor
 					else
 					{			
 						//Se deve andare al marciapiede adiacente, non deve per forza passare per l'incrocio
-						var dv=dove.substring(3).toInt;
-						var io=id.substring(3).toInt;
+						var dv=dove.substring(id.indexOf("M")+2).toInt;
+						var io=id.substring(id.indexOf("M")+2).toInt;
 						if (id.contains("MI") && ((io==1 && dv==numMarciapiedi) || (io!=1 && dv==io-1)))
 						{
 							nextMarciapiede!p;
@@ -134,12 +135,19 @@ class Marciapiede (z:ActorRef) extends Actor
 								var tentativi: Int=0;
 								while(!result && tentativi<maxTentativi)
 								{
-									val future = nextActor ? p; 
-									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
-									if (bool)
-										result=true;
-									else
-										tentativi+=1;
+									try
+									{
+										val future = nextActor ? p; 
+										val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+										if (bool)
+											result=true;
+										else
+											tentativi+=1;
+									}
+									catch
+									{
+										case e: TimeoutException => tentativi+=1;
+									}
 								}
 								if(tentativi==maxTentativi)
 								{

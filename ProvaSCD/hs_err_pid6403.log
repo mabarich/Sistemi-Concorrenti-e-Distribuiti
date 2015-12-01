@@ -1,0 +1,929 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 32768 bytes for committing reserved memory.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_linux.cpp:2627), pid=6403, tid=1784146752
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_60-b27) (build 1.8.0_60-b27)
+# Java VM: Java HotSpot(TM) Server VM (25.60-b23 mixed mode linux-x86 )
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x6aca7400):  JavaThread "C1 CompilerThread2" daemon [_thread_in_vm, id=6415, stack(0x6a4fe000,0x6a57f000)]
+
+Stack: [0x6a4fe000,0x6a57f000],  sp=0x6a57d5b0,  free space=509k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0x8cd06f]  VMError::report_and_die()+0x16f
+V  [libjvm.so+0x38bea5]  report_vm_out_of_memory(char const*, int, unsigned int, VMErrorType, char const*)+0x55
+V  [libjvm.so+0x750e26]  os::Linux::commit_memory_impl(char*, unsigned int, bool)+0xe6
+V  [libjvm.so+0x7512f8]  os::pd_commit_memory(char*, unsigned int, unsigned int, bool)+0x28
+V  [libjvm.so+0x74b21c]  os::commit_memory(char*, unsigned int, unsigned int, bool)+0x2c
+V  [libjvm.so+0x8c910c]  VirtualSpace::expand_by(unsigned int, bool)+0x1ec
+V  [libjvm.so+0x4a18b5]  CodeHeap::expand_by(unsigned int)+0x65
+V  [libjvm.so+0x31db52]  CodeCache::allocate(int, bool)+0x72
+V  [libjvm.so+0x72420e]  nmethod::new_nmethod(methodHandle, int, int, CodeOffsets*, int, DebugInformationRecorder*, Dependencies*, CodeBuffer*, int, OopMapSet*, ExceptionHandlerTable*, ImplicitExceptionTable*, AbstractCompiler*, int)+0x1ae
+V  [libjvm.so+0x2b4a5b]  ciEnv::register_method(ciMethod*, int, CodeOffsets*, int, CodeBuffer*, int, OopMapSet*, ExceptionHandlerTable*, ImplicitExceptionTable*, AbstractCompiler*, int, bool, bool, RTMState)+0x37b
+V  [libjvm.so+0x20b840]  Compilation::install_code(int)+0xa0
+V  [libjvm.so+0x20cc01]  Compilation::compile_method()+0xc1
+V  [libjvm.so+0x20ce77]  Compilation::Compilation(AbstractCompiler*, ciEnv*, ciMethod*, int, BufferBlob*)+0x207
+V  [libjvm.so+0x20dc3b]  Compiler::compile_method(ciEnv*, ciMethod*, int)+0x7b
+V  [libjvm.so+0x347b51]  CompileBroker::invoke_compiler_on_method(CompileTask*)+0xda1
+V  [libjvm.so+0x348967]  CompileBroker::compiler_thread_loop()+0x567
+V  [libjvm.so+0x876578]  compiler_thread_entry(JavaThread*, Thread*)+0x18
+V  [libjvm.so+0x880ae9]  JavaThread::thread_main_inner()+0x109
+V  [libjvm.so+0x880c6b]  JavaThread::run()+0x14b
+V  [libjvm.so+0x753469]  java_start(Thread*)+0x119
+C  [libpthread.so.0+0x6d4c]  start_thread+0xcc
+C  [libc.so.6+0xeedde]  clone+0x5e
+
+
+Current CompileTask:
+C1:  74122 8571       3       scala.collection.immutable.HashMap$HashTrieMap::updated0 (240 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x6db21800 JavaThread "Priority-akka.actor.default-dispatcher-34" [_thread_blocked, id=6955, stack(0x635f8000,0x63649000)]
+  0x67d18000 JavaThread "Priority-prio-dispatcher4-31" [_thread_blocked, id=6629, stack(0x62bc9000,0x62c1a000)]
+  0x62faac00 JavaThread "Priority-prio-dispatcher4-32" [_thread_blocked, id=6628, stack(0x62c1a000,0x62c6b000)]
+  0x67f76c00 JavaThread "Priority-prio-dispatcher4-33" [_thread_in_vm, id=6627, stack(0x62c6b000,0x62cbc000)]
+  0x62fa9800 JavaThread "Priority-prio-dispatcher4-30" [_thread_blocked, id=6626, stack(0x62cbc000,0x62d0d000)]
+  0x68e74c00 JavaThread "Priority-prio-dispatcher4-29" [_thread_in_Java, id=6625, stack(0x62d0d000,0x62d5e000)]
+  0x09728800 JavaThread "Priority-prio-dispatcher4-28" [_thread_blocked, id=6624, stack(0x62d5e000,0x62daf000)]
+  0x68e77000 JavaThread "Priority-prio-dispatcher4-27" [_thread_in_vm, id=6623, stack(0x62daf000,0x62e00000)]
+  0x62fa6800 JavaThread "Priority-prio-dispatcher4-26" [_thread_in_vm, id=6622, stack(0x63a67000,0x63ab8000)]
+  0x62fa4c00 JavaThread "Priority-prio-dispatcher4-25" [_thread_in_vm, id=6621, stack(0x63ab8000,0x63b09000)]
+  0x62fa3400 JavaThread "Priority-prio-dispatcher4-24" [_thread_in_vm, id=6620, stack(0x63d05000,0x63d56000)]
+  0x62fa2000 JavaThread "Priority-prio-dispatcher4-23" [_thread_blocked, id=6619, stack(0x63dbc000,0x63e0d000)]
+  0x6db1e000 JavaThread "Priority-akka.actor.default-dispatcher-22" [_thread_blocked, id=6543, stack(0x63e0d000,0x63e5e000)]
+  0x68e73c00 JavaThread "Priority-akka.actor.default-dispatcher-21" [_thread_blocked, id=6542, stack(0x641c9000,0x6421a000)]
+  0x675e6800 JavaThread "Hashed wheel timer #1" [_thread_blocked, id=6540, stack(0x650e0000,0x65131000)]
+  0x097dc000 JavaThread "Priority-prio-dispatcher4-20" [_thread_blocked, id=6539, stack(0x63d56000,0x63da7000)]
+  0x68ed8c00 JavaThread "Priority-akka.actor.default-dispatcher-19" [_thread_blocked, id=6538, stack(0x63b09000,0x63b5a000)]
+  0x09737800 JavaThread "Priority-akka.actor.default-dispatcher-18" [_thread_blocked, id=6537, stack(0x63b5a000,0x63bab000)]
+  0x6dd1b400 JavaThread "Priority-akka.actor.default-dispatcher-17" [_thread_blocked, id=6536, stack(0x63cab000,0x63cfc000)]
+  0x6db1b800 JavaThread "Priority-akka.actor.default-dispatcher-16" [_thread_blocked, id=6535, stack(0x63e5e000,0x63eaf000)]
+  0x6db1a800 JavaThread "Priority-akka.actor.default-dispatcher-15" [_thread_blocked, id=6534, stack(0x63eaf000,0x63f00000)]
+  0x6db13c00 JavaThread "Priority-akka.actor.default-dispatcher-14" [_thread_blocked, id=6533, stack(0x64140000,0x64191000)]
+  0x65c9d000 JavaThread "New I/O server boss #6" [_thread_in_native, id=6532, stack(0x6441a000,0x6446b000)]
+  0x65c99800 JavaThread "New I/O worker #5" [_thread_in_native, id=6531, stack(0x6446b000,0x644bc000)]
+  0x6898cc00 JavaThread "New I/O worker #4" [_thread_in_native, id=6530, stack(0x644bc000,0x6450d000)]
+  0x65c9b800 JavaThread "New I/O boss #3" [_thread_in_native, id=6529, stack(0x6450d000,0x6455e000)]
+  0x65f38000 JavaThread "New I/O worker #2" [_thread_in_native, id=6528, stack(0x6455e000,0x645af000)]
+  0x68e9bc00 JavaThread "New I/O worker #1" [_thread_in_native, id=6527, stack(0x645af000,0x64600000)]
+  0x64609800 JavaThread "Priority-akka.remote.default-remote-dispatcher-6" [_thread_blocked, id=6526, stack(0x64e5e000,0x64eaf000)]
+  0x6db0a800 JavaThread "Priority-akka.remote.default-remote-dispatcher-5" [_thread_blocked, id=6525, stack(0x64eaf000,0x64f00000)]
+  0x676f6000 JavaThread "Priority-akka.actor.default-dispatcher-4" [_thread_blocked, id=6524, stack(0x6503e000,0x6508f000)]
+  0x649c9000 JavaThread "Priority-akka.actor.default-dispatcher-3" [_thread_blocked, id=6523, stack(0x6508f000,0x650e0000)]
+  0x649c4000 JavaThread "Priority-akka.actor.default-dispatcher-2" [_thread_blocked, id=6522, stack(0x65158000,0x651a9000)]
+  0x64942400 JavaThread "Priority-scheduler-1" [_thread_blocked, id=6521, stack(0x651a9000,0x651fa000)]
+  0x68a90800 JavaThread "pool-4-thread-7" [_thread_blocked, id=6517, stack(0x658fa000,0x6594b000)]
+  0x6dd00800 JavaThread "pool-4-thread-6" [_thread_blocked, id=6516, stack(0x6594b000,0x6599c000)]
+  0x6db03c00 JavaThread "pool-4-thread-5" [_thread_blocked, id=6515, stack(0x65a4b000,0x65a9c000)]
+  0x65378800 JavaThread "pool-4-thread-4" [_thread_blocked, id=6514, stack(0x659ed000,0x65a3e000)]
+  0x65378000 JavaThread "pool-4-thread-3" [_thread_blocked, id=6513, stack(0x6722c000,0x6727d000)]
+  0x65377800 JavaThread "pool-4-thread-2" [_thread_blocked, id=6512, stack(0x6599c000,0x659ed000)]
+  0x65377400 JavaThread "pool-4-thread-1" [_thread_blocked, id=6511, stack(0x66dab000,0x66dfc000)]
+  0x65358800 JavaThread "process reaper" daemon [_thread_blocked, id=6483, stack(0x672af000,0x67300000)]
+  0x6acaa800 JavaThread "Service Thread" daemon [_thread_blocked, id=6416, stack(0x6d92e000,0x6d97f000)]
+=>0x6aca7400 JavaThread "C1 CompilerThread2" daemon [_thread_in_vm, id=6415, stack(0x6a4fe000,0x6a57f000)]
+  0x6aca6000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=6414, stack(0x6a57f000,0x6a600000)]
+  0x6aca4000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=6413, stack(0x6a97f000,0x6aa00000)]
+  0x6aca2800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=6412, stack(0x6dc2e000,0x6dc7f000)]
+  0x6ac85800 JavaThread "Finalizer" daemon [_thread_blocked, id=6411, stack(0xae22e000,0xae27f000)]
+  0x6ac84000 JavaThread "Reference Handler" daemon [_thread_blocked, id=6410, stack(0x6ab2e000,0x6ab7f000)]
+  0xb6507400 JavaThread "main" [_thread_blocked, id=6404, stack(0xb66f0000,0xb6741000)]
+
+Other Threads:
+  0x6ac81000 VMThread [stack: 0x6ab7f000,0x6ac00000] [id=6409]
+  0x6acbd800 WatcherThread [stack: 0x6a47d000,0x6a4fe000] [id=6417]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0xb6504018] CodeCache_lock - owner thread: 0x6aca7400
+[0xb6505260] Compile_lock - owner thread: 0x6aca7400
+[0xb6505330] MethodCompileQueue_lock - owner thread: 0x6aca7400
+
+Heap:
+ PSYoungGen      total 326400K, used 216325K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 302080K, 70% used [0x98cc0000,0xa5c4b830,0xab3c0000)
+  from space 24320K, 15% used [0xaca40000,0xacdf5d18,0xae200000)
+  to   space 23040K, 0% used [0xab3c0000,0xab3c0000,0xaca40000)
+ ParOldGen       total 699136K, used 25315K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab8f78,0x98cc0000)
+ Metaspace       used 47497K, capacity 47845K, committed 47872K, reserved 48432K
+
+Card table byte_map: [0x6dfff000,0x6e200000] byte_map_base: 0x6dc8e000
+
+Marking Bits: (ParMarkBitMap*) 0xb716b380
+ Begin Bits: [0x6b800000, 0x6c800000)
+ End Bits:   [0x6c800000, 0x6d800000)
+
+Polling page: 0xb7764000
+
+CodeCache: size=131072Kb used=13939Kb max_used=13939Kb free=117132Kb
+ bounds [0xae500000, 0xaf2b0000, 0xb6500000]
+ total_blobs=7395 nmethods=7167 adapters=138
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 73,602 Thread 0x6aca6000 8575       4       java.util.Collections$UnmodifiableList::get (11 bytes)
+Event: 73,622 Thread 0x6aca6000 nmethod 8575 0xaf295588 code [0xaf2956a0, 0xaf2957b0]
+Event: 73,714 Thread 0x6aca7400 nmethod 8563 0xaf2990c8 code [0xaf29a160, 0xaf2a2ff8]
+Event: 73,714 Thread 0x6aca7400 8573       3       java.lang.Integer::equals (29 bytes)
+Event: 73,714 Thread 0x6aca7400 nmethod 8573 0xaf295048 code [0xaf295180, 0xaf2954e0]
+Event: 73,714 Thread 0x6aca7400 8574       3       scala.collection.convert.Wrappers$SetWrapper$$anon$4::<init> (36 bytes)
+Event: 73,714 Thread 0x6aca7400 nmethod 8574 0xaf296988 code [0xaf296ac0, 0xaf296cec]
+Event: 73,714 Thread 0x6aca7400 8572       3       scala.collection.immutable.Set$Set3::<init> (32 bytes)
+Event: 73,715 Thread 0x6aca7400 nmethod 8572 0xaf295e88 code [0xaf296020, 0xaf29658c]
+Event: 73,715 Thread 0x6aca7400 8571       3       scala.collection.immutable.HashMap$HashTrieMap::updated0 (240 bytes)
+
+GC Heap History (10 events):
+Event: 56,668 GC heap before
+{Heap before GC invocations=18 (full 4):
+ PSYoungGen      total 318720K, used 292403K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 288768K, 100% used [0x98cc0000,0xaa6c0000,0xaa6c0000)
+  from space 29952K, 12% used [0xaa6c0000,0xaaa4ce00,0xac400000)
+  to   space 28672K, 0% used [0xac600000,0xac600000,0xae200000)
+ ParOldGen       total 699136K, used 25295K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab3f78,0x98cc0000)
+ Metaspace       used 47155K, capacity 47497K, committed 47616K, reserved 48432K
+Event: 56,702 GC heap after
+Heap after GC invocations=18 (full 4):
+ PSYoungGen      total 321792K, used 3619K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 293120K, 0% used [0x98cc0000,0x98cc0000,0xaab00000)
+  from space 28672K, 12% used [0xac600000,0xac988c88,0xae200000)
+  to   space 27648K, 0% used [0xaab00000,0xaab00000,0xac600000)
+ ParOldGen       total 699136K, used 25299K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab4f78,0x98cc0000)
+ Metaspace       used 47155K, capacity 47497K, committed 47616K, reserved 48432K
+}
+Event: 59,784 GC heap before
+{Heap before GC invocations=19 (full 4):
+ PSYoungGen      total 321792K, used 296739K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 293120K, 100% used [0x98cc0000,0xaab00000,0xaab00000)
+  from space 28672K, 12% used [0xac600000,0xac988c88,0xae200000)
+  to   space 27648K, 0% used [0xaab00000,0xaab00000,0xac600000)
+ ParOldGen       total 699136K, used 25299K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab4f78,0x98cc0000)
+ Metaspace       used 47223K, capacity 47549K, committed 47616K, reserved 48432K
+Event: 59,828 GC heap after
+Heap after GC invocations=19 (full 4):
+ PSYoungGen      total 320768K, used 3693K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 293120K, 0% used [0x98cc0000,0x98cc0000,0xaab00000)
+  from space 27648K, 13% used [0xaab00000,0xaae9b6d0,0xac600000)
+  to   space 26624K, 0% used [0xac800000,0xac800000,0xae200000)
+ ParOldGen       total 699136K, used 25303K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab5f78,0x98cc0000)
+ Metaspace       used 47223K, capacity 47549K, committed 47616K, reserved 48432K
+}
+Event: 63,394 GC heap before
+{Heap before GC invocations=20 (full 4):
+ PSYoungGen      total 320768K, used 296813K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 293120K, 100% used [0x98cc0000,0xaab00000,0xaab00000)
+  from space 27648K, 13% used [0xaab00000,0xaae9b6d0,0xac600000)
+  to   space 26624K, 0% used [0xac800000,0xac800000,0xae200000)
+ ParOldGen       total 699136K, used 25303K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab5f78,0x98cc0000)
+ Metaspace       used 47252K, capacity 47581K, committed 47616K, reserved 48432K
+Event: 63,441 GC heap after
+Heap after GC invocations=20 (full 4):
+ PSYoungGen      total 324096K, used 3670K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 297472K, 0% used [0x98cc0000,0x98cc0000,0xaaf40000)
+  from space 26624K, 13% used [0xac800000,0xacb959c0,0xae200000)
+  to   space 25344K, 0% used [0xaaf40000,0xaaf40000,0xac800000)
+ ParOldGen       total 699136K, used 25307K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab6f78,0x98cc0000)
+ Metaspace       used 47252K, capacity 47581K, committed 47616K, reserved 48432K
+}
+Event: 67,151 GC heap before
+{Heap before GC invocations=21 (full 4):
+ PSYoungGen      total 324096K, used 301142K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 297472K, 100% used [0x98cc0000,0xaaf40000,0xaaf40000)
+  from space 26624K, 13% used [0xac800000,0xacb959c0,0xae200000)
+  to   space 25344K, 0% used [0xaaf40000,0xaaf40000,0xac800000)
+ ParOldGen       total 699136K, used 25307K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab6f78,0x98cc0000)
+ Metaspace       used 47367K, capacity 47717K, committed 47744K, reserved 48432K
+Event: 67,182 GC heap after
+Heap after GC invocations=21 (full 4):
+ PSYoungGen      total 322816K, used 3924K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 297472K, 0% used [0x98cc0000,0x98cc0000,0xaaf40000)
+  from space 25344K, 15% used [0xaaf40000,0xab3152c0,0xac800000)
+  to   space 24320K, 0% used [0xaca40000,0xaca40000,0xae200000)
+ ParOldGen       total 699136K, used 25311K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab7f78,0x98cc0000)
+ Metaspace       used 47367K, capacity 47717K, committed 47744K, reserved 48432K
+}
+Event: 71,238 GC heap before
+{Heap before GC invocations=22 (full 4):
+ PSYoungGen      total 322816K, used 301396K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 297472K, 100% used [0x98cc0000,0xaaf40000,0xaaf40000)
+  from space 25344K, 15% used [0xaaf40000,0xab3152c0,0xac800000)
+  to   space 24320K, 0% used [0xaca40000,0xaca40000,0xae200000)
+ ParOldGen       total 699136K, used 25311K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab7f78,0x98cc0000)
+ Metaspace       used 47434K, capacity 47781K, committed 47872K, reserved 48432K
+Event: 71,278 GC heap after
+Heap after GC invocations=22 (full 4):
+ PSYoungGen      total 326400K, used 3799K [0x98cc0000, 0xae200000, 0xae200000)
+  eden space 302080K, 0% used [0x98cc0000,0x98cc0000,0xab3c0000)
+  from space 24320K, 15% used [0xaca40000,0xacdf5d18,0xae200000)
+  to   space 23040K, 0% used [0xab3c0000,0xab3c0000,0xaca40000)
+ ParOldGen       total 699136K, used 25315K [0x6e200000, 0x98cc0000, 0x98cc0000)
+  object space 699136K, 3% used [0x6e200000,0x6fab8f78,0x98cc0000)
+ Metaspace       used 47434K, capacity 47781K, committed 47872K, reserved 48432K
+}
+
+Deoptimization events (10 events):
+Event: 60,573 Thread 0x62fa4c00 Uncommon trap: reason=unstable_if action=reinterpret pc=0xae7db61c method=com.knoldus.Zona$$anonfun$receive$1.applyOrElse(Ljava/lang/Object;Lscala/Function1;)Ljava/lang/Object; @ 483
+Event: 62,883 Thread 0x6db0a800 Uncommon trap: reason=class_check action=maybe_recompile pc=0xae66c578 method=java.lang.ref.ReferenceQueue.reallyPoll()Ljava/lang/ref/Reference; @ 52
+Event: 63,058 Thread 0x64609800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xaf176090 method=akka.dispatch.sysmsg.SystemMessageList$.reverseInner(Lakka/dispatch/sysmsg/SystemMessage;Lakka/dispatch/sysmsg/SystemMessage;)Lakka/dispatch/sysmsg/SystemMessage; @ 7
+Event: 63,059 Thread 0x64609800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xaf17b76c method=akka.dispatch.sysmsg.SystemMessageList$.reverseInner(Lakka/dispatch/sysmsg/SystemMessage;Lakka/dispatch/sysmsg/SystemMessage;)Lakka/dispatch/sysmsg/SystemMessage; @ 7
+Event: 65,023 Thread 0x62fa6800 Uncommon trap: reason=unstable_if action=reinterpret pc=0xaee744a0 method=sun.misc.Unsafe.getAndAddLong(Ljava/lang/Object;JJ)J @ 21
+Event: 65,023 Thread 0x62fa6800 Uncommon trap: reason=unstable_if action=reinterpret pc=0xaf1b1674 method=com.knoldus.Zona$$anonfun$receive$1.applyOrElse(Ljava/lang/Object;Lscala/Function1;)Ljava/lang/Object; @ 356
+Event: 69,619 Thread 0x09737800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xaf18cb14 method=akka.dispatch.Mailbox.dequeue()Lakka/dispatch/Envelope; @ 4
+Event: 69,631 Thread 0x09737800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0xaf178a34 method=akka.dispatch.Mailbox.dequeue()Lakka/dispatch/Envelope; @ 4
+Event: 69,749 Thread 0x62fa2000 Uncommon trap: reason=unstable_if action=reinterpret pc=0xaf20298c method=com.knoldus.Zona$$anonfun$receive$1.applyOrElse(Ljava/lang/Object;Lscala/Function1;)Ljava/lang/Object; @ 6
+Event: 70,901 Thread 0x64609800 Uncommon trap: reason=unstable_if action=reinterpret pc=0xaee72f6c method=scala.concurrent.forkjoin.ForkJoinPool.scan(Lscala/concurrent/forkjoin/ForkJoinPool$WorkQueue;)Lscala/concurrent/forkjoin/ForkJoinTask; @ 630
+
+Internal exceptions (10 events):
+Event: 21,483 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': scala/reflect/ScalaLongSignature> (0x99c860c0) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 21,490 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/ref> (0x99cb4c80) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 21,490 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/ref/package> (0x99cb5ef8) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 21,819 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/invoke> (0x9a3ebca0) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 21,820 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/invoke/package> (0x9a3ecf28) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 22,004 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/annotation> (0x9a718850) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 22,006 Thread 0x097dc000 Exception <a 'java/lang/ClassNotFoundException': java/lang/annotation/package> (0x9a719b90) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 65,007 Thread 0x6db0a800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0xa0b83888) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/prims/jni.cpp, line 1591]
+Event: 65,064 Thread 0x64609800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0xa0edb950) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/prims/jni.cpp, line 1591]
+Event: 65,197 Thread 0x64609800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0xa1856a30) thrown at [/HUDSON3/workspace/8-2-build-linux-i586/jdk8u60/4407/hotspot/src/share/vm/prims/jni.cpp, line 1591]
+
+Events (10 events):
+Event: 71,179 Thread 0x09728800 DEOPT PACKING pc=0xaf23ffb7 sp=0x62dadd60
+Event: 71,179 Thread 0x09728800 DEOPT UNPACKING pc=0xae53c310 sp=0x62dadc28 mode 0
+Event: 71,181 Thread 0x62fa9800 DEOPT PACKING pc=0xaf23ffb7 sp=0x62d0ba60
+Event: 71,181 Thread 0x62fa9800 DEOPT UNPACKING pc=0xae53c310 sp=0x62d0b928 mode 0
+Event: 71,183 Thread 0x09728800 DEOPT PACKING pc=0xaf23ffb7 sp=0x62dadd60
+Event: 71,183 Thread 0x09728800 DEOPT UNPACKING pc=0xae53c310 sp=0x62dadc28 mode 0
+Event: 71,185 Thread 0x62fa6800 DEOPT PACKING pc=0xaf23ffb7 sp=0x63ab6c60
+Event: 71,185 Thread 0x62fa6800 DEOPT UNPACKING pc=0xae53c310 sp=0x63ab6b28 mode 0
+Event: 71,238 Executing VM operation: ParallelGCFailedAllocation
+Event: 71,278 Executing VM operation: ParallelGCFailedAllocation done
+
+
+Dynamic libraries:
+08048000-08049000 r-xp 00000000 08:12 6948843    /usr/lib/jvm/java-8-oracle/jre/bin/java
+08049000-0804a000 rw-p 00000000 08:12 6948843    /usr/lib/jvm/java-8-oracle/jre/bin/java
+0949a000-0981c000 rw-p 00000000 00:00 0          [heap]
+62ac9000-62b49000 rw-p 00000000 00:00 0 
+62b49000-62bc9000 ---p 00000000 00:00 0 
+62bc9000-62bcc000 ---p 00000000 00:00 0 
+62bcc000-62c1a000 rw-p 00000000 00:00 0 
+62c1a000-62c1d000 ---p 00000000 00:00 0 
+62c1d000-62c6b000 rw-p 00000000 00:00 0 
+62c6b000-62c6e000 ---p 00000000 00:00 0 
+62c6e000-62cbc000 rw-p 00000000 00:00 0 
+62cbc000-62cbf000 ---p 00000000 00:00 0 
+62cbf000-62d0d000 rw-p 00000000 00:00 0 
+62d0d000-62d10000 ---p 00000000 00:00 0 
+62d10000-62d5e000 rw-p 00000000 00:00 0 
+62d5e000-62d61000 ---p 00000000 00:00 0 
+62d61000-62daf000 rw-p 00000000 00:00 0 
+62daf000-62db2000 ---p 00000000 00:00 0 
+62db2000-62f00000 rw-p 00000000 00:00 0 
+62f00000-62fbc000 rw-p 00000000 00:00 0 
+62fbc000-63000000 ---p 00000000 00:00 0 
+63000000-63100000 rw-p 00000000 00:00 0 
+63100000-63200000 rw-p 00000000 00:00 0 
+63200000-63300000 rw-p 00000000 00:00 0 
+63300000-633fa000 rw-p 00000000 00:00 0 
+633fa000-63400000 ---p 00000000 00:00 0 
+63400000-634f9000 rw-p 00000000 00:00 0 
+634f9000-63500000 ---p 00000000 00:00 0 
+635f8000-635fb000 ---p 00000000 00:00 0 
+635fb000-63749000 rw-p 00000000 00:00 0 
+63749000-63849000 rw-p 00000000 00:00 0 
+63849000-63949000 rw-p 00000000 00:00 0 
+63949000-63a49000 rw-p 00000000 00:00 0 
+63a67000-63a6a000 ---p 00000000 00:00 0 
+63a6a000-63ab8000 rw-p 00000000 00:00 0 
+63ab8000-63abb000 ---p 00000000 00:00 0 
+63abb000-63b09000 rw-p 00000000 00:00 0 
+63b09000-63b0c000 ---p 00000000 00:00 0 
+63b0c000-63b5a000 rw-p 00000000 00:00 0 
+63b5a000-63b5d000 ---p 00000000 00:00 0 
+63b5d000-63cab000 rw-p 00000000 00:00 0 
+63cab000-63cae000 ---p 00000000 00:00 0 
+63cae000-63cfc000 rw-p 00000000 00:00 0 
+63d05000-63d08000 ---p 00000000 00:00 0 
+63d08000-63d56000 rw-p 00000000 00:00 0 
+63d56000-63d59000 ---p 00000000 00:00 0 
+63d59000-63da7000 rw-p 00000000 00:00 0 
+63dbc000-63dbf000 ---p 00000000 00:00 0 
+63dbf000-63e0d000 rw-p 00000000 00:00 0 
+63e0d000-63e10000 ---p 00000000 00:00 0 
+63e10000-63e5e000 rw-p 00000000 00:00 0 
+63e5e000-63e61000 ---p 00000000 00:00 0 
+63e61000-63eaf000 rw-p 00000000 00:00 0 
+63eaf000-63eb2000 ---p 00000000 00:00 0 
+63eb2000-64000000 rw-p 00000000 00:00 0 
+64040000-64140000 rw-p 00000000 00:00 0 
+64140000-64143000 ---p 00000000 00:00 0 
+64143000-64191000 rw-p 00000000 00:00 0 
+641c9000-641cc000 ---p 00000000 00:00 0 
+641cc000-6431a000 rw-p 00000000 00:00 0 
+6431a000-6441a000 rw-p 00000000 00:00 0 
+6441a000-6441d000 ---p 00000000 00:00 0 
+6441d000-6446b000 rw-p 00000000 00:00 0 
+6446b000-6446e000 ---p 00000000 00:00 0 
+6446e000-644bc000 rw-p 00000000 00:00 0 
+644bc000-644bf000 ---p 00000000 00:00 0 
+644bf000-6450d000 rw-p 00000000 00:00 0 
+6450d000-64510000 ---p 00000000 00:00 0 
+64510000-6455e000 rw-p 00000000 00:00 0 
+6455e000-64561000 ---p 00000000 00:00 0 
+64561000-645af000 rw-p 00000000 00:00 0 
+645af000-645b2000 ---p 00000000 00:00 0 
+645b2000-64600000 rw-p 00000000 00:00 0 
+64600000-6464e000 rw-p 00000000 00:00 0 
+6464e000-64700000 ---p 00000000 00:00 0 
+64700000-64800000 rw-p 00000000 00:00 0 
+64800000-64900000 rw-p 00000000 00:00 0 
+64900000-64a00000 rw-p 00000000 00:00 0 
+64a00000-64b00000 rw-p 00000000 00:00 0 
+64b00000-64bfe000 rw-p 00000000 00:00 0 
+64bfe000-64c00000 ---p 00000000 00:00 0 
+64c2d000-64d2d000 rw-p 00000000 00:00 0 
+64d2d000-64e2d000 rw-p 00000000 00:00 0 
+64e5e000-64e61000 ---p 00000000 00:00 0 
+64e61000-64eaf000 rw-p 00000000 00:00 0 
+64eaf000-64eb2000 ---p 00000000 00:00 0 
+64eb2000-64f00000 rw-p 00000000 00:00 0 
+64f00000-64ff9000 rw-p 00000000 00:00 0 
+64ff9000-65000000 ---p 00000000 00:00 0 
+6503e000-65041000 ---p 00000000 00:00 0 
+65041000-6508f000 rw-p 00000000 00:00 0 
+6508f000-65092000 ---p 00000000 00:00 0 
+65092000-650e0000 rw-p 00000000 00:00 0 
+650e0000-650e3000 ---p 00000000 00:00 0 
+650e3000-65131000 rw-p 00000000 00:00 0 
+65158000-6515b000 ---p 00000000 00:00 0 
+6515b000-651a9000 rw-p 00000000 00:00 0 
+651a9000-651ac000 ---p 00000000 00:00 0 
+651ac000-651fa000 rw-p 00000000 00:00 0 
+651fa000-65300000 r--s 00d84000 08:12 3672792    /home/marco/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.11.7.jar
+65300000-653a4000 rw-p 00000000 00:00 0 
+653a4000-65400000 ---p 00000000 00:00 0 
+65400000-65500000 rw-p 00000000 00:00 0 
+65500000-655da000 rw-p 00000000 00:00 0 
+655da000-65600000 ---p 00000000 00:00 0 
+65600000-65700000 rw-p 00000000 00:00 0 
+65700000-657f0000 rw-p 00000000 00:00 0 
+657f0000-65800000 ---p 00000000 00:00 0 
+6583d000-65856000 r--s 00167000 08:12 3408569    /home/marco/.ivy2/cache/com.assembla.scala-incubator/graph-core_2.11/jars/graph-core_2.11-1.9.4.jar
+65856000-658a2000 r--s 00412000 08:12 3672793    /home/marco/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.7.jar
+658a2000-658fa000 r--s 00523000 08:12 3672791    /home/marco/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.7.jar
+658fa000-658fd000 ---p 00000000 00:00 0 
+658fd000-6594b000 rw-p 00000000 00:00 0 
+6594b000-6594e000 ---p 00000000 00:00 0 
+6594e000-6599c000 rw-p 00000000 00:00 0 
+6599c000-6599f000 ---p 00000000 00:00 0 
+6599f000-659ed000 rw-p 00000000 00:00 0 
+659ed000-659f0000 ---p 00000000 00:00 0 
+659f0000-65a3e000 rw-p 00000000 00:00 0 
+65a4b000-65a4e000 ---p 00000000 00:00 0 
+65a4e000-65b9c000 rw-p 00000000 00:00 0 
+65b9c000-65c00000 r--s 003e8000 08:12 3410922    /home/marco/Scaricati/activator-dist-1.3.5/repository/org.scalaz/scalaz-core_2.10/6.0.4/jars/scalaz-core_2.10.jar
+65c00000-65cfb000 rw-p 00000000 00:00 0 
+65cfb000-65d00000 ---p 00000000 00:00 0 
+65d00000-65e00000 rw-p 00000000 00:00 0 
+65e00000-65f00000 rw-p 00000000 00:00 0 
+65f00000-65ffb000 rw-p 00000000 00:00 0 
+65ffb000-66000000 ---p 00000000 00:00 0 
+66000000-660fd000 rw-p 00000000 00:00 0 
+660fd000-66100000 ---p 00000000 00:00 0 
+66100000-66200000 rw-p 00000000 00:00 0 
+66200000-662f4000 rw-p 00000000 00:00 0 
+662f4000-66300000 ---p 00000000 00:00 0 
+66300000-66400000 rw-p 00000000 00:00 0 
+66400000-664fc000 rw-p 00000000 00:00 0 
+664fc000-66500000 ---p 00000000 00:00 0 
+66500000-66600000 rw-p 00000000 00:00 0 
+66600000-666fc000 rw-p 00000000 00:00 0 
+666fc000-66700000 ---p 00000000 00:00 0 
+66700000-66800000 rw-p 00000000 00:00 0 
+66800000-66900000 rw-p 00000000 00:00 0 
+66900000-66b00000 rw-p 00000000 00:00 0 
+66b00000-66bfb000 rw-p 00000000 00:00 0 
+66bfb000-66c00000 ---p 00000000 00:00 0 
+66c00000-66cff000 rw-p 00000000 00:00 0 
+66cff000-66d00000 ---p 00000000 00:00 0 
+66d09000-66d11000 r-xp 00000000 08:12 6825177    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libmanagement.so
+66d11000-66d12000 rw-p 00007000 08:12 6825177    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libmanagement.so
+66d12000-66d2a000 r--s 00115000 08:12 3542049    /home/marco/Scaricati/activator-dist-1.3.5/repository/io.netty/netty/3.8.0.Final/bundles/netty.jar
+66d2a000-66d2d000 ---p 00000000 00:00 0 
+66d2d000-66d7b000 rw-p 00000000 00:00 0 
+66d7c000-66d7e000 r--s 0000a000 08:12 3408381    /home/marco/Scaricati/activator-dist-1.3.5/repository/org.uncommons.maths/uncommons-maths/1.2.2a/jars/uncommons-maths.jar
+66d7e000-66d86000 r--s 0007b000 08:12 4066788    /home/marco/.ivy2/cache/com.google.protobuf/protobuf-java/bundles/protobuf-java-2.5.0.jar
+66d86000-66d9b000 r--s 0012f000 08:12 4063347    /home/marco/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/jars/akka-remote_2.11-2.3.5.jar
+66d9b000-66dab000 r--s 000f0000 08:12 4063344    /home/marco/.ivy2/cache/com.typesafe.akka/akka-cluster_2.11/jars/akka-cluster_2.11-2.3.5.jar
+66dab000-66dae000 ---p 00000000 00:00 0 
+66dae000-66efc000 rw-p 00000000 00:00 0 
+66efc000-66ff6000 rw-p 00000000 00:00 0 
+66ff6000-66ffc000 ---p 00000000 00:00 0 
+67000000-67100000 rw-p 00000000 00:00 0 
+67100000-671c1000 rw-p 00000000 00:00 0 
+671c1000-67200000 ---p 00000000 00:00 0 
+67207000-6722c000 r--s 00247000 08:12 3805000    /home/marco/.ivy2/cache/org.scalafx/scalafx_2.11/jars/scalafx_2.11-8.0.40-R8.jar
+6722c000-6722f000 ---p 00000000 00:00 0 
+6722f000-6727d000 rw-p 00000000 00:00 0 
+67284000-672af000 r--s 002ca000 08:12 4063349    /home/marco/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/jars/akka-actor_2.11-2.4-SNAPSHOT.jar
+672af000-672b2000 ---p 00000000 00:00 0 
+672b2000-67300000 rw-p 00000000 00:00 0 
+67300000-673f9000 rw-p 00000000 00:00 0 
+673f9000-67400000 ---p 00000000 00:00 0 
+67400000-67500000 rw-p 00000000 00:00 0 
+67500000-67600000 rw-p 00000000 00:00 0 
+67600000-676fd000 rw-p 00000000 00:00 0 
+676fd000-67700000 ---p 00000000 00:00 0 
+67700000-677fa000 rw-p 00000000 00:00 0 
+677fa000-67800000 ---p 00000000 00:00 0 
+67800000-67900000 rw-p 00000000 00:00 0 
+67900000-679f9000 rw-p 00000000 00:00 0 
+679f9000-67a00000 ---p 00000000 00:00 0 
+67a00000-67b00000 rw-p 00000000 00:00 0 
+67b00000-67be9000 rw-p 00000000 00:00 0 
+67be9000-67c00000 ---p 00000000 00:00 0 
+67c00000-67d00000 rw-p 00000000 00:00 0 
+67d00000-67df1000 rw-p 00000000 00:00 0 
+67df1000-67e00000 ---p 00000000 00:00 0 
+67e00000-67ee9000 rw-p 00000000 00:00 0 
+67ee9000-67f00000 ---p 00000000 00:00 0 
+67f00000-67fd9000 rw-p 00000000 00:00 0 
+67fd9000-68000000 ---p 00000000 00:00 0 
+68000000-680e2000 rw-p 00000000 00:00 0 
+680e2000-68100000 ---p 00000000 00:00 0 
+68100000-681f1000 rw-p 00000000 00:00 0 
+681f1000-68200000 ---p 00000000 00:00 0 
+68200000-68300000 rw-p 00000000 00:00 0 
+68300000-683ff000 rw-p 00000000 00:00 0 
+683ff000-68400000 ---p 00000000 00:00 0 
+68400000-684f6000 rw-p 00000000 00:00 0 
+684f6000-68500000 ---p 00000000 00:00 0 
+68500000-685fc000 rw-p 00000000 00:00 0 
+685fc000-68600000 ---p 00000000 00:00 0 
+68600000-686f4000 rw-p 00000000 00:00 0 
+686f4000-68700000 ---p 00000000 00:00 0 
+68700000-687f0000 rw-p 00000000 00:00 0 
+687f0000-68800000 ---p 00000000 00:00 0 
+68800000-68900000 rw-p 00000000 00:00 0 
+68900000-689fe000 rw-p 00000000 00:00 0 
+689fe000-68a00000 ---p 00000000 00:00 0 
+68a00000-68afc000 rw-p 00000000 00:00 0 
+68afc000-68b00000 ---p 00000000 00:00 0 
+68b00000-68c00000 rw-p 00000000 00:00 0 
+68c00000-68d00000 rw-p 00000000 00:00 0 
+68d00000-68e00000 rw-p 00000000 00:00 0 
+68e00000-68efe000 rw-p 00000000 00:00 0 
+68efe000-68f00000 ---p 00000000 00:00 0 
+68f00000-69000000 rw-p 00000000 00:00 0 
+69000000-690fe000 rw-p 00000000 00:00 0 
+690fe000-69100000 ---p 00000000 00:00 0 
+69100000-691f0000 rw-p 00000000 00:00 0 
+691f0000-69200000 ---p 00000000 00:00 0 
+69200000-69300000 rw-p 00000000 00:00 0 
+69300000-693f9000 rw-p 00000000 00:00 0 
+693f9000-69400000 ---p 00000000 00:00 0 
+69400000-69500000 rw-p 00000000 00:00 0 
+69500000-695fc000 rw-p 00000000 00:00 0 
+695fc000-69600000 ---p 00000000 00:00 0 
+69600000-69700000 rw-p 00000000 00:00 0 
+69700000-69800000 rw-p 00000000 00:00 0 
+69800000-698fd000 rw-p 00000000 00:00 0 
+698fd000-69900000 ---p 00000000 00:00 0 
+69907000-69911000 r--s 00095000 08:12 3540717    /home/marco/Scaricati/activator-dist-1.3.5/repository/org.scala-lang.modules/scala-xml_2.11/1.0.2/bundles/scala-xml_2.11.jar
+69911000-69916000 r--s 0003f000 08:12 3542348    /home/marco/Scaricati/activator-dist-1.3.5/repository/com.typesafe/config/1.3.0/bundles/config.jar
+69916000-6991a000 r--s 00031000 08:12 3672645    /home/marco/.ivy2/cache/jline/jline/jars/jline-2.12.1.jar
+6991a000-69925000 r--s 0005d000 08:12 3935839    /home/marco/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.4.jar
+69925000-69930000 r--s 00094000 08:12 4067853    /home/marco/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.4.jar
+69930000-69943000 r--s 00344000 08:12 6825257    /usr/lib/jvm/java-8-oracle/jre/lib/resources.jar
+69943000-699bc000 r--s 010e2000 08:12 6819668    /usr/lib/jvm/java-8-oracle/lib/tools.jar
+699bc000-699bf000 ---p 00000000 00:00 0 
+699bf000-69ad5000 rw-p 00000000 00:00 0 
+69ad5000-69adc000 r--s 00000000 08:12 4207080    /usr/lib/i386-linux-gnu/gconv/gconv-modules.cache
+69adc000-69b00000 r--p 00000000 08:12 4599130    /usr/share/locale-langpack/it/LC_MESSAGES/libc.mo
+69b00000-69c00000 rw-p 00000000 00:00 0 
+69c00000-69d00000 rw-p 00000000 00:00 0 
+69d00000-69df6000 rw-p 00000000 00:00 0 
+69df6000-69e00000 ---p 00000000 00:00 0 
+69e00000-69f00000 rw-p 00000000 00:00 0 
+69f00000-69ffa000 rw-p 00000000 00:00 0 
+69ffa000-6a000000 ---p 00000000 00:00 0 
+6a000000-6a100000 rw-p 00000000 00:00 0 
+6a100000-6a1ff000 rw-p 00000000 00:00 0 
+6a1ff000-6a200000 ---p 00000000 00:00 0 
+6a202000-6a300000 r--s 00cd0000 08:12 3412254    /home/marco/.sbt/boot/scala-2.10.5/lib/scala-compiler.jar
+6a300000-6a400000 rw-p 00000000 00:00 0 
+6a402000-6a409000 r--s 0003c000 08:12 4067492    /home/marco/.ivy2/cache/scala_2.10/sbt_0.13/com.typesafe.sbteclipse/sbteclipse-core/jars/sbteclipse-core-2.2.0.jar
+6a409000-6a40b000 r--s 00001000 08:12 4067490    /home/marco/.ivy2/cache/scala_2.10/sbt_0.13/com.typesafe.sbteclipse/sbteclipse-plugin/jars/sbteclipse-plugin-2.2.0.jar
+6a40b000-6a47d000 r--s 0065b000 08:12 3412251    /home/marco/.sbt/boot/scala-2.10.5/lib/scala-library.jar
+6a47d000-6a47e000 ---p 00000000 00:00 0 
+6a47e000-6a4fe000 rw-p 00000000 00:00 0 
+6a4fe000-6a501000 ---p 00000000 00:00 0 
+6a501000-6a57f000 rw-p 00000000 00:00 0 
+6a57f000-6a582000 ---p 00000000 00:00 0 
+6a582000-6a600000 rw-p 00000000 00:00 0 
+6a600000-6a800000 r--p 00000000 08:12 4201162    /usr/lib/locale/locale-archive
+6a800000-6a900000 rw-p 00000000 00:00 0 
+6a901000-6a905000 r--s 00095000 08:12 6825080    /usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar
+6a905000-6a90f000 r--s 00116000 08:12 6948817    /usr/lib/jvm/java-8-oracle/jre/lib/ext/localedata.jar
+6a90f000-6a911000 r--s 0000b000 08:12 3412224    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/xsbti/interface-0.13.9.jar
+6a911000-6a913000 r--s 00001000 08:12 3412204    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/compiler-ivy-integration-0.13.9.jar
+6a913000-6a915000 r--s 0000b000 08:12 3412195    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/tracking-0.13.9.jar
+6a915000-6a94a000 r--s 002da000 08:12 3412236    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/scala-reflect-2.10.5.jar
+6a94a000-6a97f000 r--s 002da000 08:12 3412255    /home/marco/.sbt/boot/scala-2.10.5/lib/scala-reflect.jar
+6a97f000-6a982000 ---p 00000000 00:00 0 
+6a982000-6aa00000 rw-p 00000000 00:00 0 
+6aa00000-6aaf9000 rw-p 00000000 00:00 0 
+6aaf9000-6ab00000 ---p 00000000 00:00 0 
+6ab01000-6ab08000 r--s 0004b000 08:12 3412234    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/serialization_2.10-0.1.1.jar
+6ab08000-6ab0a000 r--s 00012000 08:12 3412208    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/jawn-parser_2.10-0.6.0.jar
+6ab0a000-6ab0b000 r--s 00001000 08:12 3412207    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/cross-0.13.9.jar
+6ab0b000-6ab14000 r--s 0006e000 08:12 3412216    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/actions-0.13.9.jar
+6ab14000-6ab17000 r--s 0001e000 08:12 3412243    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/run-0.13.9.jar
+6ab17000-6ab2c000 r--s 00101000 08:12 3412225    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/ivy-2.3.0-sbt-c5d1b95fdcc1e1007740ffbecf4eb07abc51ec93.jar
+6ab2c000-6ab2e000 r--s 00017000 08:12 3412196    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/testing-0.13.9.jar
+6ab2e000-6ab31000 ---p 00000000 00:00 0 
+6ab31000-6ab7f000 rw-p 00000000 00:00 0 
+6ab7f000-6ab80000 ---p 00000000 00:00 0 
+6ab80000-6ac00000 rw-p 00000000 00:00 0 
+6ac00000-6acf8000 rw-p 00000000 00:00 0 
+6acf8000-6ad00000 ---p 00000000 00:00 0 
+6ad00000-6ad03000 r--s 0001a000 08:12 3412187    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/cache-0.13.9.jar
+6ad03000-6ad07000 r--s 00034000 08:12 3412235    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/jsch-0.1.46.jar
+6ad07000-6ad0a000 r--s 00018000 08:12 3412220    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/logging-0.13.9.jar
+6ad0a000-6ad19000 r--s 000bb000 08:12 3412227    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/scala-pickling_2.10-0.10.0.jar
+6ad19000-6ad1c000 r--s 00030000 08:12 3412239    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/jline-2.11.jar
+6ad1c000-6ad1f000 r--s 00013000 08:12 3412188    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/classpath-0.13.9.jar
+6ad1f000-6ad21000 r--s 00002000 08:12 3412238    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/test-interface-1.0.jar
+6ad21000-6ad25000 r--s 0001c000 08:12 3412210    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/compiler-integration-0.13.9.jar
+6ad25000-6ad27000 r--s 00006000 08:12 3412213    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/relation-0.13.9.jar
+6ad27000-6ad2a000 r--s 0001d000 08:12 3412202    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/tasks-0.13.9.jar
+6ad2a000-6ad32000 r--s 00057000 08:12 3412199    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/completion-0.13.9.jar
+6ad32000-6ad81000 rw-p 00000000 00:00 0 
+6ad81000-6af59000 r--s 03d17000 08:12 6825081    /usr/lib/jvm/java-8-oracle/jre/lib/rt.jar
+6af59000-6b3fa000 rw-p 00000000 00:00 0 
+6b3fa000-6b400000 ---p 00000000 00:00 0 
+6b400000-6d800000 rw-p 00000000 00:00 0 
+6d800000-6d8ff000 rw-p 00000000 00:00 0 
+6d8ff000-6d900000 ---p 00000000 00:00 0 
+6d900000-6d903000 r--s 00012000 08:12 3412217    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/classfile-0.13.9.jar
+6d903000-6d908000 r--s 00024000 08:12 3412197    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/persist-0.13.9.jar
+6d908000-6d914000 r--s 000a4000 08:12 3412233    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/quasiquotes_2.10-2.0.1.jar
+6d914000-6d91f000 r--s 00096000 08:12 3412205    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/main-settings-0.13.9.jar
+6d91f000-6d922000 r--s 0001d000 08:12 3412237    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/task-system-0.13.9.jar
+6d922000-6d929000 r--s 00049000 08:12 3412200    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/api-0.13.9.jar
+6d929000-6d92e000 r--s 00036000 08:12 3412226    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/compile-0.13.9.jar
+6d92e000-6d931000 ---p 00000000 00:00 0 
+6d931000-6d97f000 rw-p 00000000 00:00 0 
+6d97f000-6d980000 ---p 00000000 00:00 0 
+6d980000-6da00000 rw-p 00000000 00:00 0 
+6da00000-6db00000 rw-p 00000000 00:00 0 
+6db00000-6db32000 rw-p 00000000 00:00 0 
+6db32000-6dc00000 ---p 00000000 00:00 0 
+6dc00000-6dc02000 r--s 00014000 08:12 3412242    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/apply-macro-0.13.9.jar
+6dc02000-6dc03000 r--s 00005000 08:12 3412221    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/test-agent-0.13.9.jar
+6dc03000-6dc2e000 r--s 00239000 08:12 3412231    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/main-0.13.9.jar
+6dc2e000-6dc31000 ---p 00000000 00:00 0 
+6dc31000-6dc7f000 rw-p 00000000 00:00 0 
+6dc7f000-6dc80000 ---p 00000000 00:00 0 
+6dc80000-6dd00000 rw-p 00000000 00:00 0 
+6dd00000-6ddfd000 rw-p 00000000 00:00 0 
+6ddfd000-6de00000 ---p 00000000 00:00 0 
+6de00000-6de04000 r--s 0001b000 08:12 3412241    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/process-0.13.9.jar
+6de04000-6de06000 r--s 00002000 08:12 3412203    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/control-0.13.9.jar
+6de06000-6de28000 r--s 001b3000 08:12 3412228    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/ivy-0.13.9.jar
+6de28000-6de29000 ---p 00000000 00:00 0 
+6de29000-ae200000 rw-p 00000000 00:00 0 
+ae200000-ae202000 r--s 00007000 08:12 3412232    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/paranamer-2.6.jar
+ae202000-ae20a000 r--s 00060000 08:12 3412206    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/collections-0.13.9.jar
+ae20a000-ae214000 r--s 0006e000 08:12 3412198    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/incremental-compiler-0.13.9.jar
+ae214000-ae215000 r--s 00001000 08:12 3412192    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/json4s-support_2.10-0.6.0.jar
+ae215000-ae21a000 r--s 00037000 08:12 3412189    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/command-0.13.9.jar
+ae21a000-ae21b000 r--s 00002000 08:12 3412209    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/launcher-interface-1.0.0-M1.jar
+ae21b000-ae21c000 r--s 00005000 08:12 3412201    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/sbt-0.13.9.jar
+ae21c000-ae220000 r--s 00022000 08:12 3412191    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/sbinary_2.10-0.4.2.jar
+ae220000-ae22a000 r--s 00085000 08:12 3412186    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/json4s-core_2.10-3.2.10.jar
+ae22a000-ae22c000 r--s 00013000 08:12 3412240    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/json4s-ast_2.10-3.2.10.jar
+ae22c000-ae22e000 r--s 0000e000 08:12 3412222    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/logic-0.13.9.jar
+ae22e000-ae231000 ---p 00000000 00:00 0 
+ae231000-ae27f000 rw-p 00000000 00:00 0 
+ae27f000-ae280000 ---p 00000000 00:00 0 
+ae280000-ae337000 rw-p 00000000 00:00 0 
+ae337000-ae500000 ---p 00000000 00:00 0 
+ae500000-af2b0000 rwxp 00000000 00:00 0 
+af2b8000-b6500000 ---p 00000000 00:00 0 
+b6500000-b65fb000 rw-p 00000000 00:00 0 
+b65fb000-b6600000 ---p 00000000 00:00 0 
+b6600000-b660f000 r-xp 00000000 08:12 6825168    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libnio.so
+b660f000-b6610000 rw-p 0000e000 08:12 6825168    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libnio.so
+b6610000-b6625000 r-xp 00000000 08:12 6825137    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libnet.so
+b6625000-b6626000 rw-p 00015000 08:12 6825137    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libnet.so
+b6626000-b6642000 r--s 0010c000 08:12 6818484    /usr/share/sbt-launcher-packaging/bin/sbt-launch.jar
+b6642000-b665a000 rw-p 00000000 00:00 0 
+b665a000-b6673000 r-xp 00000000 08:12 6825170    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libzip.so
+b6673000-b6674000 rw-p 00019000 08:12 6825170    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libzip.so
+b6674000-b667f000 r-xp 00000000 08:12 4850293    /lib/i386-linux-gnu/libnss_files-2.15.so
+b667f000-b6680000 r--p 0000a000 08:12 4850293    /lib/i386-linux-gnu/libnss_files-2.15.so
+b6680000-b6681000 rw-p 0000b000 08:12 4850293    /lib/i386-linux-gnu/libnss_files-2.15.so
+b6681000-b668b000 r-xp 00000000 08:12 4850298    /lib/i386-linux-gnu/libnss_nis-2.15.so
+b668b000-b668c000 r--p 00009000 08:12 4850298    /lib/i386-linux-gnu/libnss_nis-2.15.so
+b668c000-b668d000 rw-p 0000a000 08:12 4850298    /lib/i386-linux-gnu/libnss_nis-2.15.so
+b668d000-b66a3000 r-xp 00000000 08:12 4850327    /lib/i386-linux-gnu/libnsl-2.15.so
+b66a3000-b66a4000 r--p 00015000 08:12 4850327    /lib/i386-linux-gnu/libnsl-2.15.so
+b66a4000-b66a5000 rw-p 00016000 08:12 4850327    /lib/i386-linux-gnu/libnsl-2.15.so
+b66a5000-b66a7000 rw-p 00000000 00:00 0 
+b66a7000-b66ae000 r-xp 00000000 08:12 4850291    /lib/i386-linux-gnu/libnss_compat-2.15.so
+b66ae000-b66af000 r--p 00006000 08:12 4850291    /lib/i386-linux-gnu/libnss_compat-2.15.so
+b66af000-b66b0000 rw-p 00007000 08:12 4850291    /lib/i386-linux-gnu/libnss_compat-2.15.so
+b66b0000-b66b6000 r--s 0003e000 08:12 3412190    /home/marco/.sbt/boot/scala-2.10.5/org.scala-sbt/sbt/0.13.9/io-0.13.9.jar
+b66b6000-b66ba000 r--s 00025000 08:12 3412253    /home/marco/.sbt/boot/scala-2.10.5/lib/jline.jar
+b66ba000-b66c2000 rw-s 00000000 08:12 3017227    /tmp/hsperfdata_marco/6403
+b66c2000-b66e6000 r-xp 00000000 08:12 6825145    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libjava.so
+b66e6000-b66e7000 rw-p 00023000 08:12 6825145    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libjava.so
+b66e7000-b66ee000 r-xp 00000000 08:12 4850296    /lib/i386-linux-gnu/librt-2.15.so
+b66ee000-b66ef000 r--p 00006000 08:12 4850296    /lib/i386-linux-gnu/librt-2.15.so
+b66ef000-b66f0000 rw-p 00007000 08:12 4850296    /lib/i386-linux-gnu/librt-2.15.so
+b66f0000-b66f3000 ---p 00000000 00:00 0 
+b66f3000-b6741000 rw-p 00000000 00:00 0 
+b6741000-b676b000 r-xp 00000000 08:12 4850318    /lib/i386-linux-gnu/libm-2.15.so
+b676b000-b676c000 r--p 00029000 08:12 4850318    /lib/i386-linux-gnu/libm-2.15.so
+b676c000-b676d000 rw-p 0002a000 08:12 4850318    /lib/i386-linux-gnu/libm-2.15.so
+b676d000-b70ed000 r-xp 00000000 08:12 6825149    /usr/lib/jvm/java-8-oracle/jre/lib/i386/server/libjvm.so
+b70ed000-b715a000 rw-p 00980000 08:12 6825149    /usr/lib/jvm/java-8-oracle/jre/lib/i386/server/libjvm.so
+b715a000-b7580000 rw-p 00000000 00:00 0 
+b7580000-b7723000 r-xp 00000000 08:12 4850289    /lib/i386-linux-gnu/libc-2.15.so
+b7723000-b7725000 r--p 001a3000 08:12 4850289    /lib/i386-linux-gnu/libc-2.15.so
+b7725000-b7726000 rw-p 001a5000 08:12 4850289    /lib/i386-linux-gnu/libc-2.15.so
+b7726000-b7729000 rw-p 00000000 00:00 0 
+b7729000-b772c000 r-xp 00000000 08:12 4850322    /lib/i386-linux-gnu/libdl-2.15.so
+b772c000-b772d000 r--p 00002000 08:12 4850322    /lib/i386-linux-gnu/libdl-2.15.so
+b772d000-b772e000 rw-p 00003000 08:12 4850322    /lib/i386-linux-gnu/libdl-2.15.so
+b772e000-b772f000 rw-p 00000000 00:00 0 
+b772f000-b7743000 r-xp 00000000 08:12 6825129    /usr/lib/jvm/java-8-oracle/jre/lib/i386/jli/libjli.so
+b7743000-b7744000 rw-p 00014000 08:12 6825129    /usr/lib/jvm/java-8-oracle/jre/lib/i386/jli/libjli.so
+b7744000-b775b000 r-xp 00000000 08:12 4850316    /lib/i386-linux-gnu/libpthread-2.15.so
+b775b000-b775c000 r--p 00016000 08:12 4850316    /lib/i386-linux-gnu/libpthread-2.15.so
+b775c000-b775d000 rw-p 00017000 08:12 4850316    /lib/i386-linux-gnu/libpthread-2.15.so
+b775d000-b775f000 rw-p 00000000 00:00 0 
+b775f000-b7762000 r--s 00018000 08:12 3412252    /home/marco/.sbt/boot/scala-2.10.5/lib/jansi.jar
+b7762000-b7763000 r--p 00859000 08:12 4201162    /usr/lib/locale/locale-archive
+b7763000-b7764000 rw-p 00000000 00:00 0 
+b7764000-b7765000 r--p 00000000 00:00 0 
+b7765000-b7770000 r-xp 00000000 08:12 6825147    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libverify.so
+b7770000-b7771000 rw-p 0000b000 08:12 6825147    /usr/lib/jvm/java-8-oracle/jre/lib/i386/libverify.so
+b7771000-b7773000 rw-p 00000000 00:00 0 
+b7773000-b7774000 r-xp 00000000 00:00 0          [vdso]
+b7774000-b7794000 r-xp 00000000 08:12 4850319    /lib/i386-linux-gnu/ld-2.15.so
+b7794000-b7795000 r--p 0001f000 08:12 4850319    /lib/i386-linux-gnu/ld-2.15.so
+b7795000-b7796000 rw-p 00020000 08:12 4850319    /lib/i386-linux-gnu/ld-2.15.so
+bff42000-bff43000 rwxp 00000000 00:00 0 
+bff75000-bff96000 rw-p 00000000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -Xms1024m -Xmx1024m -XX:ReservedCodeCacheSize=128m -XX:MaxMetaspaceSize=256m 
+java_command: /usr/share/sbt-launcher-packaging/bin/sbt-launch.jar
+java_class_path (initial): /usr/share/sbt-launcher-packaging/bin/sbt-launch.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+SHELL=/bin/bash
+DISPLAY=:0.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x8cdb80], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0x8cdb80], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x74db00], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.so+0x74db00], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.so+0x74db00], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x74db00], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x74f180], sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x750630], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.so+0x750630], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.so+0x750630], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x750630], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=12.04
+DISTRIB_CODENAME=precise
+DISTRIB_DESCRIPTION="Ubuntu 12.04.2 LTS"
+
+uname:Linux 3.2.0-48-generic-pae #74-Ubuntu SMP Thu Jun 6 20:05:01 UTC 2013 i686
+libc:glibc 2.15 NPTL 2.15 
+rlimit: STACK 8192k, CORE 0k, NPROC 28637, NOFILE 4096, AS infinity
+load average:20,52 6,87 3,31
+
+/proc/meminfo:
+MemTotal:        3680248 kB
+MemFree:          148800 kB
+Buffers:           22180 kB
+Cached:            45856 kB
+SwapCached:            0 kB
+Active:          3392180 kB
+Inactive:          31900 kB
+Active(anon):    3357172 kB
+Inactive(anon):      592 kB
+Active(file):      35008 kB
+Inactive(file):    31308 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+HighTotal:       2821832 kB
+HighFree:            440 kB
+LowTotal:         858416 kB
+LowFree:          148360 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:               572 kB
+Writeback:             0 kB
+AnonPages:       3356328 kB
+Mapped:            26172 kB
+Shmem:              1428 kB
+Slab:              38656 kB
+SReclaimable:      19704 kB
+SUnreclaim:        18952 kB
+KernelStack:        6320 kB
+PageTables:        14820 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     1840124 kB
+Committed_AS:   10443356 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       83876 kB
+VmallocChunk:      23292 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:        8184 kB
+DirectMap2M:      905216 kB
+
+
+CPU:total 4 (4 cores per cpu, 1 threads per core) family 6 model 15 stepping 11, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, tsc
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Quad CPU    Q6600  @ 2.40GHz
+stepping	: 11
+microcode	: 0xb3
+cpu MHz		: 2400.000
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 4
+apicid		: 0
+initial apicid	: 0
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm tpr_shadow vnmi flexpriority
+bogomips	: 4788.35
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Quad CPU    Q6600  @ 2.40GHz
+stepping	: 11
+microcode	: 0xb3
+cpu MHz		: 2400.000
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 1
+cpu cores	: 4
+apicid		: 1
+initial apicid	: 1
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm tpr_shadow vnmi flexpriority
+bogomips	: 4788.85
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Quad CPU    Q6600  @ 2.40GHz
+stepping	: 11
+microcode	: 0xb3
+cpu MHz		: 2400.000
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 2
+cpu cores	: 4
+apicid		: 2
+initial apicid	: 2
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm tpr_shadow vnmi flexpriority
+bogomips	: 4788.89
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Quad CPU    Q6600  @ 2.40GHz
+stepping	: 11
+microcode	: 0xb3
+cpu MHz		: 2400.000
+cache size	: 4096 KB
+physical id	: 0
+siblings	: 4
+core id		: 3
+cpu cores	: 4
+apicid		: 3
+initial apicid	: 3
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dtherm tpr_shadow vnmi flexpriority
+bogomips	: 4788.89
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 3680248k(148676k free), swap 0k(0k free)
+
+vm_info: Java HotSpot(TM) Server VM (25.60-b23) for linux-x86 JRE (1.8.0_60-b27), built on Aug  4 2015 10:44:54 by "java_re" with gcc 4.3.0 20080428 (Red Hat 4.3.0-8)
+
+time: Mon Nov 30 11:05:24 2015
+elapsed time: 74 seconds (0d 0h 1m 14s)
+

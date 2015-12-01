@@ -10,13 +10,14 @@ import com.typesafe.config.Config
 import akka.dispatch.PriorityGenerator
 import akka.actor.ActorSystem
 
-class Incrocio extends Actor 
+class Incrocio (iz:String) extends Actor 
 {
 	var corsiaOut = ArrayBuffer[ActorRef]();	
 	var marciapiedeOut = ArrayBuffer[ActorRef]();
 	var tratti = ArrayBuffer[ActorRef]();	
 	var strisce = ArrayBuffer[ActorRef]();
 	var stato:Int=0;
+	val idZona: String = iz;
 	
 
 	override def preStart: Unit = 
@@ -120,9 +121,9 @@ class Incrocio extends Actor
 		var dove=m.nxt;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
-			dove=dove.substring(2, pos);
+			dove=dove.substring(idZona.length, pos);
 		else
-			dove=dove.substring(2);
+			dove=dove.substring(idZona.length);
 		//Caso particolare del calcolo	
 		val tratto=dove.toInt;		
 		if(tratto==1)
@@ -137,7 +138,7 @@ class Incrocio extends Actor
 		println("Persona "+p.id+" arrivata all'incrocio");
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
-		dove=dove.substring(3);	
+		dove=dove.substring(idZona.length+1);	
 		//Casi particolari del calcolo	
 		if(dove.toInt==1)
 			strisce(strisce.size-2)!p;
@@ -155,9 +156,9 @@ class Incrocio extends Actor
 		var dove=m.nxt;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
-			dove=dove.substring(2, pos);
+			dove=dove.substring(idZona.length, pos);
 		else
-			dove=dove.substring(2);
+			dove=dove.substring(idZona.length);
 		//Caso particolare del calcolo	
 		val tratto=dove.toInt;		
 		if(tratto==1)
@@ -172,7 +173,7 @@ class Incrocio extends Actor
 		println("Persona (deviata) "+p.id+" arrivata all'incrocio");
 		//Guardo su che striscia deve andare
 		var dove=p.nxt;
-		dove=dove.substring(3);	
+		dove=dove.substring(idZona.length+1);	
 		//Casi particolari del calcolo	
 		if(dove.toInt==1)
 			strisce(strisce.size-2)!p;

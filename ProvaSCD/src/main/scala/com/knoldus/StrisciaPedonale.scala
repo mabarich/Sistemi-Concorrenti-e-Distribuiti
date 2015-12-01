@@ -65,8 +65,8 @@ class StrisciaPedonale extends Actor
 	{
 		println("Persona "+p.id+" arrivata alla striscia "+id);
 		val dove=p.to;
-		val io=id.substring(2); //1S3
-		val to=dove.substring(3); //1MO3
+		val io=id.substring(id.indexOf("S")+1); //1S3
+		val to=dove.substring(id.indexOf("S")+2); //1MO3
 		if(io==to)
 			marciapiede!p;
 		else
@@ -78,8 +78,8 @@ class StrisciaPedonale extends Actor
 		var p:Persona=cp.persona;
 		println("Persona "+p.id+" arrivata alla striscia "+id);
 		val dove=p.to;
-		val io=id.substring(2); //1S3
-		val to=dove.substring(3); //1MO3
+		val io=id.substring(id.indexOf("S")+1); //1S3
+		val to=dove.substring(id.indexOf("S")+2); //1MO3
 		if(io==to)
 			marciapiede!p;
 		else

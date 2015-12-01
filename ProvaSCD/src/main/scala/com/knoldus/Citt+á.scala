@@ -7,33 +7,34 @@ import akka.actor.ActorSystem
 import scala.concurrent.duration._
 import akka.actor.Props
 import com.typesafe.config.ConfigFactory
+import scala.xml.XML
 
 object Città
 {
-	var zone = ArrayBuffer[Pezzo]();
+	//var zone = ArrayBuffer[Pezzo]();
 	var listaNomi = ArrayBuffer[String]();
 	def main(args: Array[String]): Unit =
 	{
-		listaNomi+="Z11";
-		listaNomi+="Z12";
-		//listaNomi+="Z3";
-		listaNomi+="Z14";
-		
-		listaNomi+="Z15";
-		listaNomi+="Z16";
-		listaNomi+="Z17";
-
-
-		zone+=new Pezzo("2551","Z11", listaNomi)
-		zone+=new Pezzo("2552","Z12", listaNomi)
-		//zone+=new Pezzo("2553","Z13", listaNomi)
-		zone+=new Pezzo("2554","Z14", listaNomi)
-		zone+=new Pezzo("2555","Z15", listaNomi)
-		zone+=new Pezzo("2556","Z16", listaNomi)
-		zone+=new Pezzo("2557","Z17", listaNomi)
-
-		for (x<-0 to zone.size-1)
-			zone(x).start;
+		var nome="/home/marco/Scrivania/ProvaSCD/src/main/scala/com/knoldus/Zone.xml";
+		val xml=XML.loadFile(nome);
+		val zone=xml \ "Zone" \ "Zona";
+		for(x <- 0 to zone.size-1)
+		{
+			val id:String=zone(x)\"@id" text;
+			listaNomi+=id;
+		}
+		if(args.size==0)
+		{		
+			for(x <- 0 to listaNomi.size-1)
+			{
+				val port=2551+x;
+				new Pezzo(port.toString, listaNomi(x), listaNomi).start;
+			}
+		}
+		else if (args.size==2)
+		{
+			new Pezzo(args(1), args(0), listaNomi).start;
+		}
 	}
 }
 
@@ -47,11 +48,6 @@ class Pezzo (p:String, i:String, ln:ArrayBuffer[String])
 	{
 		val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").withFallback(ConfigFactory.parseString("akka.cluster.roles = [Zona]")).withFallback(ConfigFactory.load())
 		val system = ActorSystem("Priority", config);
-
-		
-		println("\n\n\n"+id+"\n\n\n");		
-
-
 		val zona = system.actorOf(Props(classOf[Zona],id,port, listaNomi).withDispatcher("prio-dispatcher4"), id);
 		zona!Start;
 	}

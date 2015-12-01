@@ -6,17 +6,20 @@
 - ACK (OK)
 - Eventuali invii multipli (OK)
 - Zone con una strada (non legge marciapiedi) e con due (se non ha incrocio e ho due strade metto i next come le altre strade) (OK)
-- Gestione dinamica delle porte senza i new messi a mano
+- Gestione dinamica delle porte senza i new messi a mano (OK)
 - Deviazioni sottotipi di mezzi (OK)
 - Tratti per i mezzi hanno qualcosa di strano all'incrocio (OK)
 - Gestione zone che cadono 
-	- Controllo che nella zona giù non ci sia una fermata o una destinazione
+	- Controllo che nella zona giù non ci sia una fermata o una destinazione (OK)
 	- Nel pezzo finale della deviazione devo reimpostare il next correttamente (OK) 
 	- Marciapiede adiacente (OK)
-	- Assenza di percorsi minimi (java.util.NoSuchElementException a riga 123)
-	- Gestisco il catch del timeout
+	- Assenza di percorsi minimi (OK)
+	- Gestisco il catch del timeout (OK)
 	- LOOP PEDONI HA PROBLEMA con il checkPedoni (OK)
 	- Zone che tornano attive
-- Substring non sempre tengono conto della lunghezza dell'id della zona
+	- Se cade 5, 4 calcola 4126, ma se cade anche 2, 1 calcola 1456 e cicla (OK) (se una zona torna UP devo ridirglielo)
+- Substring non sempre tengono conto della lunghezza dell'id della zona (OK)
 - Sistemo eccezione della corriera (OK)
 - Unire cicli creazioni?
+- Non legge i file (OK)
+- Eccezione strana col pedone (OK)

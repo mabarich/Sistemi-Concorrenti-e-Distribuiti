@@ -1,6 +1,5 @@
 package com.knoldus
 
-
 import scala.concurrent.Await
 import akka.pattern.ask
 import akka.util.Timeout
@@ -8,6 +7,7 @@ import scala.concurrent.duration._
 
 import akka.actor.Actor
 import akka.actor.ActorRef
+import java.util.concurrent.TimeoutException
 
 class Corsia (z:ActorRef) extends Actor 
 {	
@@ -114,12 +114,19 @@ class Corsia (z:ActorRef) extends Actor
 							var tentativi: Int=0;
 							while(!result && tentativi<maxTentativi)
 							{
-								val future = nextActor ? m; 
-								val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
-								if (bool)
-									result=true;
-								else
-									tentativi+=1;
+								try
+								{
+									val future = nextActor ? m; 
+									val bool = Await.result(future, timeout.duration).asInstanceOf[Boolean];
+									if (bool)
+										result=true;
+									else
+										tentativi+=1;
+								}
+								catch
+								{
+									case e: TimeoutException => println("\n\nTimeout\n\n"); tentativi+=1;
+								}
 							}
 							if(tentativi==maxTentativi)
 							{

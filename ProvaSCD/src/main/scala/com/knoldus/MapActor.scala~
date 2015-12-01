@@ -16,6 +16,8 @@ class MapActor (i: String, z:ActorRef) extends Actor
 	{
 		case c:String => if(c==idZona) { sender!new containerVicino(idZona,zona); }	   
 		case c:ChiediVicini => if (c.id!=idZona) chiedi(sender);
+		case c:ZonaCaduta => zona!c;
+		case num:Int => if(("Z"+num.toString)==idZona) zona!num;
 	}
 
 	def chiedi (sender:ActorRef): Unit =

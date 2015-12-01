@@ -72,10 +72,10 @@ class Tratto extends Actor
 		var dove=m.to;
 		val pos=dove.indexOf("_"); 
 		if (pos>=0)
-			dove=dove.substring(2, pos);
+			dove=dove.substring(id.indexOf("T")+1, pos);
 		else
-			dove=dove.substring(2);
-		if(id.substring(2)!=dove)
+			dove=dove.substring(id.indexOf("T")+1);
+		if(id.substring(id.indexOf("T")+1)!=dove)
 			tratti(dove.toInt-1)!new containerMezzo(m);
 		else
 			nextActor!m;

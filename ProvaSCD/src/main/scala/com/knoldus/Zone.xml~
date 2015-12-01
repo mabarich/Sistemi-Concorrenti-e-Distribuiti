@@ -1,0 +1,117 @@
+<xml>
+	<Zone>
+		<Zona id="Z1">
+			<Vicini>
+				<Vicino id="Z2" />
+				<Vicino id="Z3" />
+			</Vicini>
+			<Strade>
+				<StradeIn>
+					<StradaIn id="1I1"/>
+					<StradaIn id="1I2"/>
+				</StradeIn>
+				<StradeOut>
+					<StradaOut id="1O1"/>
+					<StradaOut id="1O2"/>
+				</StradeOut>
+			</Strade>
+			<Marciapiedi>
+				<MarciapiediIn>
+					<MarciapiedeIn id="1MI1"/>
+					<MarciapiedeIn id="1MI2"/>
+				</MarciapiediIn>
+				<MarciapiediOut>
+					<MarciapiedeOut id="1MO1"/>
+					<MarciapiedeOut id="1MO2"/>
+				</MarciapiediOut>
+			</Marciapiedi>
+			<Pedoni>
+				<Pedone id="P0" zone="1,3,4,2" percorso="1MI1,1MO2,3MI1,3MO2,4MI2,4MO1,2MI1,2MO2,1MI1,R" />			
+			</Pedoni>
+			<!--<Automobili>
+				<Automobile id="M0" zone="1,1" percorso="1I1_1,1I1_2,1O2,X,1I2,1O1,R" guidatore="P1"/>
+			</Automobili>-->
+		</Zona>
+
+		<Zona id="Z2">
+			<Vicini>
+				<Vicino id="Z4" />
+				<Vicino id="Z1" />
+			</Vicini>
+			<Strade>
+				<StradeIn>
+					<StradaIn id="2I1"/>
+					<StradaIn id="2I2"/>
+				</StradeIn>
+				<StradeOut>
+					<StradaOut id="2O1"/>
+					<StradaOut id="2O2"/>
+				</StradeOut>
+			</Strade>
+			<Marciapiedi>
+				<MarciapiediIn>
+					<MarciapiedeIn id="2MI1"/>
+					<MarciapiedeIn id="2MI2"/>
+				</MarciapiediIn>
+				<MarciapiediOut>
+					<MarciapiedeOut id="2MO1"/>
+					<MarciapiedeOut id="2MO2"/>
+				</MarciapiediOut>
+			</Marciapiedi>
+		</Zona>
+
+		<Zona id="Z3">
+			<Vicini>
+				<Vicino id="Z1" />
+				<Vicino id="Z4" />
+			</Vicini>
+			<Strade>
+				<StradeIn>
+					<StradaIn id="3I1"/>
+					<StradaIn id="3I2"/>
+				</StradeIn>
+				<StradeOut>
+					<StradaOut id="3O1"/>
+					<StradaOut id="3O2"/>
+				</StradeOut>
+			</Strade>
+			<Marciapiedi>
+				<MarciapiediIn>
+					<MarciapiedeIn id="3MI1"/>
+					<MarciapiedeIn id="3MI2"/>
+				</MarciapiediIn>
+				<MarciapiediOut>
+					<MarciapiedeOut id="3MO1"/>
+					<MarciapiedeOut id="3MO2"/>
+				</MarciapiediOut>
+			</Marciapiedi>
+		</Zona>
+
+		<Zona id="Z4">
+			<Vicini>
+				<Vicino id="Z2" />
+				<Vicino id="Z3" />
+			</Vicini>
+			<Strade>
+				<StradeIn>
+					<StradaIn id="4I1"/>
+					<StradaIn id="4I2"/>
+				</StradeIn>
+				<StradeOut>
+					<StradaOut id="4O1"/>
+					<StradaOut id="4O2"/>
+				</StradeOut>
+			</Strade>
+			<Marciapiedi>
+				<MarciapiediIn>
+					<MarciapiedeIn id="4MI1"/>
+					<MarciapiedeIn id="4MI2"/>
+				</MarciapiediIn>
+				<MarciapiediOut>
+					<MarciapiedeOut id="4MO1"/>
+					<MarciapiedeOut id="4MO2"/>
+				</MarciapiediOut>
+			</Marciapiedi>
+		</Zona>
+	</Zone>
+</xml>
