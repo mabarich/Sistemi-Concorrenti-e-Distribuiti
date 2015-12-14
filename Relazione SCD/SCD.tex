@@ -1,0 +1,229 @@
+\documentclass{article}
+
+\newcommand{\NomeDocumento}{Sistemi Concorrenti e Distribuiti}
+\newcommand{\Versione}{1.0}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{midpage}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage[italian]{babel}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\pagestyle{fancy}
+
+\lfoot{\bfseries \NomeDocumento}
+\cfoot{}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{titlepage} % era midpage
+
+\begin{center}
+
+\begin{figure}[H]
+\begin{center} % \centering
+\includegraphics[ width=110px]{./img/Logo_Padova.png}
+\label{Logo}
+\end{center} % aggiunta
+\end{figure}
+
+\begin{center}
+ \vspace{1em}
+
+ {\Large \textsc{Universit\`{a} degli Studi di Padova}}\\
+
+\vspace{1em}
+
+ {\Large \textsc{Corso di Laurea Magistrale in Informatica}}\\
+ 
+ \vspace{5em}
+ 
+ {\Large Sistemi Concorrenti e Distribuiti}\\
+
+ \vspace{5em}
+
+ {\LARGE \textbf{Traffico citt\`{a}}}\\
+
+ \clearpage{\pagestyle{empty}\cleardoublepage} % puoi toglierlo, credo
+
+\end{center}
+
+\end{center}
+
+\end{titlepage} % era midpage
+\newpage
+\null 
+\newpage
+
+\newpage
+\begin{itemize}
+\color{black}\item {Versione 1}
+\color{green}\item {Versione 2}
+\end{itemize}
+\color{black}\emph{Modifiche:}
+\begin{itemize}
+\item {-}
+\end{itemize}
+\color{black}\emph{Aggiunte:}
+\begin{itemize}
+\item {Stesura documento}
+\end{itemize}
+\newpage
+
+\tableofcontents 
+\listoftables
+\listoffigures
+\newpage
+
+\pagestyle{fancy}
+
+\lhead{
+	\color{black}
+	\bfseries \textsf{\normalsize Introduzione\\} 
+}
+\chead{}
+\rhead{
+	\color{black}
+	\bfseries \textsf{\normalsize v.\Versione\\} 
+}
+\section{Introduzione}
+Questo documento ha lo scopo di presentare il lavoro svolto durante l\textquoteright{} attivit\`{a} di stage. 
+
+Verr\`{a} presentata inizialmente l\textquoteright{} analisi eseguita per determinare i requisiti che dovranno essere soddisfatti dall\textquoteright{} applicazione, per poi descrivere la progettazione e la realizzazione dell\textquoteright{} applicazione.
+\subsection{Problema}
+- Breve descrizione \newline
+- Direzioni, struttura città, ecc...\newline
+- Piccola lista di requisiti e di limitazioni imposte \newline 
+\newpage
+
+\pagestyle{fancy}
+
+\lhead{
+	\color{black}
+	\bfseries \textsf{\normalsize Esecuzione\\} 
+}
+\chead{}
+\rhead{
+	\color{black}
+	\bfseries \textsf{\normalsize v.\Versione\\} 
+}
+
+\section{Esecuzione}
+\subsection{SBT}
+La piattaforma di Android offre due importantissime componenti per la realizzazione di applicazioni, ovvero le activity ed i service.
+\subsection{Scala}
+Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicazione provvista di una interfaccia grafica. Sono quindi usate principalmente per operazioni che richiedono una interazione con l\textquoteright{} utente.
+
+\subsection{Akka}
+Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicazione provvista di una interfaccia grafica. Sono quindi usate principalmente per operazioni che richiedono una interazione con l\textquoteright{} utente.
+
+\newpage
+
+\pagestyle{fancy}
+
+\lhead{
+	\color{black}
+	\bfseries \textsf{\normalsize Studio del problema\\} 
+}
+\chead{}
+\rhead{
+	\color{black}
+	\bfseries \textsf{\normalsize v.\Versione\\} 
+}
+
+\section{Studio del problema}
+- Gerarchia \newline
+- Motivazione scelta gerarchia
+\subsection{Entit\`{a}}
+- Lista entità
+\subsection{Stati}
+- Lista stati
+\subsection{Azioni}
+- Tabellona
+\subsection{Sincronizzazione}
+- Non so tuttora se sia giusto
+
+\newpage
+
+\pagestyle{fancy}
+
+\lhead{
+	\color{black}
+	\bfseries \textsf{\normalsize Studio del problema\\} 
+}
+\chead{}
+\rhead{
+	\color{black}
+	\bfseries \textsf{\normalsize v.\Versione\\} 
+}
+
+\section{Implementazione}
+\subsection{Progettazione}
+- Immagine schema
+\subsubsection{Linguaggio}
+Il linguaggio scelto per realizzare il progetto \`{e} Scala. Tramite l\textquoteright{} uso del toolkit Akka, \`{e} infatti possibile applicazioni concorrenti, distribuite e resistenti agli errori. Il modello ad attori permette di gestire in maniera più semplice ed efficiente i problemi di concorrenza.
+
+\`{E} permessa inoltre una buona gestione degli errori. Ogni attore \`{e} supervisionato da un altro attore. Ogni attore che provocher\`{a} un errore dovr\`{a} infatti riferire il problema al suo supervisore, il quale dovr\`{a} reagire in maniera appropriata.
+Akka permette anche di realizzare applicazioni distribuite. \`{E} possibile infatti creare attori in diversi nodi all\textquoteright{} interno di un cluster. Tali attori potranno comunicare senza alcun problema nonostante vengano eseguiti in nodi diversi.
+\subsubsection{Concorrenza}
+- Assenza di lock, condisioni e cagate varie \newline
+- Semafori e priorità
+\subsubsection{Distribuzione}
+- Sincronizzazioni iniziali \newline
+- Caduta zone \newline
+- Invio messaggi e ACK
+\subsubsection{Lista classi}
+- Lista classi, breve descrizione e funzionamento
+\subsubsection{Descrizione classi}
+- Diagramma delle classi
+\subsubsection{Correttezza ordinamento messaggi}
+- Scrivo che ogni messaggio arriva prima di altri (aggiorno con la sincronizzazione iniziale)
+\subsection{Funzionalit\`{a} non implementate}
+- Motivazioni \newline
+- Salvataggio di stato ogni tanto (quando una zona torna su, dovrebbe avere un metodo di recupero dei mezzi che aveva) \newline
+- Grafica (creazione, ogni corsia, marciapiede, tratto e striscia pedonale ha un riferimento ad una label che modificherebbe man mano) \newline
+\subsection{Screenshots}
+- Fermata autobus con pedoni che salgono e scendono \newline
+- Code ai semafori \newline
+- Caduta zone e deviazioni
+
+\newpage
+
+\pagestyle{fancy}
+
+\lhead{
+	\color{black}
+	\bfseries \textsf{\normalsize Bibliografia\\} 
+}
+\chead{}
+\rhead{
+	\color{black}
+	\bfseries \textsf{\normalsize v.\Versione\\} 
+}
+\section{Bibliografia}
+\begin{itemize}
+\item {[1]} Scala: \textit{http://www.scala-lang.org/documentation/}
+\item {[2]} Akka: \textit{http://doc.akka.io/docs/akka/snapshot/scala.html}
+\item {[3]} SBT: \textit{http://www.scala-sbt.org/}
+\item {[4]} Sistemi Concorrenti e Distribuiti: \textit{http://www.math.unipd.it/$\sim$tullio/SCD/2014/}
+\item {[5]} Routing: \textit{http://en.wikipedia.org/wiki/List\_of\_ad\_hoc\_routing\_protocols}
+\end{itemize}
+\begin{midpage}
+\begin{center}
+\null
+\end{center}
+\end{midpage}
+\end{document}

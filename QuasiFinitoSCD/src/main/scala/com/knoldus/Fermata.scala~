@@ -1,0 +1,72 @@
+package com.knoldus
+
+import akka.actor.Actor
+import akka.actor.ActorRef
+import scala.collection.mutable.ArrayBuffer
+
+class Fermata (z: ActorRef, i: String) extends Actor 
+{	
+	var codaInEntrata = ArrayBuffer[Persona]();
+	var codaInUscita = ArrayBuffer[Persona]();
+	var zona: ActorRef=z;
+	var id=i;
+
+  	override def receive: Actor.Receive = 
+	{
+		case z:ActorRef => zona=z;
+		case m:String => start(m);
+		case p:Persona => personaRicevuta(p);	
+		case m:Autobus =>	corrieraRicevuta (m, sender);		   
+	}
+
+	def start (m:String): Unit  = id=m;
+
+	def personaRicevuta (p:Persona): Unit  =
+	{
+		println("Persona "+p.id+" arrivata alla fermata"); 
+		codaInEntrata+=p;
+	}
+
+	def corrieraRicevuta (m:Autobus, sender: ActorRef): Unit  =
+	{
+		println("Mezzo "+m.id+" arrivato alla fermata "+id); 
+		var uscita:ArrayBuffer[Persona]=null;
+		uscita=m.togli(id);
+		var num=m.postiLiberi;
+		var restanti= ArrayBuffer[Persona]();
+		if(codaInEntrata.size!=0 && num!=0)
+		{
+			for (p <- 0 to codaInEntrata.size-1)
+			{	
+				var dove=codaInEntrata(p).to; 
+				if (dove.substring(1)==m.id && num!=0) //.to() ritorna FA0 visto che non ho mai fatto next .inc()
+				{
+					codaInEntrata(p).inc;
+					codaInEntrata(p).inc;
+					m.aggiungi(codaInEntrata(p));
+					num-= 1;
+					println("Il passeggero "+codaInEntrata(p).id+" è salito sulla corriera");
+				}
+				else if (dove.substring(1)==m.id && num==0) 
+				{
+					println("Il passeggero "+codaInEntrata(p).id+" non può salire in corriera perché è piena");
+					restanti+=codaInEntrata(p);
+				}
+				else
+					restanti+=codaInEntrata(p);
+			}
+		}
+		else
+			println("L'autobus non ha posti liberi (oppure nessuno deve salire)");
+		codaInEntrata=restanti;
+		if (uscita!=null && uscita.size!=0)
+		{
+			//println("Ho "+uscita.size+" persone scese dalla corriera");
+			for (p <- 0 to uscita.size-1)
+			{	
+				zona!uscita(p);
+			}
+		}
+		sender!m;
+	}	
+}

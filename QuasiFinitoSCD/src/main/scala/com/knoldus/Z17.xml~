@@ -1,0 +1,23 @@
+<xml>
+	<Zona id="Z17">
+		<Vicini>
+			<Vicino id="Z14" />
+		</Vicini>
+		<Strade>
+			<StradeIn>
+				<StradaIn id="17I1"/>
+			</StradeIn>
+			<StradeOut>
+				<StradaOut id="17O1"/>
+			</StradeOut>
+		</Strade>
+		<Marciapiedi>
+			<MarciapiediIn>
+				<MarciapiedeIn id="17MI1"/>
+			</MarciapiediIn>
+			<MarciapiediOut>
+				<MarciapiedeOut id="17MO1"/>
+			</MarciapiediOut>
+		</Marciapiedi>
+	</Z1ona>
+</xml>
