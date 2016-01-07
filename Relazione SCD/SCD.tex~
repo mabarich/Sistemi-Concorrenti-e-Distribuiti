@@ -12,6 +12,7 @@
 \usepackage{float}
 \usepackage[italian]{babel}
 \usepackage{hyperref}
+\usepackage{lettrine}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -100,13 +101,11 @@
 	\bfseries \textsf{\normalsize v.\Versione\\} 
 }
 \section{Introduzione}
-Questo documento ha lo scopo di presentare il lavoro svolto durante l\textquoteright{} attivit\`{a} di stage. 
-
-Verr\`{a} presentata inizialmente l\textquoteright{} analisi eseguita per determinare i requisiti che dovranno essere soddisfatti dall\textquoteright{} applicazione, per poi descrivere la progettazione e la realizzazione dell\textquoteright{} applicazione.
+\lettrine[lines=1]{Q}{}uesto documento ha lo scopo di presentare il lavoro svolto per il corso di Sistemi Concorrenti e Distribuiti per il corso di Laurea Magistrale in Informatica. 
+\par Verr\`{a} presentata inizialmente una breve descrizione del problema, seguita poi dall\textquoteright{}analisi di tale problema e dalla presentazione di una delle possibili implementazioni.
 \subsection{Problema}
-- Breve descrizione \newline
-- Direzioni, struttura città, ecc...\newline
-- Piccola lista di requisiti e di limitazioni imposte \newline 
+\lettrine[lines=1]{I}{}l problema consiste nello studio e nell\textquoteright{}implementazione di sistema rappresentante una citt\`{a} con i suoi residenti. La citt\`{a} deve gestire in maniera corretta tutti gli aspetti di concorrenza e di distribuzione. Requisiti obbligatori sono dunque la distribuzione e la scalabilit\`{a}. 
+
 \newpage
 
 \pagestyle{fancy}
@@ -122,13 +121,41 @@ Verr\`{a} presentata inizialmente l\textquoteright{} analisi eseguita per determ
 }
 
 \section{Esecuzione}
+\lettrine[lines=1]{P}{}rima di illustrare per\`{o} lo studio fatto, verr\`{a} illustrato brevemente il software necessario per la corretta esecuzione dell\textquoteright{}applicazione.
 \subsection{SBT}
-La piattaforma di Android offre due importantissime componenti per la realizzazione di applicazioni, ovvero le activity ed i service.
-\subsection{Scala}
-Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicazione provvista di una interfaccia grafica. Sono quindi usate principalmente per operazioni che richiedono una interazione con l\textquoteright{} utente.
+\lettrine[lines=1]{S}{}BT \`{e} un build tool open source usato per progetti Scala e Java. Al momento, nonostate varie critiche, \`{e} il build tool pi\`{u} utilizzato per i progetti realizzati in Scala.
+Per poter eseguire il progetto, sono stati offerti due diversi metodi. 
 
-\subsection{Akka}
-Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicazione provvista di una interfaccia grafica. Sono quindi usate principalmente per operazioni che richiedono una interazione con l\textquoteright{} utente.
+\par Il primo consente di eseguire tutto senza fornire alcun parametro. Baster\`{a} semplicemente avviare l\textquoteright{}esecuzione tramite il comando \textit{sbt run} come nella figura sotto riportata. In questo modo sar\`{a} l\textquoteright{}applicazione verr\`{a} eseguita con una sola JVM.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[ width=350px]{./img/SBT1.png}
+\caption{Unica JVM}
+\label{fig:Unica JVM}
+\end{center}
+\end{figure}
+
+\par Il secondo consente invece di specificare l\textquoteright{}identificativo e la porta desiderata per ogni zona della citt\`{a}, la quale verr\`{a} quindi eseguita in una propria JVM differente. Questa modalit\`{a} \`{e} molto utile in quanto consentir\`{a} di \lq{}rimuovere\rq{} e \lq{}aggiungere\rq{} zone a piacimento, ma questo verr\`{a} spiegato meglio in seguito.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[ width=350px]{./img/SBT2.png}
+\caption{Multiple JVM}
+\label{fig:Multiple JVM}
+\end{center} 
+\end{figure}
+
+\subsection{Scala ed Akka}
+\lettrine[lines=1]{I}{}l linguaggio scelto per realizzare il progetto \`{e} Scala. Per l\textquoteright{}installazione del toolkit Akka baster\`{a} semplicemente specificare nel file di configurazione (\textit{build.sbt}) del progetto le \lq{}dipendenze\rq{}. In questo modo, alla prima esecuzione, SBT scaricher\`{a} tutto il necessario per la corretta esecuzione. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[ width=350px]{./img/build.png}
+\caption{Build.sbt}
+\label{fig:Build.sbt}
+\end{center} 
+\end{figure}
 
 \newpage
 
@@ -147,8 +174,10 @@ Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicaz
 \section{Studio del problema}
 - Gerarchia \newline
 - Motivazione scelta gerarchia
+- Piccola lista di requisiti e di limitazioni imposte \newline 
+- Direzioni, struttura citt\`{a}, ecc...\newline
 \subsection{Entit\`{a}}
-- Lista entità
+- Lista entit\`{a}
 \subsection{Stati}
 - Lista stati
 \subsection{Azioni}
@@ -174,16 +203,91 @@ Un\textquoteright{} activity \`{e} una componente dell\textquoteright{} applicaz
 \subsection{Progettazione}
 - Immagine schema
 \subsubsection{Linguaggio}
-Il linguaggio scelto per realizzare il progetto \`{e} Scala. Tramite l\textquoteright{} uso del toolkit Akka, \`{e} infatti possibile applicazioni concorrenti, distribuite e resistenti agli errori. Il modello ad attori permette di gestire in maniera più semplice ed efficiente i problemi di concorrenza.
+\lettrine[lines=1]{I}{}l linguaggio scelto per realizzare il progetto \`{e} Scala. Tramite l\textquoteright{}uso del toolkit Akka, \`{e} infatti possibile applicazioni concorrenti, distribuite e resistenti agli errori. Il modello ad attori permette di gestire in maniera pi\`{u} semplice ed efficiente i problemi di concorrenza.
 
-\`{E} permessa inoltre una buona gestione degli errori. Ogni attore \`{e} supervisionato da un altro attore. Ogni attore che provocher\`{a} un errore dovr\`{a} infatti riferire il problema al suo supervisore, il quale dovr\`{a} reagire in maniera appropriata.
-Akka permette anche di realizzare applicazioni distribuite. \`{E} possibile infatti creare attori in diversi nodi all\textquoteright{} interno di un cluster. Tali attori potranno comunicare senza alcun problema nonostante vengano eseguiti in nodi diversi.
+\par \`{E} permessa inoltre una buona gestione degli errori. Ogni attore \`{e} supervisionato da un altro attore. Ogni attore che provocher\`{a} un errore dovr\`{a} infatti riferire il problema al suo supervisore, il quale dovr\`{a} reagire in maniera appropriata.
+\par Akka permette anche di realizzare applicazioni distribuite. \`{E} possibile infatti creare attori in diversi nodi all\textquoteright{}interno di un cluster. Tali attori potranno comunicare senza alcun problema nonostante vengano eseguiti in nodi diversi.
 \subsubsection{Concorrenza}
 - Assenza di lock, condisioni e cagate varie \newline
-- Semafori e priorità
+- Semafori e priorit\`{a} \newline
+
+\lettrine[lines=1]{O}{}gni componente del progetto \`{e} rappresentata da un attore. Queste entit\`{a} comunicano tra di loro in modo diretto tramite scambio di messaggi. In questo modo ho pi\`{u} comunicazione, ma \`{e} meno probabile che si verifichino situazioni pericolose o deadlock. Di conseguenza non saranno presenti variabili condivise tra gli attori: ogni attore avr\`{a} delle proprie variabili modificabili solamente da se stesso in seguito alla ricezioni di certi messaggi. Non vi \`{e} nemmeno bisogno di utilizzare synchronized, wait() o notify() per la gestione di eventuali liste. Ogni messaggio infatti verr\`{a} gestito singolarmente, mentre tutti gli altri rimarranno in attesa di essere letti.
+\par Come detto in precedenza, non possono verificarsi dei deadlock non verificandosi tutte e 4 le condizioni relative al deadlock. Non ci sono infatti situazioni di accumulo di risorse necessarie ad altri processi (ogni attore riceve mezzi o persone, ma non deve bloccarsi per aspettarle). Non sono presenti quindi situazioni di attesa circolare che potrebbero portare ad uno stallo.
+\par Non si pu\`{o} verificare nemmeno una situazione di starvation; i vari attori infatti non avranno priorit\`{a} diverse. L\textquoteright{}unica situazione in cui vengono gestite priorit\`{a} diverse \`{e} quella della ricezione di messaggi relativi ai semafori. All\textquoteright{}arrivo di un messaggio \lq semaforo rosso” o \lq semaforo verde”, questi saranno letti subito dopo il messaggio attuale. Akka per\`{o} garantisce l\textquoteright{}ordinamento dei messaggi con la stessa priorit\`{a} provenienti dallo stesso mittente, quindi tutti i messaggi relativi a mezzi o pedoni saranno letti prima o poi.
+Tale gestione delle priorit\`{a} avverr\`{a} nel seguente modo: verranno usati  due stati (due metodi \lq receive\rq) per poter gestire correttamente gli invii, uno da usare quando il semaforo \`{e} rosso e l\textquoteright{}altro da usare quando il semaforo \`{e} verde. Il primo ricever\`{a} i mezzi e li salva nella coda. Appena verr\`{a} ricevuto un messaggio (semaforo verde), lo stato verr\`{a} cambiato. Il secondo dunque invier\`{a} i mezzi in coda ed eventuali nuovi mezzi ricevuti finch\'{e} non ricever\`{a} un certo messaggio (semaforo rosso). In questo caso si ritorner\`{a} al primo metodo \lq receive\rq.
+Per gestire correttamente i semafori e quindi fermare subito il trasferimento dei mezzi, l\textquoteright{}attore necessita di una mailbox particolare. Sar\`{a} infatti necessario l\textquoteright{}utilizzo di una \lq BoundedStablePriorityMailbox\rq in quanto essa gestisce messaggi con priorit\`{a}, garantendo al tempo stesso l\textquoteright{}ordinamento corretto di messaggi con la stessa priorit\`{a}. 
+\par Di seguito si potr\`{a} vedere uno schema che dimostra la correttezza dell\textquoteright{}idea appena presentata.
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Semaforo1.png}
+\caption{Semaforo 1}
+\label{fig:Semaforo 1}
+\end{center}
+\end{figure}
+Un attore inizia con il \lq receive” relativo al semaforo verde. Questo legge un mezzo ricevuto e lo rimanda al tratto o alla strada di destinazione. Supponiamo ora che l\textquoteright{}attore stia ricevendo dei mezzi ed un messaggio \lq Semaforo rosso”. All\textquoteright{}arrivo di un messaggio \lq Semaforo rosso”, questo verr\`{a} letto prima dei vari mezzi in arrivo.
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Semaforo2.png}
+\caption{Semaforo 2}
+\label{fig:Semaforo 2}
+\end{center}
+\end{figure}
+Quel messaggio far\`{a} cambiare mailbox all\textquoteright{}attore. Gli altri messaggi non ancora gestiti verranno quindi letti con la nuova mailbox. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Semaforo3.png}
+\caption{Semaforo 3}
+\label{fig:Semaforo 3}
+\end{center}
+\end{figure}
+Tale mailbox ora ha il compito di salvare tutti i mezzi in arrivo, simulando quindi la coda che si forma quando c\textquoteright{}\`{e} un semaforo rosso.
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Semaforo4.png}
+\caption{Semaforo 4}
+\label{fig:Semaforo 4}
+\end{center}
+\end{figure}
+Supponendo ora che arrivi un messaggio \lq Semaforo verde\rq, lo stato dell\textquoteright{}attore cambier\`{a} nuovamente.
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Semaforo5.png}
+\caption{Semaforo 5}
+\label{fig:Semaforo 5}
+\end{center}
+\end{figure}
+Siccome i messaggi gi\`{a} letti non possono pi\`{u} essere letti dalla prima mailbox, dovranno essere rimandati. Per fare funzionare il tutto, i mezzi gi\`{a} accodati verranno rispediti con una priorit\`{a} un po\textquoteright{} pi\`{u} alta. Dunque prima di terminare la gestione del messaggio relativo al semaforo, si dovr\`{a} inviare all\textquoteright{}attore stesso TUTTI i mezzi accodati. Nell\textquoteright{}esempio dunque, \lq Tratto1\rq gestir\`{a} prima \lq M1\rq ed \lq M3\rq in quanto hanno priorit\`{a} media (\lq M1\rq verr\`{a} gestito per primo in quanto una \lq BoundedStablePriorityMailbox\rq garantisce il corretto ordinamento per i messaggi con la stessa priorit\`{a} ricevuti dallo stesso mittente) per poi gestire \lq M5\rq. Nel caso arrivasse un nuovo messaggio \lq Semaforo rosso\rq, la situazione verr\`{a} gestita come gi\`{a} spiegato all\textquoteright{}inizio. Tutti i mezzi non ancora gestiti verranno quindi letti con la seconda mailbox e verranno accodati.
+\par La gestione dei semafori inoltre risulta molto semplice. Basta solo impostare un timer per poter inviare a se stesso un messaggio per fare scattare i semafori. Tale messaggio per\`{o} dovr\`{a} essere letto subito (e dovr\`{a} quindi avere una maggiore priorit\`{a} rispetto a mezzi e pedoni), quindi ci sar\`{a} bisogno di una \lq PriorityMailbox” anche per l\textquoteright{}incrocio.
+\par La progettazione \`{e} stata fatta in modo tale da rendere il sistema pi\`{u} scalabile possibile. Esso infatti funziona con una quantit\`{a} qualsiasi di strade, di fermate, di mezzi e di persone. Questo perch\'{e} ogni componente dovr\`{a} comunicare solamente con un\textquoteright{}altra entit\`{a}.
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Strade2.png}
+\caption{Strade 2}
+\label{fig:Strade 2}
+\end{center}
+\end{figure}
+Ogni strada infatti dovr\`{a} solo guardare se nella STESSA posizione della lista Cont\_In o Cont\_Out c\textquoteright{}\`{e} o meno un riferimento. Ovviamente ci dovr\`{a} essere un controllo per evitare che la strada \lq I4\_2\rq continui a mandare un messaggio sempre a se stessa. Dato che si era deciso di permettere al massimo una divisione per una strada, baster\`{a} controllare, ad esempio, se l\textquoteright{}identificativo della strada contiene \lq \_2\rq  alla fine. In tal caso comunicher\`{a} con quella strada, altrimenti comunicher\`{a} con l\textquoteright{}incrocio o con la zona vicina a seconda se la strada \`{e} \lq entrante” oppure \lq uscente\rq. Baster\`{a} quindi, durante la creazione delle strade,  impostare correttamente i destinatari dei messaggi. Ogni zona potr\`{a} quindi avere un numero arbitrario di strade e ci potr\`{a} essere fino ad una fermata per ogni strada.
+\par Come gi\`{a} detto inoltre, non \`{e} necessario l\textquoteright{}utilizzo di liste per poter salvare mezzi e pedoni. Tali code saranno infatti gestite automaticamente dalle mailbox dei vari attori (che gestiscono in maniera automatica l\textquoteright{}ordinamento. Akka infatti garantisce la lettura ordinata dei messaggi ricevuti dallo stesso mittente). 
+\par Tale progettazione inoltre non comporta accodamenti forzati. Nessuna componente del sistema infatti deve aspettare che altre componenti finiscano il loro lavoro per poter continuare il proprio (ad eccezione dell\textquoteright{}incrocio con la gestione delle precedenze). 
+
+
 \subsubsection{Distribuzione}
 - Sincronizzazioni iniziali \newline
-- Invio messaggi e ACK
+- Caduta zone \newline
+
+
+\lettrine[lines=1]{P}{}er la realizzazione del sistema si vuole utilizzare il Clustering di Akka. Ogni cluster rappresenta un insieme di nodi (la cui posizione non \`{e} necessariamente nota al programmatore). L\textquoteright{}Akka Clustering \`{e} stato preferito rispetto all\textquoteright{}Akka Remoting in quanto, con quest\textquoteright{}ultimo, ci sarebbe l\textquoteright{} obbligato a conoscere gli indirizzi IP di tutte le zone. Nonostante ogni zona venga assegnata ad un nodo diverso, tutte le zone fanno parte dello stesso Actor System. In questo modo, ogni zona pu\`{o} richiedere (tramite un semplice \lq contex.actorSelection(…)\rq) e ricevere i riferimenti alle zone vicine. Tali riferimenti verranno quindi utilizzati dalle varie componenti per permettere l\textquoteright{}invio di mezzi e persone.
+\par La normale comunicazione tra le varie zone, dato che avviene tramite messaggi, utilizza una semantica \lq at-most-once\rq. Questo non va bene in quanto non \`{e} garantito l\textquoteright{}arrivo e la conseguente lettura dei messaggi  da parte delle altre zone. Prima di poter dunque eliminare definitivamente un mezzo da una zona, bisogna essere certi che quella vicina l\textquoteright{}abbia ricevuto correttamente.  Una semplice soluzione sarebbe quella di utilizzare il trait \lq AtLeastOnceDelivery\rq, ma esso comporta la gestione automatica di ulteriori invii in seguito a dei fallimenti, non garantendo pi\`{u} quindi il corretto ordinamento dei messaggi. Si \`{e} optato quindi per l\textquoteright{}utilizzo dei Futures. Ogni corsia o marciapiede dovr\`{a} aspettare una risposta dalla zona di destinazione prima di poter inviare il mezzo successivo. In caso la risposta non venga ricevuta in tempo, si dovr\`{a} ritentare con un nuovo invio.  Ovviamente ogni zona dovr\`{a} essere in grado di scartare eventuali duplicati tramite l\textquoteright{}uso delle liste \lq mezziRicevuti\rq e \lq personeRicevute\rq. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics{./img/Protocollo.png}
+\caption{Invio pedoni}
+\label{fig:Invio pedoni}
+\end{center}
+\end{figure}
+Questo pu\`{o} causare dei rallentamenti, ma consentir\`{a} al sistema di funzionare correttamente. L\textquoteright{}importante \`{e} non scegliere un tempo di attesa troppo breve (non voglio inviare troppi messaggi inutili), ma nemmeno troppo esteso (non voglio causare troppi rallentamenti solo per aspettare un messaggio).
+\par La progettazione \`{e} stata fatta in modo tale da rendere il sistema pi\`{u} scalabile possibile. Il sistema infatti funziona con una quantit\`{a} qualsiasi di zone. Come gi\`{a} spiegato per la parte concorrente infatti, baster\`{a} passare i riferimenti corretti alle strade uscenti durante la fase di creazione per poter avere un numero arbitrario di zone.
+
 \subsubsection{Lista classi}
 - Lista classi, breve descrizione e funzionamento
 \subsubsection{Descrizione classi}

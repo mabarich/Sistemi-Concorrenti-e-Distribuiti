@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.7)  14 DEC 2015 17:34
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.7)  29 DEC 2015 16:30
 entering extended mode
  %&-line parsing enabled.
 **SCD.tex
@@ -229,64 +229,82 @@ Package: atbegshi 2008/07/31 v1.9 At begin shipout hook (HO)
 (/usr/share/texmf-texlive/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
 \Fld@listcount=\count100
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 21.
+) (./lettrine.sty
+File: lettrine.sty 2002/10/26 v1.4 (D. Flipo)
+\c@DefaultLines=\count101
+\DefaultFindent=\dimen122
+\DefaultNindent=\dimen123
+\DefaultSlope=\dimen124
+\L@lbox=\box28
+\L@tbox=\box29
+\c@L@lines=\count102
+\L@Pindent=\dimen125
+\L@Findent=\dimen126
+\L@Nindent=\dimen127
+\L@lraise=\dimen128
+\L@first=\dimen129
+\L@next=\dimen130
+\L@slope=\dimen131
+\L@height=\dimen132
+
+(/usr/share/texmf-texlive/tex/latex/lettrine/lettrine.cfg))
+Package hyperref Info: Option `colorlinks' set `true' on input line 22.
  (./SCD.aux)
 \openout1 = `SCD.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 30.
-LaTeX Font Info:    Try loading font information for LGR+cmr on input line 30.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 31.
+LaTeX Font Info:    Try loading font information for LGR+cmr on input line 31.
 
 (/usr/share/texmf-texlive/tex/generic/babel/lgrcmr.fd
 File: lgrcmr.fd 2008/06/17 v2.3 Greek Computer Modern
 )
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
 
 (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count101
-\scratchdimen=\dimen122
-\scratchbox=\box28
-\nofMPsegments=\count102
-\nofMParguments=\count103
+\scratchcounter=\count103
+\scratchdimen=\dimen133
+\scratchbox=\box30
+\nofMPsegments=\count104
+\nofMParguments=\count105
 \everyMPshowfont=\toks18
-\MPscratchCnt=\count104
-\MPscratchDim=\dimen123
-\MPnumerator=\count105
+\MPscratchCnt=\count106
+\MPscratchDim=\dimen134
+\MPnumerator=\count107
 \everyMPtoPDFconversion=\toks19
 )
-Package hyperref Info: Link coloring ON on input line 30.
+Package hyperref Info: Link coloring ON on input line 31.
  (/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
 (/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
 Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
-\c@section@level=\count106
+\c@section@level=\count108
 )
-LaTeX Info: Redefining \ref on input line 30.
-LaTeX Info: Redefining \pageref on input line 30.
+LaTeX Info: Redefining \ref on input line 31.
+LaTeX Info: Redefining \pageref on input line 31.
  (./SCD.out)
 (./SCD.out)
 \@outlinefile=\write3
 \openout3 = `SCD.out'.
 
-\AtBeginShipoutBox=\box29
- <./img/Logo_Padova.png, id=91, 598.235pt x 602.25pt>
+\AtBeginShipoutBox=\box31
+ <./img/Logo_Padova.png, id=87, 598.235pt x 602.25pt>
 File: ./img/Logo_Padova.png Graphic file (type png)
 
 <use ./img/Logo_Padova.png> [1
@@ -296,17 +314,17 @@ TeX warning (ext4): destination with the same identifier (name{page.1}) has bee
 n already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.69 \newpage
+l.70 \newpage
               [1
 
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 73.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 74.
  (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 74.
  [2]
 (./SCD.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -326,60 +344,137 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout6 = `SCD.lof'.
 
  [3]
-Missing character: There is no √ in font cmr10!
-Missing character: There is no † in font cmr10!
-
-Underfull \hbox (badness 10000) in paragraph at lines 107--110
-
- []
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 22.54448pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4] [5]
-Missing character: There is no √ in font cmr10!
-Missing character: There is no † in font cmr10!
- [6]
-Missing character: There is no √ in font cmr10!
-Missing character: There is no π in font cmr10!
-Missing character: There is no √ in font cmr10!
-Missing character: There is no † in font cmr10!
+[4] <./img/SBT1.png, id=169, 728.7225pt x 454.69875pt>
+File: ./img/SBT1.png Graphic file (type png)
+ <use ./img/SBT1.png>
+Overfull \hbox (6.31378pt too wide) in paragraph at lines 133--134
+ [] 
+ []
 
-Underfull \hbox (badness 10000) in paragraph at lines 195--198
+<./img/SBT2.png, id=170, 728.7225pt x 454.69875pt>
+File: ./img/SBT2.png Graphic file (type png)
+ <use ./img/SBT2.png>
+Overfull \hbox (6.31378pt too wide) in paragraph at lines 143--144
+ [] 
+ []
+
+[5 <./img/SBT1.png>]
+Overfull \hbox (6.69893pt too wide) in paragraph at lines 150--151
+\OT1/cmr/m/n/10 toolk-it Ak-ka baster^^Ra sem-plice-mente speci-fi-care nel fil
+e di con-fig-u-razione (\OT1/cmr/m/it/10 build.sbt\OT1/cmr/m/n/10 )
+ []
+
+<./img/build.png, id=177, 882.29625pt x 147.55125pt>
+File: ./img/build.png Graphic file (type png)
+ <use ./img/build.png>
+Overfull \hbox (6.31378pt too wide) in paragraph at lines 154--155
+ [] 
+ []
+
+[6 <./img/SBT2.png> <./img/build.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 175--179
 
  []
 
-[7] [8]
-Overfull \hbox (43.49081pt too wide) in paragraph at lines 221--222
+[7]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+ [8] <./img/Semaforo1.png, id=196, 228.10219pt x 144.54pt>
+File: ./img/Semaforo1.png Graphic file (type png)
+
+<use ./img/Semaforo1.png>
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+
+<./img/Semaforo2.png, id=197, 284.56313pt x 143.78719pt>
+File: ./img/Semaforo2.png Graphic file (type png)
+
+<use ./img/Semaforo2.png> [9 <./img/Semaforo1.png>]
+<./img/Semaforo3.png, id=204, 223.58531pt x 151.3153pt>
+File: ./img/Semaforo3.png Graphic file (type png)
+
+<use ./img/Semaforo3.png>
+<./img/Semaforo4.png, id=205, 222.07968pt x 151.3153pt>
+File: ./img/Semaforo4.png Graphic file (type png)
+
+<use ./img/Semaforo4.png> [10 <./img/Semaforo2.png> <./img/Semaforo3.png>]
+<./img/Semaforo5.png, id=213, 254.45062pt x 146.79843pt>
+File: ./img/Semaforo5.png Graphic file (type png)
+
+<use ./img/Semaforo5.png> [11 <./img/Semaforo4.png> <./img/Semaforo5.png>]
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+
+<./img/Strade2.png, id=221, 203.25937pt x 166.37157pt>
+File: ./img/Strade2.png Graphic file (type png)
+ <use ./img/Strade2.png>
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+
+[12 <./img/Strade2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 272--274
+
+ []
+
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ¶ in font cmr10!
+<./img/Protocollo.png, id=229, 325.215pt x 262.73157pt>
+File: ./img/Protocollo.png Graphic file (type png)
+
+<use ./img/Protocollo.png> [13] [14 <./img/Protocollo.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 295--298
+
+ []
+
+[15]
+Overfull \hbox (43.49081pt too wide) in paragraph at lines 321--322
 []\OT1/cmr/m/n/10 [4] Sis-te-mi Con-cor-ren-ti e Dis-tribuiti: \OT1/cmr/m/it/10
  http://www.math.unipd.it/$\OMS/cmsy/m/n/10 ^^X$\OT1/cmr/m/it/10 tullio/SCD/201
 4/ 
  []
 
-AED: lastpage setting LastPage [9] (./SCD.aux) ) 
+AED: lastpage setting LastPage [16] (./SCD.aux) ) 
 Here is how much of TeX's memory you used:
- 4900 strings out of 495061
- 70698 string characters out of 1182622
- 143643 words of memory out of 3000000
- 7966 multiletter control sequences out of 15000+50000
- 7058 words of font info for 25 fonts, out of 3000000 for 9000
+ 5039 strings out of 495061
+ 72821 string characters out of 1182622
+ 148770 words of memory out of 3000000
+ 8073 multiletter control sequences out of 15000+50000
+ 7658 words of font info for 27 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 38i,12n,43p,333b,419s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts
-/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
-/cm/cmcsc10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.
-pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/sh
-are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fo
-nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmti10.pfb>
-Output written on SCD.pdf (10 pages, 448902 bytes).
+ 38i,13n,43p,1157b,419s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfont
+s/cm/cmcsc10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10
+.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/s
+hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
+nts/cm/cmti10.pfb>
+Output written on SCD.pdf (17 pages, 572240 bytes).
 PDF statistics:
- 216 PDF objects out of 1000 (max. 8388607)
- 35 named destinations out of 1000 (max. 500000)
- 182 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 296 PDF objects out of 1000 (max. 8388607)
+ 51 named destinations out of 1000 (max. 500000)
+ 224 words of extra memory for PDF output out of 10000 (max. 10000000)
 
