@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.7)  29 DEC 2015 16:30
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.7)  25 JAN 2016 18:35
 entering extended mode
  %&-line parsing enabled.
 **SCD.tex
@@ -249,7 +249,57 @@ File: lettrine.sty 2002/10/26 v1.4 (D. Flipo)
 
 (/usr/share/texmf-texlive/tex/latex/lettrine/lettrine.cfg))
 Package hyperref Info: Option `colorlinks' set `true' on input line 22.
- (./SCD.aux)
+ (./SCD.aux
+! Missing \endcsname inserted.
+<to be read again> 
+                   \unhbox 
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+
+LaTeX Warning: Label `fig:Citt\`{a}' multiply defined.
+
+! Missing \endcsname inserted.
+<to be read again> 
+                   \unhbox 
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+! Missing number, treated as zero.
+<to be read again> 
+                   \accent@spacefactor 
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+! Bad space factor (0).
+<to be read again> 
+                   \accent@spacefactor 
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+! Extra \endcsname.
+\@namedef ...xpandafter \def \csname #1\endcsname 
+                                                  
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+! Extra }, or forgotten \endgroup.
+\@newl@bel ...ined}}\global \@namedef {#1@#2}{#3}}
+                                                  
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+)
 \openout1 = `SCD.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
@@ -266,8 +316,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
 LaTeX Font Info:    ... okay on input line 31.
 LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 31.
 LaTeX Font Info:    Try loading font information for LGR+cmr on input line 31.
-
-(/usr/share/texmf-texlive/tex/generic/babel/lgrcmr.fd
+ (/usr/share/texmf-texlive/tex/generic/babel/lgrcmr.fd
 File: lgrcmr.fd 2008/06/17 v2.3 Greek Computer Modern
 )
 LaTeX Font Info:    ... okay on input line 31.
@@ -304,14 +353,20 @@ LaTeX Info: Redefining \pageref on input line 31.
 \openout3 = `SCD.out'.
 
 \AtBeginShipoutBox=\box31
- <./img/Logo_Padova.png, id=87, 598.235pt x 602.25pt>
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<./img/Logo_Padova.png, id=92, 598.235pt x 602.25pt>
 File: ./img/Logo_Padova.png Graphic file (type png)
 
-<use ./img/Logo_Padova.png> [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./img/Logo_Padova.png>]pdf
-TeX warning (ext4): destination with the same identifier (name{page.1}) has bee
-n already used, duplicate ignored
+<use ./img/Logo_Padova.png>pdfTeX warning (ext4): destination with the same ide
+ntifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.61  \clearpage
+                {\pagestyle{empty}\cleardoublepage} % puoi toglierlo, credo
+[1 <./img/Logo_Padova.png>]pdfTeX warning (ext4): destination with the same ide
+ntifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.70 \newpage
@@ -343,138 +398,164 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@lof=\write6
 \openout6 = `SCD.lof'.
 
- [3]
+ [3] [4]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 22.54448pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4] <./img/SBT1.png, id=169, 728.7225pt x 454.69875pt>
+[5] <./img/SBT1.png, id=182, 728.7225pt x 454.69875pt>
 File: ./img/SBT1.png Graphic file (type png)
  <use ./img/SBT1.png>
 Overfull \hbox (6.31378pt too wide) in paragraph at lines 133--134
  [] 
  []
 
-<./img/SBT2.png, id=170, 728.7225pt x 454.69875pt>
+<./img/SBT2.png, id=183, 728.7225pt x 454.69875pt>
 File: ./img/SBT2.png Graphic file (type png)
  <use ./img/SBT2.png>
 Overfull \hbox (6.31378pt too wide) in paragraph at lines 143--144
  [] 
  []
 
-[5 <./img/SBT1.png>]
+[6 <./img/SBT1.png>]
 Overfull \hbox (6.69893pt too wide) in paragraph at lines 150--151
 \OT1/cmr/m/n/10 toolk-it Ak-ka baster^^Ra sem-plice-mente speci-fi-care nel fil
 e di con-fig-u-razione (\OT1/cmr/m/it/10 build.sbt\OT1/cmr/m/n/10 )
  []
 
-<./img/build.png, id=177, 882.29625pt x 147.55125pt>
+<./img/build.png, id=190, 882.29625pt x 147.55125pt>
 File: ./img/build.png Graphic file (type png)
  <use ./img/build.png>
 Overfull \hbox (6.31378pt too wide) in paragraph at lines 154--155
  [] 
  []
 
-[6 <./img/SBT2.png> <./img/build.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 175--179
+[7 <./img/SBT2.png> <./img/build.png>]
+<./img/Citta.png, id=198, 222.8325pt x 167.87718pt>
+File: ./img/Citta.png Graphic file (type png)
+ <use ./img/Citta.png>
+<./img/Zone.png, id=199, 222.8325pt x 167.87718pt>
+File: ./img/Zone.png Graphic file (type png)
+ <use ./img/Zone.png>
+[8] [9 <./img/Citta.png (PNG copy)> <./img/Zone.png (PNG copy)>]
+<./img/Direzioni.png, id=210, 100.12407pt x 121.95563pt>
+File: ./img/Direzioni.png Graphic file (type png)
 
- []
-
-[7]
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
- [8] <./img/Semaforo1.png, id=196, 228.10219pt x 144.54pt>
+<use ./img/Direzioni.png> [10 <./img/Direzioni.png (PNG copy)>] [11] [12]
+[13] <./img/Semaforo1.png, id=232, 228.10219pt x 144.54pt>
 File: ./img/Semaforo1.png Graphic file (type png)
 
 <use ./img/Semaforo1.png>
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-
-<./img/Semaforo2.png, id=197, 284.56313pt x 143.78719pt>
+<./img/Semaforo2.png, id=233, 284.56313pt x 143.78719pt>
 File: ./img/Semaforo2.png Graphic file (type png)
 
-<use ./img/Semaforo2.png> [9 <./img/Semaforo1.png>]
-<./img/Semaforo3.png, id=204, 223.58531pt x 151.3153pt>
+<use ./img/Semaforo2.png> [14 <./img/Semaforo1.png>]
+<./img/Semaforo3.png, id=240, 223.58531pt x 151.3153pt>
 File: ./img/Semaforo3.png Graphic file (type png)
 
 <use ./img/Semaforo3.png>
-<./img/Semaforo4.png, id=205, 222.07968pt x 151.3153pt>
+<./img/Semaforo4.png, id=241, 222.07968pt x 151.3153pt>
 File: ./img/Semaforo4.png Graphic file (type png)
 
-<use ./img/Semaforo4.png> [10 <./img/Semaforo2.png> <./img/Semaforo3.png>]
-<./img/Semaforo5.png, id=213, 254.45062pt x 146.79843pt>
+<use ./img/Semaforo4.png> [15 <./img/Semaforo2.png> <./img/Semaforo3.png>]
+<./img/Semaforo5.png, id=249, 254.45062pt x 146.79843pt>
 File: ./img/Semaforo5.png Graphic file (type png)
 
-<use ./img/Semaforo5.png> [11 <./img/Semaforo4.png> <./img/Semaforo5.png>]
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-
-<./img/Strade2.png, id=221, 203.25937pt x 166.37157pt>
+<use ./img/Semaforo5.png> [16 <./img/Semaforo4.png> <./img/Semaforo5.png>]
+<./img/Strade2.png, id=257, 203.25937pt x 166.37157pt>
 File: ./img/Strade2.png Graphic file (type png)
  <use ./img/Strade2.png>
-Missing character: There is no ‚ in font cmr10!
-Missing character: There is no Ä in font cmr10!
-Missing character: There is no ù in font cmr10!
-
-[12 <./img/Strade2.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 272--274
+[17 <./img/Strade2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 383--385
 
  []
 
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
 Missing character: There is no ¶ in font cmr10!
-<./img/Protocollo.png, id=229, 325.215pt x 262.73157pt>
+<./img/Protocollo.png, id=265, 325.215pt x 262.73157pt>
 File: ./img/Protocollo.png Graphic file (type png)
 
-<use ./img/Protocollo.png> [13] [14 <./img/Protocollo.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 295--298
+<use ./img/Protocollo.png> [18]
+Missing character: There is no √ in font cmr10!
+Missing character: There is no π in font cmr10!
+Missing character: There is no √ in font cmr10!
+Missing character: There is no † in font cmr10!
+
+<./img/Schema2.png, id=271, 531.48563pt x 218.31563pt>
+File: ./img/Schema2.png Graphic file (type png)
+ <use ./img/Schema2.png>
+Overfull \hbox (6.31378pt too wide) in paragraph at lines 407--408
+ [] 
+ []
+
+[19 <./img/Protocollo.png>] [20 <./img/Schema2.png>]
+Missing character: There is no √ in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no √ in font cmr10!
+Missing character: There is no © in font cmr10!
+ [21] [22]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 483.
+
+
+(/usr/share/texmf-texlive/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 483.
+ [23]
+Underfull \hbox (badness 10000) in paragraph at lines 499--502
 
  []
 
-[15]
-Overfull \hbox (43.49081pt too wide) in paragraph at lines 321--322
+[24]
+Overfull \hbox (43.49081pt too wide) in paragraph at lines 525--526
 []\OT1/cmr/m/n/10 [4] Sis-te-mi Con-cor-ren-ti e Dis-tribuiti: \OT1/cmr/m/it/10
  http://www.math.unipd.it/$\OMS/cmsy/m/n/10 ^^X$\OT1/cmr/m/it/10 tullio/SCD/201
 4/ 
  []
 
-AED: lastpage setting LastPage [16] (./SCD.aux) ) 
+AED: lastpage setting LastPage [25] (./SCD.aux
+! Missing \endcsname inserted.
+<to be read again> 
+                   \unhbox 
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+! Extra \endcsname.
+\@newl@bel ... \bbl@tempa \csname #1@#2\endcsname 
+                                                  \def \bbl@tempb {#3}\@safe...
+l.34 ...{a}}{{4}{9}{Citt\`{a}\relax }{figure.4}{}}
+                                                  
+? 
+)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 5039 strings out of 495061
- 72821 string characters out of 1182622
- 148770 words of memory out of 3000000
- 8073 multiletter control sequences out of 15000+50000
+ 5092 strings out of 495061
+ 73593 string characters out of 1182622
+ 149992 words of memory out of 3000000
+ 8107 multiletter control sequences out of 15000+50000
  7658 words of font info for 27 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 38i,13n,43p,1157b,419s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/font
-s/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfont
-s/cm/cmcsc10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10
-.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/s
-hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/texmf-texlive/font
-s/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-texlive/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
-nts/cm/cmti10.pfb>
-Output written on SCD.pdf (17 pages, 572240 bytes).
+ 38i,13n,43p,1165b,424s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-te
+xlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr17.pf
+b></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texmf-
+texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fon
+ts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on SCD.pdf (27 pages, 614638 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
- 51 named destinations out of 1000 (max. 500000)
- 224 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 363 PDF objects out of 1000 (max. 8388607)
+ 63 named destinations out of 1000 (max. 500000)
+ 236 words of extra memory for PDF output out of 10000 (max. 10000000)
 

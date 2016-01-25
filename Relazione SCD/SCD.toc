@@ -1,22 +1,21 @@
 \select@language {italian}
-\contentsline {section}{\numberline {1}Introduzione}{4}{section.1}
-\contentsline {subsection}{\numberline {1.1}Problema}{4}{subsection.1.1}
-\contentsline {section}{\numberline {2}Esecuzione}{5}{section.2}
-\contentsline {subsection}{\numberline {2.1}SBT}{5}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Scala ed Akka}{6}{subsection.2.2}
-\contentsline {section}{\numberline {3}Studio del problema}{7}{section.3}
-\contentsline {subsection}{\numberline {3.1}Entit\`{a}}{7}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Stati}{7}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Azioni}{7}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Sincronizzazione}{7}{subsection.3.4}
-\contentsline {section}{\numberline {4}Implementazione}{8}{section.4}
-\contentsline {subsection}{\numberline {4.1}Progettazione}{8}{subsection.4.1}
-\contentsline {subsubsection}{\numberline {4.1.1}Linguaggio}{8}{subsubsection.4.1.1}
-\contentsline {subsubsection}{\numberline {4.1.2}Concorrenza}{8}{subsubsection.4.1.2}
-\contentsline {subsubsection}{\numberline {4.1.3}Distribuzione}{13}{subsubsection.4.1.3}
-\contentsline {subsubsection}{\numberline {4.1.4}Lista classi}{14}{subsubsection.4.1.4}
-\contentsline {subsubsection}{\numberline {4.1.5}Descrizione classi}{14}{subsubsection.4.1.5}
-\contentsline {subsubsection}{\numberline {4.1.6}Correttezza ordinamento messaggi}{15}{subsubsection.4.1.6}
-\contentsline {subsection}{\numberline {4.2}Funzionalit\`{a} non implementate}{15}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Screenshots}{15}{subsection.4.3}
-\contentsline {section}{\numberline {5}Bibliografia}{16}{section.5}
+\contentsline {section}{\numberline {1}Introduzione}{5}{section.1}
+\contentsline {subsection}{\numberline {1.1}Problema}{5}{subsection.1.1}
+\contentsline {section}{\numberline {2}Esecuzione}{6}{section.2}
+\contentsline {subsection}{\numberline {2.1}SBT}{6}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Scala ed Akka}{7}{subsection.2.2}
+\contentsline {section}{\numberline {3}Studio del problema}{8}{section.3}
+\contentsline {subsection}{\numberline {3.1}Entit\`{a}}{8}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Stati}{10}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Azioni}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Sincronizzazione}{12}{subsection.3.4}
+\contentsline {section}{\numberline {4}Implementazione}{13}{section.4}
+\contentsline {subsection}{\numberline {4.1}Progettazione}{13}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Linguaggio}{13}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}Concorrenza}{13}{subsubsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.3}Distribuzione}{18}{subsubsection.4.1.3}
+\contentsline {subsubsection}{\numberline {4.1.4}Lista e descrizione classi}{19}{subsubsection.4.1.4}
+\contentsline {subsubsection}{\numberline {4.1.5}Correttezza ordinamento messaggi}{23}{subsubsection.4.1.5}
+\contentsline {subsection}{\numberline {4.2}Funzionalit\`{a} non implementate}{24}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Screenshots}{24}{subsection.4.3}
+\contentsline {section}{\numberline {5}Bibliografia}{25}{section.5}
